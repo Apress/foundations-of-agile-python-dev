@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>FIT Library</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="fit-library">
+<h1 class="title">FIT Library</h1>
+<p>The FIT Library is a group of fixtures that takes a different approach to writing tests and fixtures. This minimizes the amount of &quot;technology facing&quot; terminology that has to appear in an acceptance test, and in some cases also reduces the amount of work required to write fixtures.</p>
+<p>The FIT library is built around two flow style fixtures, the DoFixture and the SequenceFixture. They are basically the same, so this introduction applies to both of them unless I mention one or the other specifically. These two fixtures fill somewhat the same function as the ActionFixture.</p>
+<p>It also includes a group of three substitutes for RowFixture, and two different approaches to ColumnFixture.</p>
+<p>The flow fixtures turn the acceptance test into one long table. The first table cell (usually a single cell table) is the name of the DoFixture or SequenceFixture subclass that will handle the remainder of the acceptance test. Some authors like to grey this cell out and move it to the right where it is out of the way.</p>
+<p>Most of the FIT Library fixtures are based around multiple parameter functions. This contrasts with the classic fixtures which are all based around getter and setter type functions, fields and properties. That is, the classic fixtures either store a value or make a calculation and retrieve the results. These functions, on the other hand, all take multiple parameters and may store values as side effects.</p>
+<p>This requires a somewhat different approach in specifying type information. In the classic fixtures, type information is in a dictionary in the fixture class named _typeDict with a key of the method, field or property name (after conversion by either camel or GracefulNames).</p>
+<p>In these fixtures, type information is still specified in the _typeDict dictionary, but the key has &quot;.types&quot; appended. The value is a list of types, with the result type first. The types themselves are the same as the classic types, however the result type has a number of special values. These are explained fully in the DoFixture and SpecifyFixture writeup.</p>
+<p>All of the FitLibrary fixtures default to using the ExtendedCamelCase routine to translate the names in the fixtures into method names for Python. However, the actual translation routine can be selected on a fixture by fixture basis, or the Application Configuration exit can be used to provide an application-wide dictionary of names.</p>
+<p>There is a good deal of documentation in the FitLib directory, however it is oriented toward the Java release. This document is intended to explain some of the differences.</p>
+<p>The February 15 version of FitLibrary from Sourceforge supports the November 2004 FitNesse release and the 1.0 batch release; do not attempt to install the changed FIT or FitNesse .jar files over any other release of either FitNesse or batch!</p>
+<p>The 1.1 batch release has all the needed changes included, you must install the documentation and specification tests from SourceForge if you want them.</p>
+<p>The 20050405 FitNesse release has the Fit Library jar file included. It also includes the documentation package, but not the specification tests.</p>
+<p>The following fixtures are part of the FitLibrary.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Fixture Name</th>
+<th>Fixture Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><a class="reference" href="FitLib_ArrayFixture.htm">ArrayFixture</a></td>
+<td>checks contents of an ordered
+collection.</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_CalculateFixture.htm">CalculateFixture</a></td>
+<td>An alternative to ColumnFixture</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_CombinationFixture.htm">CombinationFixture</a></td>
+<td>verify all combinations</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_ConstraintFixture.htm">ConstraintFixture</a></td>
+<td>All rows are either true or false</td>
+</tr>
+<tr><td>CompareFilesFixture</td>
+<td>Compares files and directories.
+Very useful in certain test
+situations.</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_DisplayUtility.htm">DisplayUtility</a></td>
+<td>An enhancement to the Fit Library
+which allows an inline display of
+a collection.</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_DoFixture.htm">DoFixture</a></td>
+<td>A highly recommended alternative
+to all the rest of the fixtures</td>
+</tr>
+<tr><td>GridFixture</td>
+<td>For comparing a 2 dimensional
+array implemented as a list of
+lists against a table.</td>
+</tr>
+<tr><td>FixtureFixture</td>
+<td>For testing fixtures</td>
+</tr>
+<tr><td>ParamRowFixture</td>
+<td>Interface to RowFixture</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_DoFixture.htm">SequenceFixture</a></td>
+<td>Slight variation on DoFixture</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_SetUpFixture.htm">SetUpFixture</a></td>
+<td>Variation on ColumnFixture, used
+for setup tasks.</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_ArrayFixture.htm">SetFixture</a></td>
+<td>Variation on RowFixture</td>
+</tr>
+<tr><td>SpecifyFixture</td>
+<td>Used to test fixtures</td>
+</tr>
+<tr><td><a class="reference" href="FitLib_ArrayFixture.htm">SubsetFixture</a></td>
+<td>Same as SetFixture, except that
+it only looks for partials.</td>
+</tr>
+</tbody>
+</table>
+<p>Fit Library also includes several additional classes that provide interesting facilities. These include ListTree and Table. Several additional facilities, including the Grid Image fixture and Dot Graphics, have not been converted, although they will be converted in a future release. The ability for the batch runner to read Microsoft Excel files has not, and will not, be converted.</p>
+<p>The ListTree facility provides the ability to use unordered lists in tests. It consists of a support class and a type adapter in the ListTree module in the fitLib directory. There are a fair number of examples in the specification tests, including the CompareFilesFixture, which uses it to present its results.</p>
+<p>The Table module includes a class and type adapter that support the use ofembedded tables. The specification test shows some examples. This module stressed the type adapter mechanism significantly; I would not be at all surprised to find places where using it gets a &quot;Cell Access requires...&quot; exception message. These will be fixed when found.</p>
+</div>
+</body>
+</html>

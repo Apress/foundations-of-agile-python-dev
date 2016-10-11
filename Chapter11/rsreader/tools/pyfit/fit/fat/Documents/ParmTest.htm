@@ -1,0 +1,26 @@
+<html><head><title>Parameter Test</title></head>
+<body>
+<h1>Test Table Parameters</h1>
+<p>The April 8, 2004 Fitnesse release added the ability to put parameters on the first line of a table. Unfortunately, all of the ATs for this and other features are on Fitnesse, so they aren't availible in batch.</p>
+<p>This just compares the second line, cell by cell, against the parms array that we get from Fixture. It's probably the simplest fixture imaginable.</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr>
+    <td>eg.ParmTest</td>
+    <td>This</td>
+    <td>Is</td>
+    <td>A</td>
+    <td>Test</td>
+</tr>
+<tr>
+    <td>eg.ParmTest</td>
+    <td>This</td>
+    <td>Is</td>
+    <td>A</td>
+    <td>Test</td>
+</tr>
+</table>
+
+<p>If this worked, the first cell should be white, and the other four green.</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3><tr><td colspan=2>fit.Summary</td></tr></table>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Dot Graphics</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="dot-graphics">
+<h1 class="title">Dot Graphics</h1>
+<p>Even though I'm linking to this as if it was a fixture, it isn't one. It's a more or less (hopefully more) functional example of how to link to an external package that renders graphics from some kind of source file.</p>
+<p>The example uses the dot visualization program from the graphics package at graphvis. See page 83 of the Fit Book for an example, and a reference to where to get the graphvis programs.</p>
+<p>The DotGraphic module and class is an application object: it encapsulates a text string that can be run through dot to produce a gif (or a lot of other formats, for that matter). It also contains some file management code and the code to actually run dot to produce the graphic file.</p>
+<p>It hooks into the system through the <a class="reference" href="FitLib_GraphicTypeAdapter.htm">GraphicTypeAdapter</a>. This type adapter links to two different application objects: this one and the <a class="reference" href="FitLib_ImageFixture.htm">ImageNameGraphic</a>, so it needs an additional piece of metadata to tell it which object to create on a parse call.</p>
+<p>I'm not at all happy with either the code, the file management or the quality of the port from Rick Mugridge's work in FitLibrary. In particular, the file management has substantial problems, most of which will be solved in release 0.9, while the interface with dot makes too many assumptions of where it is. It probably won't work properly except on my machine, at least without some code hackery.</p>
+</div>
+</body>
+</html>

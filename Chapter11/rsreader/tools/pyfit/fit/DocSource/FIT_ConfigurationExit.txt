@@ -1,0 +1,223 @@
+Application Configuration Module
+================================
+
+Python FIT contains a mechanism where an application can specify configuration parameters and mappings in a central location, and keep them distinct from the configuration parameters and mappings for different applications using the same FIT installation.
+
+The mechanism itself is quite simple: it's a Python module that is called at various places where FIT has to locate a resource. This gives the application the ability to use the full capability of the Python language, without at the same time inventing a new specification language for configuration.
+
+.. contents::
+
+Why a Configuration Module?
+---------------------------
+
+Why does Python FIT have a configuration module, and why is the configuration specified in Python rather than, say XML?
+
+That's two rather different questions. The first one is fairly easy. There are a number of subtle, and some not so subtle, issues that are best dealt with centrally rather than piecmeal, scattered over a large number of fixtures. Some of these issues arise out of the nature of FIT, some of them are fixes for problems that arose in the course of putting four different packages together, each of which had their own way of doing some things, some of them have to do with internationalization and localization, and some just are.
+
+The other question is similar: why are the configuration options specified in a Python module rather than an XML file? This is an issue that's debated in the industry over and over, and it has no clear answer. The central pivot is that XML files have a lot of advantages in terms of tool support, but they have one really major disadvantage: simple configuration files have a distressing tendency to turn into poorly thought out programming languages over time.
+
+Using a programming language as the vehicle has no such limitation. The person maintaining the configuration has the full power of a first-class programming language at his or her disposal. With a little bit of planning, one can even make the configuration module put out an XML file that can then be run through XSLT transforms to get pretty, interesting or even useful reports.
+
+The decision about which way to go is usually simple in context as long as all of the factors are considered.
+
+Specifying the Configuration Module.
+------------------------------------
+
+The configuration module to use can be specified on the runner command or the FitNesse !path command. It can also be specified in the SiteOptions entry for the runner, in the [options] section of the "list of files" option, or for a specific test in the "list of options" file. The latter option is mostly for testing FIT.
+
+The first module located in order is used; later entries in the order above are ignored.
+
+Batch Runners
++++++++++++++
+
+It's specified as the -a option the batch runner command. Additional parameters for the configuration module are specified with the -b option, one parameter per option. Keyword parameters are not directly supported. It's possible to simulate a key-value pair by establishing a convention for the separator, such as a dash, underscore or dot.
+
+FitNesse FitServer
+++++++++++++++++++
+
+It's specified on an !path widget. The FitNesse FitServer takes the first path element that ends in .py as being the configuration module. If it's specified, the FitServer takes each path element that ends in .parm as being a parameter to pass to the configuration module. Keyword parameters are not directly supported. It's possible to simulate a key-value pair by establishing a convention for the separator, such as a dash, underscore or dot.
+
+FitNesse TestRunner
++++++++++++++++++++
+
+It's specified as the -a option on the TestRunner command. Additional parameters for the configuration module are specified with the -b options, one parameter per option. Keyword parameters are not directly supported. It's possible to simulate a key-value pair by establishing a convention for the separator, such as a dash, underscore or dot.
+
+Other IDEs
+++++++++++
+
+To be determined.
+
+Configuration Module Structure
+------------------------------
+
+The configuration module contains a function named defineConfig that takes one parameter: the options class created from parsing the options. It returns a class instance that will execute the configuration policy.
+
+Exits
+-----
+
+FIT calls the instance for decisions or to resolve resource requests at a number of different places in its process. The class has a method for each exit point it cares to deal with; missing exit points are treated as if they returned None, which usually means either that FIT will take the documented default action, or it will create an exception for a resource that cannot be found.
+
+Information Retrieval exits
++++++++++++++++++++++++++++
+
+These exits provide information at various points. In some cases these are suplements or replacements for prior facilities, in other cases they provide new features.
+
+getMetaData(self, classObject, identifierName) => metaData
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit can provide the metadata for a method, field or property. It will only be called if the type adapter mechanism cannot find metadata in the usual places. If the routine returns None, the type adapter mechanism will issue an exception.
+
+mapTypeAdapter(self, name) => type adapter module and class
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit can be used to manage type adapters. The parameter is either the type adapter name or a reference to the class or instance. The result is either the class object for the adapter or value object, or one of the special values True, False or None.
+
+The exit should return either True or None for a standard type adapter such as String. If it wants to prohibit the use of one of the standard adapters, it should return False.
+
+If it wants to prohibit the use of class or instance references, it should return False, otherwise it should return True or None.
+
+The names of application type adapters and value objects always begin with an @ character. These names have nothing to do with the actual class or module name; they are simply lookup keys. The exit should return a reference to the class object for the adapter or value object, or either False or None to report that the name is unknown. A True return has no meaning.
+
+mapCellHandler(self, name) => cell handler permission or class
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit can be used to manage cell handlers. The parameter is the cell handler name. It can be a class object or class instance for an application supplied cell handler. The response for a standard cell handler is either True or None to accept it, or False to globally ban its use in the application.
+
+The names of application specific cell handlers begin with an @ character. The response is either None or False to report that the handler is not known, or a reference to the class object for the handler. A True response has no meaning in this case.
+
+manageCellHandlers(self, type adapter name) => dictionary
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit can be used to manage cell handlers globally. The parameter is the name of a type adapter; the response is a dictionary whose keys are cell handler names, and whose values are one of the strings: "add", "remove", "permit", "require" or "prohibit". The dictionary can also contain two special keys: ".updateFromMetadata" with possible values of "yes" and "no", and ".startWithDefaultList" with possible values of "yes" and "no".
+
+If the key is an application provided cell handler, i.e. if it starts with an "@", then the mapCellHandler routine will be used to acquire the corresponding class object. If mapCellHandler denies its use, then the value will be changed to "prohibit", regardless of its original value.
+
+Processing is as follows: First, the ".startWithDefaultList" is checked. If it specifies "no", then the default list of type adapters is removed; the rest of the process starts with an empty list. 
+
+Second, the "add" and "remove" commands are processed, resulting in a new default list.
+
+Third, if the ".updateFromMetadata" key is missing, or if it specifies "yes", the add and remove commands from the metadata are processed. During processing, if any keys specified "permit", then  adds will be checked to determine if the cell handler is permitted.
+
+Finally, any cell handlers marked with "required" are added to the list if they're not there already, and any marked "prohibited" are removed.
+
+A return value of False removes all cell handlers for that type adapter.
+
+A return value of None provides the default list, as modified by any cell handlers added or removed by the metadata.
+
+There is currently no way of disabling the error, exception[] or Fail[] cell handlers.
+
+mapFixture(self, name) => path to fixture.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit can remap fixture names. If it returns a string, that will be used to look up the fixture. If it returns None, Fixture will use the original name to look up the fixture in the defined manner. It can also return False, which will be treated as None by Fixture, but will force MethodTarget to treat the string as a method name. \*TODO
+
+Note that Fixture Renames and Graceful Names are bypassed completely when an Application Configuration exit is in force, regardless of whether this exit is taken or not.
+
+mapLabel(self, label) => (result, string).
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit will be called at the beginning of camel, gracefulNames or ExtendedCamel. The result is either None or a tuple containing a result type and an optional result. If it returns None, the three mapping routines will continue with their defined process. 
+
+The first element in the result tuple must be one of None, "force" or "done". If the first element is None, the mapping routines will continue with the original input, using their default mapping algorithm. The second parameter is not checked.
+
+If the first element of the result tuple is "force", the original string will be converted using one of the three English language mapping algorithms. The second element must be one of: "camel", "gracefulNames" or "extended". This option provides consistency throughout an application. In addition, "extended" can be used for non-English languages, in conjunction with the ".renameTo" metadata qualifier.
+
+If the first element is "done", the mapping routine will return the second element as the result without further processing. There is no check to determine if it is a valid Python identifier.
+
+mapErrorMessage(self, message data, error or exception, stack dump).
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The message data for an error message is either a message identifier, which is a character string, or a tuple that begins with the message identifier and includes other data to be inserted in the message.
+
+mapErrorMessage should either return None to cause the standard English language message to be produced, or should return a character string which has all of the elements inserted in the appropriate places.
+
+This routine can override whether a stack dump is produced by returning a tuple containing the message or None as the first element, and a True or False as the second. It cannot override the classification as an error or an exception.
+
+getAdapterForObject(self, object)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This routine is used in conjunction with the Default type adapter. It provides an opportunity to supply adapters for application objects which need them. It can also deny the ability to use fundamental types or supply alternative adapters for them.
+
+A return of None enables default processing as described in the Default section of the Type Adapter writeup. False denies the ability to use that object. To supply an adapter the class object for the adapter must be returned; Default processing does not understand the adapter naming scheme.
+
+It's probably better to raise an exception rather than return False; the type adapter mechanism will probably fail with difficult to diagnose errors.
+
+Standards Compliance and Configuration
+++++++++++++++++++++++++++++++++++++++
+
+fpTypeAdapterCheck(self)
+>>>>>>>>>>>>>>>>>>>>>>>>
+
+This routine supplies the globally permissable defaults for the standard float type adapter's check operation. The return value is a three character string. The first character specifies how a bare floating point value is treated, the second specifies how an explicit epsilon is treated, and the third specifies how a range expression is treated. The letter 'f', in all three cases, causes an exception to be raised for that particular option.
+
+The default is currently "eer", which allows both implicit and explicit epsilon processing as well as range checks. It is possible that the default will change to "fff" for strict standards compliance with the FIT 2.0 specification.
+
+The .checkType metadata qualifier overrides this specification.
+
+See the `Type Adapter`__ writeup for a more detailed explanation of floating point check processing.
+
+__ FIT_TypeAdapters.htm
+
+canDefaultMissingMetadata(self)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This routine provides permission for the type adapter mechanism to use the Default type adapter if no type adapter is specified for a request. There are no parameters; permission is given or denied globally across an entire application.
+
+The return values are True, False and None. None denies permission, and is the default if the routine is not implemented.
+
+Management
+++++++++++
+
+listOfFilesOptions(self, options):
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit provides the ability for an exit that was installed from the SiteOptions or runner command to process options specified in the [options] section of a list of files. It may or may not be taken if the exit was installed from the [options] section of the list of files.
+
+It's taken after the options have been merged. It can return True, False or None; None is the same as True. False cancels the run after completing validity checking.
+
+individualTestOptions(self, options)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit provides the ability for an exit to process options from an individual file entry in the list of files option.
+
+beforeRunExecution(self):
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit is taken after options have been processed and before any tests have been executed. It can acquire expensive resources or provide simulators for them, and store references in the run level symbol table.
+
+beforeTestExecution(self, path, parseTree):
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit is taken before each individual test begins execution. It can return True, False or None. True means the test is to execute; False means the test is to be bypassed. None is the same as True. Anything else is the same as False.
+
+It is legitimate for it to add symbols to the test level symbol table or change the options in the test level option object. Modifying the parse tree will work, but should be avoided as it will probably cause confusion all around, at least if it's done without making it real obvious what the changes are all about.
+
+The batch runner will drive this exit if the input has a parse error, in this case the parseTree parameter will have an exception object, not the root of a tree of parse nodes. The FitNesse runner will not drive this exit in case of a parse error. Instead, it will drive the afterTestExecution exit.
+
+afterTestExecution(self, counts, summary):
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit is taken after each individual test finishes execution. It can inspect the counts object and add entries to the summary; they will be reflected in the XML statistics file but not in the test itself.
+
+This exit will not be taken for tests bypassed by the beforeTestExecution exit.
+
+This exit may be taken if there is an unexpected error (including an error in parsing the HTML) in FitNesse. An unhandled error in batch causes the runner to terminate.
+
+afterRunExecution(self, counts):
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This exit is taken after all tests have been executed. It can release expensive resources acquired by a beforeTestExecution exit, write its own run summary, or communicate results to test or management automation tools.
+
+Counts is a count object which contains one count for each separate test. Tests that were bypassed by the beforeTestExecution exit are not included.
+
+There may be situations where FIT attempts to exit without calling this routine. If more reliability is needed, the Python standard library atexit module can be used.
+
+fixtureSetUpExit(self, table):
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This controls whether the setUpFixture() and tearDownFixture() exits will be taken in each fixture. A return value of True or None permits the exit, a return value of False prohibits it. If the routine does not exist, the default return is None, which enables the exits.
+
+columnFixtureExits(self, table):
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This controls whether the beginningOfRow() and endOfRow() exits will be taken in column fixtures. A return value of True or None permits the exits, a return value of False prohibits them. The default return of None when the exit does not exist enables the exits.

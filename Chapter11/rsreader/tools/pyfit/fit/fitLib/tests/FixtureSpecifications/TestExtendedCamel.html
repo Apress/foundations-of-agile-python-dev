@@ -1,0 +1,38 @@
+<html><title>TestExtendedCamel</title><body>
+<h1><a href="TestExtendedCamel.html">TestExtendedCamel</a></h1>
+<p><font color="#c04040">The original first two rows ("hi" and " hi ")of this table don't pass because of the special handling of quoted strings: the fixture never sees the quotes. These two rows have been removed. The problem is in the fixture and string type adapter, it does not arise in a normal string. This case ought to be covered by the unit tests. (both cases should translate to 'quoteHiQuote').</font></p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fitLib.specify.TestCamelCase</td></tr>
+<tr><td>name   </td><td></td><td> identifier </td></tr>
+<tr><td>!#$%age</td><td></td><td> bangHashDollarPercentAge </td></tr>
+<tr><td>&'()*  </td><td></td><td> ampersandSingleQuoteLeftParenthesisRightParenthesisStar </td></tr>
+<tr><td>+,-./: </td><td></td><td> plusCommaMinusDotSlashColon </td></tr>
+<tr><td>;=?    </td><td></td><td> semicolonEqualsQuestion </td></tr>
+<tr><td>@[]\   </td><td></td><td> atLeftSquareBracketRightSquareBracketBackslash </td></tr>
+<tr><td>^`{}~  </td><td></td><td> caretBackquoteLeftBraceRightBraceTilde </td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fitLib.specify.TestCamelCase</td></tr>
+<tr><td>name           </td><td></td><td> identifier </td></tr>
+<tr><td>two words      </td><td></td><td> twoWords </td></tr>
+<tr><td>three wee words</td><td></td><td> threeWeeWords </td></tr>
+<tr><td>23             </td><td></td><td> two3  </td></tr>
+<tr><td>2  words        </td><td></td><td> twoWords </td></tr>
+<tr><td>cost $         </td><td></td><td> costDollar </td></tr>
+<tr><td>cost$          </td><td></td><td> costDollar </td></tr>
+<tr><td>!              </td><td></td><td> bang </td></tr>
+<tr><td>!!             </td><td></td><td> bangBang </td></tr>
+<tr><td>meet @         </td><td></td><td> meetAt </td></tr>
+<tr><td>rick@rimu.com  </td><td></td><td> rickAtRimuDotCom </td></tr>
+<tr><td>               </td><td></td><td> blank </td></tr>
+</table>
+<br>
+<p><font color="#c04040">The last row was eliminated because case is not a Python keyword.</font></p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fitLib.specify.TestCamelCase</td></tr>
+<tr><td>name           </td><td></td><td> identifier </td></tr>
+<tr><td>for            </td><td></td><td> for_       </td></tr>
+<tr><td>class          </td><td></td><td> class_     </td></tr>
+</table>
+</body></html>

@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Using FIT for Testing</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="using-fit-for-testing">
+<h1 class="title">Using FIT for Testing</h1>
+<p>For some people, how to use FIT for testing seems to be obvious; for others there's a feeling of befuddlement at the beginning. I'm going to go through a simple example, showing quite a bit of my thought process along the way. The example is not, at this point, going to be backed up by working fixture code: it's directed at the customer or business analyst, not at the developer.</p>
+<div class="section" id="the-example-and-model">
+<h1><a name="the-example-and-model">The Example and Model</a></h1>
+<p>To motivate the example, it's going to be about a relatively small slice of an ATM banking application: transfering money between accounts. While this is a relatively small example, it does have three screens, and it's embedded in a larger application that deals with such issues as checking the bank card against the PIN number, selecting the function and so forth. At the beginning we'er going to ignore these larger issues in the interests of keeping things short enough to digest. We'll add them in as we go on.</p>
+<p>Modern applications are built in a layered fashion, much like a layer cake, although it's sometimes useful to think of them as a series of clerks, each one of which passes information only to the clerk in front of her and behind her, doing something to the information as she processes it. The key thought here is that each layer, or each clerk, only talks to the two adjacent layers or clerks.</p>
+<p>The specific model I'm going to use has five layers, called the View, Presenter, Application, Model and Data layers, abbreviated as VPAMD. It's a little more detailed than the models you see in the literature, but there is a reason for the detail.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Layer</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>View</td>
+<td>Writes on the
+screen, handles
+touches on screen.</td>
+</tr>
+<tr><td>Presenter</td>
+<td>Handles logical
+events like &quot;Button
+6 pressed, tells
+view what to draw.</td>
+</tr>
+<tr><td>Application</td>
+<td>Handles task.</td>
+</tr>
+<tr><td>Model</td>
+<td>Mechanism for tasks</td>
+</tr>
+<tr><td>Data</td>
+<td>The Data Base</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="testing-from-the-outside">
+<h1><a name="testing-from-the-outside">Testing From the Outside</a></h1>
+<p>Most people would start out testing an application like this from the outside: that is, they would either sit at a system and manually follow a testing script, or use an automated capture and replay system that captures keystrokes (in this case, screen touches) and verifies that what's drawn on the screen meets expectations. The manual version is not repeatable: it has to be redone at great expense for every version of the system shipped, and it's subject to the usual flock of manual errors. The automated capture and replay systems have other disadvantages, including expense, substantial training requirements, substantial time investments, and fragility in the face of changing requirements.</p>
+<p>I've heard of one company, and there are undoubtedly more, that's found it can't change its user interface because of the expense of changing all of the capture and replay tests.</p>
+<p>That's not to say that capture and replay testing is always a bad thing in all circumstances. It's well suited to testing the user interface; it's not well suited to testing the actual application logic.</p>
+<p>When one does capture and replay testing, or a manual equivalent of it, there is a better way of focusing on the issues and getting the rest of the detail out of the way. The following table illustrates this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Layer</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Tester</td>
+<td>Runs scripted tests</td>
+</tr>
+<tr><td>View</td>
+<td>Writes on the
+screen, handles
+touches on screen.</td>
+</tr>
+<tr><td>Presenter</td>
+<td>Handles logical
+events like &quot;Button
+6 pressed&quot;, tells
+view what to draw.</td>
+</tr>
+<tr><td>Application Mock</td>
+<td>Handles task with
+hard coded test
+data</td>
+</tr>
+</tbody>
+</table>
+<p>The Application Mock in the table above isolates the test from the remainder of the application. As long as the mock successfully models what the real application would do with the given test data, we can be quite successful at testing the user interaction parts of the system. We also don't have to retest on every change to the parts of the system below the Presenter layer, which is a substantial savings.</p>
+<p>It also makes the tests run rapidly. We'll see another mock with the same functionality later.</p>
+</div>
+<div class="section" id="testing-at-the-presenter-layer">
+<h1><a name="testing-at-the-presenter-layer">Testing at the Presenter Layer</a></h1>
+<p>The interface between the View layer and the Presenter layer is in terms of logical controls on a screen. In our little application snippet, the View classes tell the presenter things like: &quot;Button 1 touched&quot;, and the presenter tells the view things like &quot;Put 'Savings' as the text of button 1&quot;.</p>
+<p>Our stack now looks like this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Layer</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>FIT tests</td>
+<td>Verifies Presenter actions</td>
+</tr>
+<tr><td>Presenter</td>
+<td>Handles logical events
+like &quot;Button 6 pressed.&quot;
+Tells what view to draw</td>
+</tr>
+<tr><td>Application</td>
+<td>Handles task.</td>
+</tr>
+<tr><td>Model</td>
+<td>Mechanism for tasks</td>
+</tr>
+<tr><td>Data</td>
+<td>The Data Base</td>
+</tr>
+</tbody>
+</table>
+<p>The guts of a FIT test at this layer might look like this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="35%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th colspan="3">fit.ActionFixture</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>start</td>
+<td>AccountTransfer</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Enter From Account</td>
+</tr>
+<tr><td>check</td>
+<td>button1contents</td>
+<td>Savings Account</td>
+</tr>
+<tr><td>press</td>
+<td>button1</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Enter To Account</td>
+</tr>
+<tr><td>check</td>
+<td>button2contents</td>
+<td>Checking Account</td>
+</tr>
+<tr><td>press</td>
+<td>button2</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Amount Entry</td>
+</tr>
+<tr><td>press</td>
+<td>button2</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>press</td>
+<td>button1</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>press</td>
+<td>buttonDot</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>press</td>
+<td>button5</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>press</td>
+<td>buttonEnter</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Transaction Successful</td>
+</tr>
+</tbody>
+</table>
+<p>We might wrap this with the logon screen, selecting the correct transaction and verifying the account balances in order to make a complete test.</p>
+<p>This is, however, tedious, difficult to get right and hard to read. If this was all there was to FIT, we'd be quite justified in ignoring it. However, things are going to get better in the next couple of layers.</p>
+<p>This layer is still important even though it's most likely going to be coded by the business analyst, professional tester or developer rather than the customer.</p>
+<p>Before we leave this layer, though, there's one more item that justifies work at this layer: we can verify the accuracy of the Application Mock we created in the first layer.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="47%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Layer</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>FIT tests</td>
+<td>Verifies Presenter
+actions.</td>
+</tr>
+<tr><td>Presenter</td>
+<td>Handles logical
+events like &quot;Button
+6 pressed, tells
+view what to draw.</td>
+</tr>
+<tr><td>Application Mock</td>
+<td>Handles task with
+hard coded test
+data</td>
+</tr>
+</tbody>
+</table>
+<p>We should, in other words, be able to run the same set of tests against both stacks: the real application and the one with the application layer mocked out.</p>
+</div>
+<div class="section" id="testing-the-application-layer">
+<h1><a name="testing-the-application-layer">Testing the Application Layer</a></h1>
+<p>The application layer is the next level down.</p>
+<p>Our stack now looks like this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>Layer</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>FIT tests</td>
+<td>Verifies Presenter
+actions.</td>
+</tr>
+<tr><td>Application</td>
+<td>Handles task.</td>
+</tr>
+<tr><td>Model</td>
+<td>Mechanism for tasks</td>
+</tr>
+<tr><td>Mock Data Layer</td>
+<td>Test Data</td>
+</tr>
+</tbody>
+</table>
+<p>The interface between the Presentation Layer and the Application Layer is much more streamlined than the interface between the View layer and the Presentation layer. To reflect this, I'm going to show a much larger slice of the test, still using the Action Fixture.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="37%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th colspan="3">fit.ActionFixture</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>start</td>
+<td>ATMApplication</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Insert Bank Card</td>
+</tr>
+<tr><td>enter</td>
+<td>bankCardNumber</td>
+<td>1234-xxxx-etc.</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Enter Pin</td>
+</tr>
+<tr><td>enter</td>
+<td>Pin</td>
+<td>Safety</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Main Menu</td>
+</tr>
+<tr><td>press</td>
+<td>Check Balance</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Account List</td>
+</tr>
+<tr><td>press</td>
+<td>Savings Account</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Account Balance</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>$10,291.42</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Main Menu</td>
+</tr>
+<tr><td>press</td>
+<td>Check Balance</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Account List</td>
+</tr>
+<tr><td>press</td>
+<td>Checking Account</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Account Balance</td>
+</tr>
+<tr><td>check</td>
+<td>Account Balance</td>
+<td>$241.92</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Main Menu</td>
+</tr>
+<tr><td>press</td>
+<td>Transfer Money</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Enter To Account</td>
+</tr>
+<tr><td>enter</td>
+<td>Account Name</td>
+<td>Checking</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Enter From Account</td>
+</tr>
+<tr><td>enter</td>
+<td>Account Name</td>
+<td>Savings</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Enter Amount</td>
+</tr>
+<tr><td>enter</td>
+<td>Amount</td>
+<td>$1,000.00</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Transaction Successful</td>
+</tr>
+<tr><td>press</td>
+<td>Display Balance</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Account List</td>
+</tr>
+<tr><td>press</td>
+<td>Savings Account</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>Account Balance</td>
+</tr>
+<tr><td>check</td>
+<td>currentScreen</td>
+<td>$9,291.42</td>
+</tr>
+<tr><td>press</td>
+<td>exitWithReceipt</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>While this is also long and tedious, it's also the complete end to end process part of the test. A complete test would also load test data at the beginning and verify the contents of data base tables or other results at the end. I've omitted these details in the interests of a shorter presentation.</p>
+<p>This layer is where an unusually thorough customer would read the test, and might even write it. However, it's still likely that this test would be written by the business analyst, the developer or a professional tester.</p>
+</div>
+<div class="section" id="testing-the-model-layer">
+<h1><a name="testing-the-model-layer">Testing the Model Layer</a></h1>
+<p>Testing at the model layer is where things get interesting. Here we're going to abandon ActionFixture in favor of DoFixture from the Fit Library. I'm also going to show an essentially complete test, omitting only one or two &quot;technology facing&quot; items at the front that are required to get things moving. I'm only going to show the table lines for the parts of the test that are naturally tabular.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="33%" />
+<col width="35%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th colspan="4">load customers</th>
+</tr>
+<tr><th>Name</th>
+<th>Customer Number</th>
+<th>Bank Card Number</th>
+<th>Pin</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Bonnie</td>
+<td>12334-786</td>
+<td>311-555-1212</td>
+<td>Bobbie</td>
+</tr>
+<tr><td>Clyde</td>
+<td>12334-787</td>
+<td>311-555-1213</td>
+<td>Cotter</td>
+</tr>
+<tr><td>Junior</td>
+<td>12334-788</td>
+<td>311-555-1214</td>
+<td>Diaper</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="33%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th colspan="3">load accounts</th>
+</tr>
+<tr><th>Customer Number</th>
+<th>Account Type</th>
+<th>Balance</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>12334-786</td>
+<td>Savings</td>
+<td>$10,291.42</td>
+</tr>
+<tr><td>12334-786</td>
+<td>Checking</td>
+<td>$241.92</td>
+</tr>
+</tbody>
+</table>
+<p><em>login customer</em> 311-555-1212 <em>with pin</em> Bobbie</p>
+<p>check <em>the</em> savings <em>account balance</em> $10,291.42</p>
+<p>check <em>the</em> checking <em>account balance</em> $241.92</p>
+<p><em>transfer</em> $1,000.00 <em>from</em> savings <em>to</em> checking</p>
+<p>check <em>the</em> savings <em>account balance</em> $9,291.42</p>
+<p>check <em>the</em> checking <em>account balance</em> $1,241.92</p>
+<p><em>logout</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="33%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th colspan="3">verify accounts</th>
+</tr>
+<tr><th>Customer Number</th>
+<th>Account Type</th>
+<th>Balance</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>12334-786</td>
+<td>Savings</td>
+<td>$9,291.42</td>
+</tr>
+<tr><td>12334-786</td>
+<td>Checking</td>
+<td>$1,241.92</td>
+</tr>
+</tbody>
+</table>
+<p>As a note to developers, this final section contains three fixtures: a DoFixture subclass that handles the entire test and two SetUpFixture subclasses to handle the initial data entry. The DoFixture contains seven methods. All of the fixtures can be reused and extended for other tests; none of them is specific to just this one test.</p>
+<p>Well, that's it! This final test is the one that the customer would probably write. It's short, to the point, and makes a reasonable example.</p>
+</div>
+</div>
+</body>
+</html>

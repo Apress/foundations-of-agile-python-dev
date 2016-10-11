@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Application Configuration Module</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="application-configuration-module">
+<h1 class="title">Application Configuration Module</h1>
+<p>Python FIT contains a mechanism where an application can specify configuration parameters and mappings in a central location, and keep them distinct from the configuration parameters and mappings for different applications using the same FIT installation.</p>
+<p>The mechanism itself is quite simple: it's a Python module that is called at various places where FIT has to locate a resource. This gives the application the ability to use the full capability of the Python language, without at the same time inventing a new specification language for configuration.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#why-a-configuration-module" id="id2" name="id2">Why a Configuration Module?</a></li>
+<li><a class="reference" href="#specifying-the-configuration-module" id="id3" name="id3">Specifying the Configuration Module.</a><ul>
+<li><a class="reference" href="#batch-runners" id="id4" name="id4">Batch Runners</a></li>
+<li><a class="reference" href="#fitnesse-fitserver" id="id5" name="id5">FitNesse FitServer</a></li>
+<li><a class="reference" href="#fitnesse-testrunner" id="id6" name="id6">FitNesse TestRunner</a></li>
+<li><a class="reference" href="#other-ides" id="id7" name="id7">Other IDEs</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#configuration-module-structure" id="id8" name="id8">Configuration Module Structure</a></li>
+<li><a class="reference" href="#exits" id="id9" name="id9">Exits</a><ul>
+<li><a class="reference" href="#information-retrieval-exits" id="id10" name="id10">Information Retrieval exits</a><ul>
+<li><a class="reference" href="#getmetadata-self-classobject-identifiername-metadata" id="id11" name="id11">getMetaData(self, classObject, identifierName) =&gt; metaData</a></li>
+<li><a class="reference" href="#maptypeadapter-self-name-type-adapter-module-and-class" id="id12" name="id12">mapTypeAdapter(self, name) =&gt; type adapter module and class</a></li>
+<li><a class="reference" href="#mapcellhandler-self-name-cell-handler-permission-or-class" id="id13" name="id13">mapCellHandler(self, name) =&gt; cell handler permission or class</a></li>
+<li><a class="reference" href="#managecellhandlers-self-type-adapter-name-dictionary" id="id14" name="id14">manageCellHandlers(self, type adapter name) =&gt; dictionary</a></li>
+<li><a class="reference" href="#mapfixture-self-name-path-to-fixture" id="id15" name="id15">mapFixture(self, name) =&gt; path to fixture.</a></li>
+<li><a class="reference" href="#maplabel-self-label-result-string" id="id16" name="id16">mapLabel(self, label) =&gt; (result, string).</a></li>
+<li><a class="reference" href="#maperrormessage-self-message-data-error-or-exception-stack-dump" id="id17" name="id17">mapErrorMessage(self, message data, error or exception, stack dump).</a></li>
+<li><a class="reference" href="#getadapterforobject-self-object" id="id18" name="id18">getAdapterForObject(self, object)</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#standards-compliance-and-configuration" id="id19" name="id19">Standards Compliance and Configuration</a><ul>
+<li><a class="reference" href="#fptypeadaptercheck-self" id="id20" name="id20">fpTypeAdapterCheck(self)</a></li>
+<li><a class="reference" href="#candefaultmissingmetadata-self" id="id21" name="id21">canDefaultMissingMetadata(self)</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#management" id="id22" name="id22">Management</a><ul>
+<li><a class="reference" href="#listoffilesoptions-self-options" id="id23" name="id23">listOfFilesOptions(self, options):</a></li>
+<li><a class="reference" href="#individualtestoptions-self-options" id="id24" name="id24">individualTestOptions(self, options)</a></li>
+<li><a class="reference" href="#beforerunexecution-self" id="id25" name="id25">beforeRunExecution(self):</a></li>
+<li><a class="reference" href="#beforetestexecution-self-path-parsetree" id="id26" name="id26">beforeTestExecution(self, path, parseTree):</a></li>
+<li><a class="reference" href="#aftertestexecution-self-counts-summary" id="id27" name="id27">afterTestExecution(self, counts, summary):</a></li>
+<li><a class="reference" href="#afterrunexecution-self-counts" id="id28" name="id28">afterRunExecution(self, counts):</a></li>
+<li><a class="reference" href="#fixturesetupexit-self-table" id="id29" name="id29">fixtureSetUpExit(self, table):</a></li>
+<li><a class="reference" href="#columnfixtureexits-self-table" id="id30" name="id30">columnFixtureExits(self, table):</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="why-a-configuration-module">
+<h1><a class="toc-backref" href="#id2" name="why-a-configuration-module">Why a Configuration Module?</a></h1>
+<p>Why does Python FIT have a configuration module, and why is the configuration specified in Python rather than, say XML?</p>
+<p>That's two rather different questions. The first one is fairly easy. There are a number of subtle, and some not so subtle, issues that are best dealt with centrally rather than piecmeal, scattered over a large number of fixtures. Some of these issues arise out of the nature of FIT, some of them are fixes for problems that arose in the course of putting four different packages together, each of which had their own way of doing some things, some of them have to do with internationalization and localization, and some just are.</p>
+<p>The other question is similar: why are the configuration options specified in a Python module rather than an XML file? This is an issue that's debated in the industry over and over, and it has no clear answer. The central pivot is that XML files have a lot of advantages in terms of tool support, but they have one really major disadvantage: simple configuration files have a distressing tendency to turn into poorly thought out programming languages over time.</p>
+<p>Using a programming language as the vehicle has no such limitation. The person maintaining the configuration has the full power of a first-class programming language at his or her disposal. With a little bit of planning, one can even make the configuration module put out an XML file that can then be run through XSLT transforms to get pretty, interesting or even useful reports.</p>
+<p>The decision about which way to go is usually simple in context as long as all of the factors are considered.</p>
+</div>
+<div class="section" id="specifying-the-configuration-module">
+<h1><a class="toc-backref" href="#id3" name="specifying-the-configuration-module">Specifying the Configuration Module.</a></h1>
+<p>The configuration module to use can be specified on the runner command or the FitNesse !path command. It can also be specified in the SiteOptions entry for the runner, in the [options] section of the &quot;list of files&quot; option, or for a specific test in the &quot;list of options&quot; file. The latter option is mostly for testing FIT.</p>
+<p>The first module located in order is used; later entries in the order above are ignored.</p>
+<div class="section" id="batch-runners">
+<h2><a class="toc-backref" href="#id4" name="batch-runners">Batch Runners</a></h2>
+<p>It's specified as the -a option the batch runner command. Additional parameters for the configuration module are specified with the -b option, one parameter per option. Keyword parameters are not directly supported. It's possible to simulate a key-value pair by establishing a convention for the separator, such as a dash, underscore or dot.</p>
+</div>
+<div class="section" id="fitnesse-fitserver">
+<h2><a class="toc-backref" href="#id5" name="fitnesse-fitserver">FitNesse FitServer</a></h2>
+<p>It's specified on an !path widget. The FitNesse FitServer takes the first path element that ends in .py as being the configuration module. If it's specified, the FitServer takes each path element that ends in .parm as being a parameter to pass to the configuration module. Keyword parameters are not directly supported. It's possible to simulate a key-value pair by establishing a convention for the separator, such as a dash, underscore or dot.</p>
+</div>
+<div class="section" id="fitnesse-testrunner">
+<h2><a class="toc-backref" href="#id6" name="fitnesse-testrunner">FitNesse TestRunner</a></h2>
+<p>It's specified as the -a option on the TestRunner command. Additional parameters for the configuration module are specified with the -b options, one parameter per option. Keyword parameters are not directly supported. It's possible to simulate a key-value pair by establishing a convention for the separator, such as a dash, underscore or dot.</p>
+</div>
+<div class="section" id="other-ides">
+<h2><a class="toc-backref" href="#id7" name="other-ides">Other IDEs</a></h2>
+<p>To be determined.</p>
+</div>
+</div>
+<div class="section" id="configuration-module-structure">
+<h1><a class="toc-backref" href="#id8" name="configuration-module-structure">Configuration Module Structure</a></h1>
+<p>The configuration module contains a function named defineConfig that takes one parameter: the options class created from parsing the options. It returns a class instance that will execute the configuration policy.</p>
+</div>
+<div class="section" id="exits">
+<h1><a class="toc-backref" href="#id9" name="exits">Exits</a></h1>
+<p>FIT calls the instance for decisions or to resolve resource requests at a number of different places in its process. The class has a method for each exit point it cares to deal with; missing exit points are treated as if they returned None, which usually means either that FIT will take the documented default action, or it will create an exception for a resource that cannot be found.</p>
+<div class="section" id="information-retrieval-exits">
+<h2><a class="toc-backref" href="#id10" name="information-retrieval-exits">Information Retrieval exits</a></h2>
+<p>These exits provide information at various points. In some cases these are suplements or replacements for prior facilities, in other cases they provide new features.</p>
+<div class="section" id="getmetadata-self-classobject-identifiername-metadata">
+<h3><a class="toc-backref" href="#id11" name="getmetadata-self-classobject-identifiername-metadata">getMetaData(self, classObject, identifierName) =&gt; metaData</a></h3>
+<p>This exit can provide the metadata for a method, field or property. It will only be called if the type adapter mechanism cannot find metadata in the usual places. If the routine returns None, the type adapter mechanism will issue an exception.</p>
+</div>
+<div class="section" id="maptypeadapter-self-name-type-adapter-module-and-class">
+<h3><a class="toc-backref" href="#id12" name="maptypeadapter-self-name-type-adapter-module-and-class">mapTypeAdapter(self, name) =&gt; type adapter module and class</a></h3>
+<p>This exit can be used to manage type adapters. The parameter is either the type adapter name or a reference to the class or instance. The result is either the class object for the adapter or value object, or one of the special values True, False or None.</p>
+<p>The exit should return either True or None for a standard type adapter such as String. If it wants to prohibit the use of one of the standard adapters, it should return False.</p>
+<p>If it wants to prohibit the use of class or instance references, it should return False, otherwise it should return True or None.</p>
+<p>The names of application type adapters and value objects always begin with an &#64; character. These names have nothing to do with the actual class or module name; they are simply lookup keys. The exit should return a reference to the class object for the adapter or value object, or either False or None to report that the name is unknown. A True return has no meaning.</p>
+</div>
+<div class="section" id="mapcellhandler-self-name-cell-handler-permission-or-class">
+<h3><a class="toc-backref" href="#id13" name="mapcellhandler-self-name-cell-handler-permission-or-class">mapCellHandler(self, name) =&gt; cell handler permission or class</a></h3>
+<p>This exit can be used to manage cell handlers. The parameter is the cell handler name. It can be a class object or class instance for an application supplied cell handler. The response for a standard cell handler is either True or None to accept it, or False to globally ban its use in the application.</p>
+<p>The names of application specific cell handlers begin with an &#64; character. The response is either None or False to report that the handler is not known, or a reference to the class object for the handler. A True response has no meaning in this case.</p>
+</div>
+<div class="section" id="managecellhandlers-self-type-adapter-name-dictionary">
+<h3><a class="toc-backref" href="#id14" name="managecellhandlers-self-type-adapter-name-dictionary">manageCellHandlers(self, type adapter name) =&gt; dictionary</a></h3>
+<p>This exit can be used to manage cell handlers globally. The parameter is the name of a type adapter; the response is a dictionary whose keys are cell handler names, and whose values are one of the strings: &quot;add&quot;, &quot;remove&quot;, &quot;permit&quot;, &quot;require&quot; or &quot;prohibit&quot;. The dictionary can also contain two special keys: &quot;.updateFromMetadata&quot; with possible values of &quot;yes&quot; and &quot;no&quot;, and &quot;.startWithDefaultList&quot; with possible values of &quot;yes&quot; and &quot;no&quot;.</p>
+<p>If the key is an application provided cell handler, i.e. if it starts with an &quot;&#64;&quot;, then the mapCellHandler routine will be used to acquire the corresponding class object. If mapCellHandler denies its use, then the value will be changed to &quot;prohibit&quot;, regardless of its original value.</p>
+<p>Processing is as follows: First, the &quot;.startWithDefaultList&quot; is checked. If it specifies &quot;no&quot;, then the default list of type adapters is removed; the rest of the process starts with an empty list.</p>
+<p>Second, the &quot;add&quot; and &quot;remove&quot; commands are processed, resulting in a new default list.</p>
+<p>Third, if the &quot;.updateFromMetadata&quot; key is missing, or if it specifies &quot;yes&quot;, the add and remove commands from the metadata are processed. During processing, if any keys specified &quot;permit&quot;, then  adds will be checked to determine if the cell handler is permitted.</p>
+<p>Finally, any cell handlers marked with &quot;required&quot; are added to the list if they're not there already, and any marked &quot;prohibited&quot; are removed.</p>
+<p>A return value of False removes all cell handlers for that type adapter.</p>
+<p>A return value of None provides the default list, as modified by any cell handlers added or removed by the metadata.</p>
+<p>There is currently no way of disabling the error, exception[] or Fail[] cell handlers.</p>
+</div>
+<div class="section" id="mapfixture-self-name-path-to-fixture">
+<h3><a class="toc-backref" href="#id15" name="mapfixture-self-name-path-to-fixture">mapFixture(self, name) =&gt; path to fixture.</a></h3>
+<p>This exit can remap fixture names. If it returns a string, that will be used to look up the fixture. If it returns None, Fixture will use the original name to look up the fixture in the defined manner. It can also return False, which will be treated as None by Fixture, but will force MethodTarget to treat the string as a method name. *TODO</p>
+<p>Note that Fixture Renames and Graceful Names are bypassed completely when an Application Configuration exit is in force, regardless of whether this exit is taken or not.</p>
+</div>
+<div class="section" id="maplabel-self-label-result-string">
+<h3><a class="toc-backref" href="#id16" name="maplabel-self-label-result-string">mapLabel(self, label) =&gt; (result, string).</a></h3>
+<p>This exit will be called at the beginning of camel, gracefulNames or ExtendedCamel. The result is either None or a tuple containing a result type and an optional result. If it returns None, the three mapping routines will continue with their defined process.</p>
+<p>The first element in the result tuple must be one of None, &quot;force&quot; or &quot;done&quot;. If the first element is None, the mapping routines will continue with the original input, using their default mapping algorithm. The second parameter is not checked.</p>
+<p>If the first element of the result tuple is &quot;force&quot;, the original string will be converted using one of the three English language mapping algorithms. The second element must be one of: &quot;camel&quot;, &quot;gracefulNames&quot; or &quot;extended&quot;. This option provides consistency throughout an application. In addition, &quot;extended&quot; can be used for non-English languages, in conjunction with the &quot;.renameTo&quot; metadata qualifier.</p>
+<p>If the first element is &quot;done&quot;, the mapping routine will return the second element as the result without further processing. There is no check to determine if it is a valid Python identifier.</p>
+</div>
+<div class="section" id="maperrormessage-self-message-data-error-or-exception-stack-dump">
+<h3><a class="toc-backref" href="#id17" name="maperrormessage-self-message-data-error-or-exception-stack-dump">mapErrorMessage(self, message data, error or exception, stack dump).</a></h3>
+<p>The message data for an error message is either a message identifier, which is a character string, or a tuple that begins with the message identifier and includes other data to be inserted in the message.</p>
+<p>mapErrorMessage should either return None to cause the standard English language message to be produced, or should return a character string which has all of the elements inserted in the appropriate places.</p>
+<p>This routine can override whether a stack dump is produced by returning a tuple containing the message or None as the first element, and a True or False as the second. It cannot override the classification as an error or an exception.</p>
+</div>
+<div class="section" id="getadapterforobject-self-object">
+<h3><a class="toc-backref" href="#id18" name="getadapterforobject-self-object">getAdapterForObject(self, object)</a></h3>
+<p>This routine is used in conjunction with the Default type adapter. It provides an opportunity to supply adapters for application objects which need them. It can also deny the ability to use fundamental types or supply alternative adapters for them.</p>
+<p>A return of None enables default processing as described in the Default section of the Type Adapter writeup. False denies the ability to use that object. To supply an adapter the class object for the adapter must be returned; Default processing does not understand the adapter naming scheme.</p>
+<p>It's probably better to raise an exception rather than return False; the type adapter mechanism will probably fail with difficult to diagnose errors.</p>
+</div>
+</div>
+<div class="section" id="standards-compliance-and-configuration">
+<h2><a class="toc-backref" href="#id19" name="standards-compliance-and-configuration">Standards Compliance and Configuration</a></h2>
+<div class="section" id="fptypeadaptercheck-self">
+<h3><a class="toc-backref" href="#id20" name="fptypeadaptercheck-self">fpTypeAdapterCheck(self)</a></h3>
+<p>This routine supplies the globally permissable defaults for the standard float type adapter's check operation. The return value is a three character string. The first character specifies how a bare floating point value is treated, the second specifies how an explicit epsilon is treated, and the third specifies how a range expression is treated. The letter 'f', in all three cases, causes an exception to be raised for that particular option.</p>
+<p>The default is currently &quot;eer&quot;, which allows both implicit and explicit epsilon processing as well as range checks. It is possible that the default will change to &quot;fff&quot; for strict standards compliance with the FIT 2.0 specification.</p>
+<p>The .checkType metadata qualifier overrides this specification.</p>
+<p>See the <a class="reference" href="FIT_TypeAdapters.htm">Type Adapter</a> writeup for a more detailed explanation of floating point check processing.</p>
+</div>
+<div class="section" id="candefaultmissingmetadata-self">
+<h3><a class="toc-backref" href="#id21" name="candefaultmissingmetadata-self">canDefaultMissingMetadata(self)</a></h3>
+<p>This routine provides permission for the type adapter mechanism to use the Default type adapter if no type adapter is specified for a request. There are no parameters; permission is given or denied globally across an entire application.</p>
+<p>The return values are True, False and None. None denies permission, and is the default if the routine is not implemented.</p>
+</div>
+</div>
+<div class="section" id="management">
+<h2><a class="toc-backref" href="#id22" name="management">Management</a></h2>
+<div class="section" id="listoffilesoptions-self-options">
+<h3><a class="toc-backref" href="#id23" name="listoffilesoptions-self-options">listOfFilesOptions(self, options):</a></h3>
+<p>This exit provides the ability for an exit that was installed from the SiteOptions or runner command to process options specified in the [options] section of a list of files. It may or may not be taken if the exit was installed from the [options] section of the list of files.</p>
+<p>It's taken after the options have been merged. It can return True, False or None; None is the same as True. False cancels the run after completing validity checking.</p>
+</div>
+<div class="section" id="individualtestoptions-self-options">
+<h3><a class="toc-backref" href="#id24" name="individualtestoptions-self-options">individualTestOptions(self, options)</a></h3>
+<p>This exit provides the ability for an exit to process options from an individual file entry in the list of files option.</p>
+</div>
+<div class="section" id="beforerunexecution-self">
+<h3><a class="toc-backref" href="#id25" name="beforerunexecution-self">beforeRunExecution(self):</a></h3>
+<p>This exit is taken after options have been processed and before any tests have been executed. It can acquire expensive resources or provide simulators for them, and store references in the run level symbol table.</p>
+</div>
+<div class="section" id="beforetestexecution-self-path-parsetree">
+<h3><a class="toc-backref" href="#id26" name="beforetestexecution-self-path-parsetree">beforeTestExecution(self, path, parseTree):</a></h3>
+<p>This exit is taken before each individual test begins execution. It can return True, False or None. True means the test is to execute; False means the test is to be bypassed. None is the same as True. Anything else is the same as False.</p>
+<p>It is legitimate for it to add symbols to the test level symbol table or change the options in the test level option object. Modifying the parse tree will work, but should be avoided as it will probably cause confusion all around, at least if it's done without making it real obvious what the changes are all about.</p>
+<p>The batch runner will drive this exit if the input has a parse error, in this case the parseTree parameter will have an exception object, not the root of a tree of parse nodes. The FitNesse runner will not drive this exit in case of a parse error. Instead, it will drive the afterTestExecution exit.</p>
+</div>
+<div class="section" id="aftertestexecution-self-counts-summary">
+<h3><a class="toc-backref" href="#id27" name="aftertestexecution-self-counts-summary">afterTestExecution(self, counts, summary):</a></h3>
+<p>This exit is taken after each individual test finishes execution. It can inspect the counts object and add entries to the summary; they will be reflected in the XML statistics file but not in the test itself.</p>
+<p>This exit will not be taken for tests bypassed by the beforeTestExecution exit.</p>
+<p>This exit may be taken if there is an unexpected error (including an error in parsing the HTML) in FitNesse. An unhandled error in batch causes the runner to terminate.</p>
+</div>
+<div class="section" id="afterrunexecution-self-counts">
+<h3><a class="toc-backref" href="#id28" name="afterrunexecution-self-counts">afterRunExecution(self, counts):</a></h3>
+<p>This exit is taken after all tests have been executed. It can release expensive resources acquired by a beforeTestExecution exit, write its own run summary, or communicate results to test or management automation tools.</p>
+<p>Counts is a count object which contains one count for each separate test. Tests that were bypassed by the beforeTestExecution exit are not included.</p>
+<p>There may be situations where FIT attempts to exit without calling this routine. If more reliability is needed, the Python standard library atexit module can be used.</p>
+</div>
+<div class="section" id="fixturesetupexit-self-table">
+<h3><a class="toc-backref" href="#id29" name="fixturesetupexit-self-table">fixtureSetUpExit(self, table):</a></h3>
+<p>This controls whether the setUpFixture() and tearDownFixture() exits will be taken in each fixture. A return value of True or None permits the exit, a return value of False prohibits it. If the routine does not exist, the default return is None, which enables the exits.</p>
+</div>
+<div class="section" id="columnfixtureexits-self-table">
+<h3><a class="toc-backref" href="#id30" name="columnfixtureexits-self-table">columnFixtureExits(self, table):</a></h3>
+<p>This controls whether the beginningOfRow() and endOfRow() exits will be taken in column fixtures. A return value of True or None permits the exits, a return value of False prohibits them. The default return of None when the exit does not exist enables the exits.</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

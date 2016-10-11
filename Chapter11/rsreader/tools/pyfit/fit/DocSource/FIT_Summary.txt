@@ -1,0 +1,10 @@
+Summary Fixture
+---------------
+
+The Fit summary fixture provides a summary of the test, including dates, times, file names and the number of good, bad, ignored and exceptions.
+
+It's a single cell table with 'fit.summary' (without the apostrophes, of course) as the only content. The fixture builds the rest of the rows and columns.
+
+Summary depends on a dictionary in Fixture named, not surprisingly, summary. You can add other things to this dictionary as the test progresses, and summary will print them out at the end. See the source for `Fixture`__ to trace exactly how this works.
+
+__ FIT_WritingFixtures.htm

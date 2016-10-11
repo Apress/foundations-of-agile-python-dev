@@ -1,0 +1,31 @@
+<html><title>CalculateFixture</title><body>
+<h1>CalculateFixture</h1>
+CalculateFixture is for testing calculations, like <i>ColumnFixture</i>. CalculateFixture was introduced to explore a few ideas.<br>
+<ul><li>It's minimalistic, in the sense that there are no (default) special values, such as " " and "error", as used in <i>ColumnFixture</i>. Such special values can be explicitly defined in the fixture code.</li>
+<li>It distinguishes between the <i>given</i> values and the <i>expected</i> values by using a blank column to separate the <i>givens</i> on the left side and the <i>expecteds</i> on the right.</li>
+<li>It allows any characters in the second (header) row, including unicode.</li>
+<li>It can simplify <a href="WritingFixtures.html"><a href="WritingFixtures.html">WritingFixtures</a></a> in some cases.</li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>CalculatedDiscount</td></tr>
+<tr><td><i>$</i></td><td></td><td><i>discount</i></td></tr>
+<tr><td>0.00</td><td></td><td>0.00</td></tr>
+<tr><td>1000.00</td><td></td><td>0.00</td></tr>
+<tr><td>1010.00</td><td></td><td>50.50</td></tr>
+<tr><td>1100.00</td><td></td><td>55.00</td></tr>
+<tr><td>1200.00</td><td></td><td>60.00</td></tr>
+<tr><td>2000.00</td><td></td><td>100.00</td></tr>
+</table>
+<ul><li>Here's a table that uses Japanese:</li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=6>CalculateCredit3</td></tr>
+<tr><td>&#26376;&#25968;</td><td>&#20449;&#38972;&#24230;</td><td>&#27531;&#39640;</td><td></td><td>&#12463;&#12524;&#12472;&#12483;&#12488;&#12434;&#35377;&#21487;&#12377;&#12427;</td><td>&#12463;&#12524;&#12472;&#12483;&#12488;&#12398;&#38480;&#24230;</td></tr>
+<tr><td>14</td><td>&#30495;</td><td>5000.00</td><td></td><td>&#30495;</td><td>1000.00</td></tr>
+<tr><td><i>0</i></td><td>&#30495;</td><td>0.00</td><td></td><td>&#20605;</td><td>0.00</td></tr>
+<tr><td>24</td><td><i>&#20605;</i></td><td>0.00</td><td></td><td>&#20605;</td><td>0.00</td></tr>
+<tr><td>18</td><td>&#30495;</td><td><i>6000.00</i></td><td></td><td>&#20605;</td><td>0.00</td></tr>
+<tr><td><i>12</i></td><td>&#30495;</td><td>5500.00</td><td></td><td>&#30495;</td><td>1000.00</td></tr>
+</table>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

@@ -1,0 +1,19 @@
+<html><head><title>Error Message Mapping</title></head>
+<body>
+<h1><center>Error Message Mapping</center></h1>
+<p>This demonstrates the facility for changine error messages.</p>
+<p>The first thing is to verify that the configuration is set up properly. Note that this test <i>will not run</i> correctly at the same time as Base Error Messages if the runner tries to run the entire directory at one time. The configurations are incompatible.</p>
+<p>This uses the same configuration module as many of the other tests in this suite.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>check configuration</td></tr>
+<tr><td>Environment</td><td colspan=2>Batch</td></tr>
+<tr><td>Options</td><td>appConfigurationModule</td><td>fit.AccTestFixtures.ApplicationConfiguration1</td></tr>
+</table>
+<p>&nbsp;</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5>fit.AccTestFixtures.ExpandErrorMessage</td></tr>
+<tr><td>args</td><td>exception</td><td>Trace</td><td>Message</td><td>notes</td></tr>
+<tr><td>("NoTypeInfo", "foo", "bar")</td><td>EXC</td><td>NOTRACE</td><td>Missing Metadata for 'foo'. It oughta be here: 'bar', and it ain't</td><td>Nonstandard error message</td></tr>
+</table>
+</body></html>

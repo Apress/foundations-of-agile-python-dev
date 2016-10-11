@@ -1,0 +1,27 @@
+<html><title>FolderRunnerBrowser</title><body>
+<h1><a href="FolderRunnerBrowser.html">FolderRunnerBrowser</a></h1>
+The <i>Browser</i> is useful when you have lots of test suites, and you want to run Fit on them and see the results while it is processing them.<br>
+<br>
+Run the <i>Browser</i> as follows:<br>
+<hr>
+<pre>
+java -cp javaFit1.1b.jar;fitLibrayForFit.jar fit.runner.folder.Browser
+</pre>
+<hr>
+This assumes that the tests are in the directory "tests" and the reports are to be written to the directory "reports".<br>
+<br>
+You will need to add to the classpath (<i>cp</i>) for:<br>
+<ul><li>Any application code that you're testing.</li>
+<li>The <i>Poi</i> jar, if your test suites include XLS files</li></ul>
+The <i>Browser</i> is suitable for doing development, because it loads the latest application classes each time it runs the tests.<br>
+<br>
+However, it is clearly a "<i>work in progress</i>".<br>
+<h3>Planned changes:</h3>
+<ul><li>Ability to run any test or test suite in the <i>testDir</i>.</li>
+<li>Immediate access to the report from its test and vice versa.</li>
+<li>Grab <i>System.out</i> and <i>System.err</i> and display them in the Browser.</li></ul>
+I am not planning to add an editor to this (I want to put my effort into a refactoring tool instead). <i>Fitster</i> is a combined runner and editor.<br>
+<h3>Known Bugs</h3>
+<ul><li>The screen flickers while the tests are running. Due to the regular reloading of the HTML. Maybe some form of double-buffering could be used.</li>
+<li>The Swing HTML viewer used in the <i>Browser</i> doesn't show some HTML properly. Eg, the "pre" tag.</li></ul>
+</body></html>

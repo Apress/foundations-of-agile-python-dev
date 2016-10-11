@@ -1,0 +1,27 @@
+<html><head><title>Test Symbol handling in Column and Row Fixture</title></head>
+<body>
+<h1><center>Test Symbol Handling in Column and Row Fixture</center></h1>
+<p>First, store some numbers into the symbol table, and create a collection for later.</p>
+<table cellSpacing=0 cellPadding=3 border=1>
+<tr><td colspan=2>eg.SymbolTest.ColumnFixture1</td></tr>
+<tr><td>input</td><td>=output?</td></tr>
+<tr><td>1</td><td>one</td></tr>
+<tr><td>2</td><td>two</td></tr>
+<tr><td>3</td><td>three</td></tr>
+</table>
+<p>Now retrieve them via the symbol table</p>
+<table cellSpacing=0 cellPadding=3 border=1>
+<tr><td colspan=2>eg.SymbolTest.ColumnFixture2</td></tr>
+<tr><td>input=</td><td>output!</td></tr>
+<tr><td>one</td><td>1</td></tr>
+<tr><td>two</td><td>2</td></tr>
+<tr><td>three</td><td>3</td></tr>
+</table>
+<p>And now look at the results using the collection from ColumnFixture1</p>
+<table cellSpacing=0 cellPadding=3 border=1>
+<tr><td colspan=2>eg.SymbolTest.RowFixture1</td></tr>
+<tr><td>input=</td><td>output</td></tr>
+<tr><td>one</td><td>1</td></tr>
+<tr><td>two</td><td>2</td></tr>
+<tr><td>three</td><td>3</td></tr>
+</table>

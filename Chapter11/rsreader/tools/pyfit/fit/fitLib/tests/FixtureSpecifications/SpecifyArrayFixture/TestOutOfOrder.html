@@ -1,0 +1,15 @@
+<html><title>TestOutOfOrder</title><body>
+<h1><a href="TestOutOfOrder.html">TestOutOfOrder</a></h1>
+<h2>All elements are there, but not in the correct order</h2>
+<i>ArrayFixture</i> ignores rows until finding the first actual element.<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td ColSpan=2>fitLib.specify.ArrayFixtureUnderTest</td></tr>
+<tr><td></td><td>+</td><td>&</td></tr>
+<tr><td>rw</td><td>1</td><td>two</td></tr>
+<tr><td>w</td><td>2</td><td>two</td></tr>
+<tr><td>report</td><td>2 missing</td><td>two</td></tr>
+<tr><td>rw</td><td>1</td><td>one</td></tr>
+<tr><td>Iw</td><td>2 surplus</td><td>two</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,30 @@
+<html>
+<head>
+	<title>Wiki: All Pairs</title>
+</head>
+<body bgcolor=#FFFFFF link=#d06040 vlink=#806040>
+	<h1>All Pairs</h1>
+	<wiki>This is the third and final fixture of a suite that make up the AllPairsExample. Like with AllFiles, we expand wildcard characters in path specifications to get lists of tests. And, like in AllCombinations, we enumerate cases drawing from these lists one test at a time in sequence. But here our goal is only to test all possible pairs of test, which will require fewer cases.
+<p>Note that the implementation of this approach doesn't work in this case, since we don't have an oracle that tells us what the actual results of each test are supposed to be. I had to remove the final test, since it wasn't correct in all cases, and I've got a bit of a fetish for tests passing with no notes and no errors. (JR).</p>
+<p><hr>
+<p>Here is the same specification we used to test the CalculatorExample in AllCombinations. Try it using AllPairs.
+<p><a href="run.cgi">http:run.cgi</a>
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=2> eg.AllPairs </td></tr>
+<tr><td> fat/Documents/AllPairs/magnitude/*.html </td><td>&nbsp;</td></tr>
+<tr><td> fat/Documents/AllPairs/sign/*.html </td><td>&nbsp;</td></tr>
+<tr><td> fat/Documents/AllPairs/function/*.html </td><td>&nbsp;</td></tr>
+</table>
+<p>To meet the "all pairs" requirement we need at least n X m cases, where n and m are the sizes of the two largest categories. That means with only two categories all combinations and all pairs are the same. The marvel of the all pairs algorithm is that it squeezes draws from additional categories into these same cases and possibly a few more.
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=2> fit.Summary </td></tr>
+</table>
+<p><hr>
+<p><strong>Implementation</strong>
+<p>The original algorithm in the Java version was overly complicated for the function it performed. This program is a slightly modified version of the standard way of generating all combinations of a list, taken two at a time. The modification consists of not taking both files in the pair from the same category. Notice that, like the other programs in this series, it does not run the pairs in both orders. Adding that capability would require one additional statement.
+</wiki>
+<hr>
+	Last edited July 28, 2003
+</body>
+</html>
+

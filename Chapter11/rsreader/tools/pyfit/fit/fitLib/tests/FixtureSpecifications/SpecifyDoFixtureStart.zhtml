@@ -1,0 +1,36 @@
+<html><title>SpecifyDoFixtureStart</title><body>
+<h1><a href="SpecifyDoFixtureStart.html">SpecifyDoFixtureStart</a></h1>
+A <i>start</i> special action creates an object of the specified class and make it the <i>SystemUnderTest</i> object associated with the <i>DoFixture</i>.<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fitLib.DoFixture</td></tr>
+<tr><td>start</td><td ColSpan=2>java.awt.Rectangle</td></tr>
+<tr><td>check</td><td><i>x</i></td><td>0</td></tr>
+<tr><td>check</td><td><i>y</i></td><td>0</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>set location</td><td>100</td><td></td><td>200</td></tr>
+<tr><td>check</td><td><i>x</i></td><td ColSpan=2>100</td></tr>
+<tr><td>check</td><td><i>y</i></td><td ColSpan=2>200</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4>location</td></tr>
+<tr><td><i>move</i></td><td>12</td><td></td><td>14</td></tr>
+<tr><td>check</td><td><i>x</i></td><td ColSpan=2>12</td></tr>
+<tr><td>check</td><td><i>y</i></td><td ColSpan=2>14</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>x</i></td><td>100</td></tr>
+<tr><td>check</td><td><i>y</i></td><td>200</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>set size</i></td><td>20</td><td></td><td>30</td></tr>
+<tr><td>check</td><td><i>width</i></td><td ColSpan=2>20</td></tr>
+<tr><td>check</td><td><i>height</i></td><td ColSpan=2>30</td></tr>
+</table>
+<br>
+<br>
+</body></html>

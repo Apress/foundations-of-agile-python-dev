@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Runners</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="runners">
+<h1 class="title">Runners</h1>
+<p>Runners are the top level programs that run tests. There are a number of runners. FileRunner, WikiRunner, HTMLRunner and FolderRunner are used for the batch version; TestRunner is used with FitNesse. Two additional runners, FitFilter and FitServer, are invoked directly from FitNesse. In addition, you can define your own runners with different sets of default parameters or additional abilities.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#functions" id="id2" name="id2">Functions</a></li>
+<li><a class="reference" href="#batch-runners" id="id3" name="id3">Batch Runners</a><ul>
+<li><a class="reference" href="#switches" id="id4" name="id4">Switches</a><ul>
+<li><a class="reference" href="#application-configuration-module" id="id5" name="id5">Application Configuration Module</a></li>
+<li><a class="reference" href="#console-output" id="id6" name="id6">Console Output</a></li>
+<li><a class="reference" href="#character-set-support" id="id7" name="id7">Character Set Support</a></li>
+<li><a class="reference" href="#standards-and-css" id="id8" name="id8">Standards and CSS</a></li>
+<li><a class="reference" href="#parameters" id="id9" name="id9">Parameters</a></li>
+<li><a class="reference" href="#setup-and-teardown-files" id="id10" name="id10">Setup and Teardown Files</a></li>
+<li><a class="reference" href="#folder-at-a-time-processing" id="id11" name="id11">Folder at a time processing</a></li>
+<li><a class="reference" href="#statistics-file-output" id="id12" name="id12">Statistics File output</a></li>
+<li><a class="reference" href="#diagnostic-output" id="id13" name="id13">Diagnostic Output</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#list-of-files-processing" id="id14" name="id14">List of Files processing</a></li>
+<li><a class="reference" href="#fixture-renames" id="id15" name="id15">Fixture Renames</a></li>
+<li><a class="reference" href="#filerunner-wikirunner-and-htmlrunner" id="id16" name="id16">FileRunner, WikiRunner and HtmlRunner</a></li>
+<li><a class="reference" href="#folderrunner" id="id17" name="id17">FolderRunner</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#fitnesse-runners" id="id18" name="id18">FitNesse Runners</a><ul>
+<li><a class="reference" href="#fitserver" id="id19" name="id19">FitServer</a></li>
+<li><a class="reference" href="#testrunner" id="id20" name="id20">TestRunner</a></li>
+<li><a class="reference" href="#fitnesse-files" id="id21" name="id21">FitNesse files</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#runner-customization" id="id22" name="id22">Runner Customization</a></li>
+<li><a class="reference" href="#statistics-file" id="id23" name="id23">Statistics File</a></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h1><a class="toc-backref" href="#id2" name="functions">Functions</a></h1>
+<p>The different runners support many of the same functions. Some functions are unique; CSS and file encodings mean nothing to FitNesse, for example. However, most functions can be specified in either batch or with Fitnesse. The tables below outline the functionality.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="11%" />
+<col width="16%" />
+<col width="36%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Function</td>
+<td>Batch</td>
+<td>TestRunner</td>
+<td>FitNesse Server</td>
+</tr>
+<tr><td>Application Configuration</td>
+<td>+a</td>
+<td>+a</td>
+<td>!path module.py</td>
+</tr>
+<tr><td>Application Config Parms</td>
+<td>+b</td>
+<td>+b</td>
+<td>!path something.parm</td>
+</tr>
+<tr><td>CSS markup</td>
+<td>+c</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr><td>default input encoding</td>
+<td>+d</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr><td>input encoding (forced)</td>
+<td>+i</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr><td>output encoding</td>
+<td>+o</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr><td>standards mode</td>
+<td>+e,+l</td>
+<td>+l</td>
+<td>!path code.std</td>
+</tr>
+<tr><td>console report level</td>
+<td>+q</td>
+<td>(planned)</td>
+<td>n/a</td>
+</tr>
+<tr><td>process subdirectories</td>
+<td>+r</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr><td>use setup and teardown</td>
+<td>+s</td>
+<td>builtin</td>
+<td>builtin</td>
+</tr>
+<tr><td>tell symbol</td>
+<td>+t</td>
+<td>+t</td>
+<td>!path key.value.sym</td>
+</tr>
+<tr><td>verbose mode</td>
+<td>+v</td>
+<td>+v</td>
+<td>+v</td>
+</tr>
+<tr><td>write XML stats file</td>
+<td>+x</td>
+<td>+x</td>
+<td>n/a</td>
+</tr>
+<tr><td>diagnostic options</td>
+<td>+z</td>
+<td>+z</td>
+<td>!path option.true/False</td>
+</tr>
+<tr><td>Add to Python Path</td>
+<td>n/a</td>
+<td>+p</td>
+<td>!path module</td>
+</tr>
+<tr><td>use list of files</td>
+<td>1st pp</td>
+<td>(planned)</td>
+<td>n/a</td>
+</tr>
+<tr><td>output directory</td>
+<td>2nd pp</td>
+<td>+o</td>
+<td>FitNesse own filesystem</td>
+</tr>
+<tr><td>fixture renames</td>
+<td>3rd pp</td>
+<td>+p (.txt)</td>
+<td>!path (.txt)</td>
+</tr>
+<tr><td>save HTML output</td>
+<td>always</td>
+<td>+h</td>
+<td>always</td>
+</tr>
+<tr><td>format using FitNesse</td>
+<td>n/a</td>
+<td>+f</td>
+<td>always</td>
+</tr>
+<tr><td>save raw output</td>
+<td>n/a</td>
+<td>+r</td>
+<td>never</td>
+</tr>
+</tbody>
+</table>
+<p>This table gives all of the options in alphabetic order</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="39%" />
+<col width="48%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Switch</td>
+<td>Batch Function</td>
+<td>TestRunner Function</td>
+</tr>
+<tr><td>+a</td>
+<td colspan="2">Application Configuration Module</td>
+</tr>
+<tr><td>+b</td>
+<td colspan="2">Application Configuration Parameters</td>
+</tr>
+<tr><td>+c</td>
+<td>CSS Level</td>
+<td>n/a</td>
+</tr>
+<tr><td>+d</td>
+<td>default file encoding</td>
+<td>n/a</td>
+</tr>
+<tr><td>+e</td>
+<td>Standards Level (obs)</td>
+<td>don't save good output</td>
+</tr>
+<tr><td>+f</td>
+<td>n/a</td>
+<td>use FitNesse to format output</td>
+</tr>
+<tr><td>+h</td>
+<td>n/a</td>
+<td>save HTML output</td>
+</tr>
+<tr><td>+i</td>
+<td>forced input encoding</td>
+<td>n/a</td>
+</tr>
+<tr><td>+l</td>
+<td colspan="2">standards level</td>
+</tr>
+<tr><td>+o</td>
+<td>output file encoding</td>
+<td>output directory</td>
+</tr>
+<tr><td>+p</td>
+<td>n/a</td>
+<td>use path from FitNesse</td>
+</tr>
+<tr><td>+q</td>
+<td>console stats level</td>
+<td>(planned)</td>
+</tr>
+<tr><td>+r</td>
+<td>recurse subdirectories</td>
+<td>save raw output file</td>
+</tr>
+<tr><td>+s</td>
+<td>use setup and teardown</td>
+<td>n/a</td>
+</tr>
+<tr><td>+t</td>
+<td colspan="2">run level symbols</td>
+</tr>
+<tr><td>+u</td>
+<td colspan="2">(reserved for planned feature)</td>
+</tr>
+<tr><td>+v</td>
+<td colspan="2">verbose error message level</td>
+</tr>
+<tr><td>+w</td>
+<td colspan="2">(reserved for use as error in runner tests)</td>
+</tr>
+<tr><td>+x</td>
+<td colspan="2">Save XML statistics</td>
+</tr>
+<tr><td>+z</td>
+<td colspan="2">diagnostic options</td>
+</tr>
+</tbody>
+</table>
+<p>The Options object also contains several attributes that can only be set in the SiteOptions module. Any additions to these fields also need to be put into the Options module.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>fitNesse_Root</td>
+<td>path to FitNesse files</td>
+</tr>
+<tr><td>fitNesse_Host</td>
+<td>defaults to &quot;localhost&quot;</td>
+</tr>
+<tr><td>fitNesse_Port</td>
+<td>defaults to 80</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="batch-runners">
+<h1><a class="toc-backref" href="#id3" name="batch-runners">Batch Runners</a></h1>
+<p>These runners are used from the command line. The various batch runners are small scripts that invoke the main RunnerImplementation.py module at the FileRunner class. Adding a new runner is trivial; just copy one of the stub files and give it a new name, and then set up the defaults you want in the SiteOptions.py module.</p>
+<p>python Runner-Name.py [options] input-file output-file [fixture-renames]</p>
+<p>The Runner-name is the name of the runner stub in the Fit main directory. It should be defined in the SiteOptions module; if it's not there it will default to the same options as FileRunner. Note that the default options for FileRunner will change in the next release; currently it does not enforce standards mode, in the future it will do so.</p>
+<p>The input-file can be an HTML file name, a directory or a .txt file listing run options and the files to process in the run. The output-file can be the name of an output file or the name of a directory for the results. A single output file is only valid if the input is defined as a single file. Fixture-renames is optional; if provided it's a .txt file with fixture renames.</p>
+<p>The batch runners do not support input from stdin or output to stdout. This sometimes confuses people who are used to Unix command conventions. This support may be added in a future release.</p>
+<div class="section" id="switches">
+<h2><a class="toc-backref" href="#id4" name="switches">Switches</a></h2>
+<p>All of the batch runners use a common code base and a common set of switches. The switches are a little unusual in that binary switches are turned on with a +, and turned off with a -. Other switches don't care whether you use + or - as the switch indicator.</p>
+<p>All switches are single characters. Parameters must be separated from the switch by at least one white space character. Switch characters can be combined.</p>
+<div class="line-block">
+<div class="line">+a Application Configuration module name</div>
+<div class="line">+b parameters for the Application Configuration module</div>
+<div class="line">+c CSS or inline markup</div>
+<div class="line">+d default input encoding</div>
+<div class="line">+e standards mode</div>
+<div class="line">+i forced input encoding</div>
+<div class="line">+o output encoding</div>
+<div class="line">+q run summary level</div>
+<div class="line">+r subdirectory processing</div>
+<div class="line">+s setup and teardown file processing</div>
+<div class="line">+t run level symbols</div>
+<div class="line">+v verbose mode</div>
+<div class="line">+x XML statistics file</div>
+<div class="line">+z diagnostic options</div>
+</div>
+<div class="section" id="application-configuration-module">
+<h3><a class="toc-backref" href="#id5" name="application-configuration-module">Application Configuration Module</a></h3>
+<p>The -a switch specifies that an application configuration module is required for this run. The path name of the module is the parameter; it must be on the Python path.</p>
+<p>The Application Configuration module cannot be overridden. It can be specified on the runner command, in the SiteOptions for the runner, in the [options] section of the &quot;list of files&quot; option and for individual files and directories in the &quot;list of files&quot; option, but specifications that are lower in the list will be ignored in favor of specifications that are higher in the list.</p>
+<p>The -b switch specifies parameters to be passed to the application configuration module. The switch can be specified multiple times; each use creates one parameter.</p>
+<p>The options currently in effect will be passed to the initialization routine; the option class will also be passed while processing the [options] section of the &quot;list of files&quot; option and while processing the options section of the individual files in the &quot;list of files&quot; option.</p>
+<p>The module can make any changes it desires to the options, however the FIT specification level is set before it sees them.</p>
+<p>Note that the Application Configuration module is incompatable with the Fixture Renames facility. If both are specified, the Application Configuration module will be used.</p>
+</div>
+<div class="section" id="console-output">
+<h3><a class="toc-backref" href="#id6" name="console-output">Console Output</a></h3>
+<p>The -v (verbose) switch controls output from command parsing. -v turns off all but error messages, +v turns on documentation of what the command line options did.</p>
+<p>The -q (quiet mode) switch controls output of run summaries to the console. It takes a two character parameter. The first character controls output from individual tests, the second one controls output from an entire directory, hierarchy of directories, or the tests in the list of files to process.</p>
+<p>The first character can be y to always put out a summary line for each test, n to never put out a summary for each test, or e to put out a summary only if the test had a wrong or an exception.</p>
+<p>The second character can be f, t or n. F (full or folder) puts out a title line and a summary line for each folder, and a final summary line at the end. It's only meaningful if the +r switch is on to request recursion through subdirectories, or if a list of files to process was supplied. The t character (total line) requests one summary line at the end. n suppresses all folder level output.</p>
+<p>Defaults are set in the SiteOptions module based on the runner name. The default for all runners except FolderRunner is yn, FolderRunner defaults to ef.</p>
+<p>The module fixes several combinations that produce difficult to interpret or redundant output; in particular:</p>
+<blockquote>
+<p>folder option n is forced in single file mode</p>
+<p>folder option f is changed to t in single directory mode</p>
+<p>folder option t is changed to f for recursive directory or list of files mode.</p>
+</blockquote>
+</div>
+<div class="section" id="character-set-support">
+<h3><a class="toc-backref" href="#id7" name="character-set-support">Character Set Support</a></h3>
+<p>PyFit processes internally in Unicode; it does not assume that all inputs are encoded in one of the utf character sets. If the HTML input file contains a character set declaration, it will use it and attempt to put out the result in the same encoding. However, there are times when it can't determine the encoding, or when the encoding in the HTML is wrong. There are three switches that control the encoding and decoding process.</p>
+<p>The -d switch sets the default encoding to use for input. This is used if PyFit cannot determine the encoding. If not set, the default is Windows-1252, which is the same as Latin-1 plus some additional characters.</p>
+<p>The -i switch forces an encoding on input; use it only as a last resort. PyFit autodetects utf 16 and 32 bit encodings before checking this, but it overrides everything else, including the utf-8 &quot;BOM&quot; signature.</p>
+<p>The -o switch forces a specific output encoding. If the encoding fails, PyFit will write the file using utf-8.</p>
+</div>
+<div class="section" id="standards-and-css">
+<h3><a class="toc-backref" href="#id8" name="standards-and-css">Standards and CSS</a></h3>
+<p>There is an emerging standard for Fit implementations; unfortunately several existing PyFit features conflict with this standard. Specifying the +e option turns on standards mode and turns off all of the conflicting features. Specifying -e turns standards mode off. The -l (lower case L) switch gives the level of the FIT specification in effect. At present, the only valid value is &quot;1.1&quot;.</p>
+<p>Currently, the only conflicting feature is CSS - you cannot specify CSS output and standards mode.</p>
+<p>The -c and +c switches turn CSS output off and on. CSS turns formatting control over to an external file, FIT.css, which is placed in each output directory. This makes it easy to change the exact coloring for cells. The FIT.css file can also be placed in the output header, which makes it easy to transport the result files, at the expense of changing it for accessability.</p>
+<p>CSS is the basis for accessability support, among many other things. Note that PyFit is not making any claims of compliance with any standards for accessability; that is well beyond the scope of what this package can do. It is simply providing a small part of the foundation on which some other product can build accessability support.</p>
+</div>
+<div class="section" id="parameters">
+<h3><a class="toc-backref" href="#id9" name="parameters">Parameters</a></h3>
+<p>The +t switch provides a key.value pair to be entered into the run level symbol table. This can be queried by fixtures at run time to provide information such as the run envirionment (developer, integration, build, test and package, or about the specific test level desired. The key is everything up to the last period, the value is everything after that.</p>
+</div>
+<div class="section" id="setup-and-teardown-files">
+<h3><a class="toc-backref" href="#id10" name="setup-and-teardown-files">Setup and Teardown Files</a></h3>
+<p>Frequently all the files in a directory or in a directory hierarchy require the same setup and teardown processing. The +s and -s switches enable and disable this support.</p>
+<p>If setup and teardown is enabled, PyFit inserts the tables from the SetUp.htm or SetUp.html file in front of the tables for the test, and puts the tables from the TearDown.htm or TearDown.html file at the end. It does this recursively; that is, if it is processing a subdirectory, the setup and teardown files from the parent directory will be put on the outside, then the files from the next directory below it just inside and so forth.</p>
+<p>These names are case sensitive; setup.HTML will not work.</p>
+</div>
+<div class="section" id="folder-at-a-time-processing">
+<h3><a class="toc-backref" href="#id11" name="folder-at-a-time-processing">Folder at a time processing</a></h3>
+<p>Folder processing is specified by using a directory as the input file name rather than a file. Subfolder processing is enabled and disabled by the +r and -r switches. +r enables it, -r disables it.</p>
+</div>
+<div class="section" id="statistics-file-output">
+<h3><a class="toc-backref" href="#id12" name="statistics-file-output">Statistics File output</a></h3>
+<p>The +x and -x switches enable and disable production of an XML statistics file. This file contains data for each file processed, including the counts and any data from the summary table, whether or not it was inserted into the HTML output. The file is its own documentation.</p>
+<p>The statistics file will not be produced if the runner is processing a single file.</p>
+</div>
+<div class="section" id="diagnostic-output">
+<h3><a class="toc-backref" href="#id13" name="diagnostic-output">Diagnostic Output</a></h3>
+<p>The -z switch sets diagnostic options. The switch takes one parameter, but it can be used as many times as needed.</p>
+<p>Diagnostic options are kept in a central dictionary. The key is separated from the value with a &quot;.&quot; character: the last dot, if any, is the separator. If there are no dots, the value defaults to True.</p>
+</div>
+</div>
+<div class="section" id="list-of-files-processing">
+<h2><a class="toc-backref" href="#id14" name="list-of-files-processing">List of Files processing</a></h2>
+<p>There are times when it's desirable to process a group of tests that are not neatly collected in a directory hierarchy. This process is specified in a .txt file named on the input parameter (the first positional parameter).</p>
+<p>The file containing the list of files has three sections, each headed by a line containing &quot;[options]&quot;, &quot;[files]&quot; and &quot;[fixture renames]&quot; respectively. The section header includes the brackets, but not the quotes. The options and fixture renames sections, including the section headers, are optional.</p>
+<p>The options section contains the same options that can be specified on the command line, one per line. All options in this section are permanent. If it specifies an applications configuration module, that replaces any module specified in the SiteOptions or the command line, however it does not get a chance to edit options from the command line or SiteOptions module.</p>
+<p>Each line in the files section is formatted as follows:</p>
+<div class="line-block">
+<div class="line">[options] input file or directory [output file or directory]</div>
+</div>
+<p>The paths are relative to the path of the file containing the file list. If the file list came in on stdin, then the paths must be absolute.</p>
+<p>Options on a file section line apply only to that file, and will be, for the most part, reverted before processing the next file.</p>
+<p>The fixture renames section contains fixture renames, one per line. See the section on fixture renames (following) for how this works. Note that if the call to the Application Configuration module when translating a fixture name returns a fixture name, the fixture renames facility is skipped.</p>
+<p>Comments can occur in any section. Comment lines must begin with a # in the first character position.</p>
+<p>Comments can be used freely before the first section and in the options section. Comments in the other two sections will conflict with paths and fixture names beginning with the # character; the solution is to preceed any path names or fixture names begining with # with something else, such as an option (in the files section) or white space (in the fixture renames section).</p>
+</div>
+<div class="section" id="fixture-renames">
+<h2><a class="toc-backref" href="#id15" name="fixture-renames">Fixture Renames</a></h2>
+<p>FIT tests are most understandable to the business people for whom we're writing the software when the fixture names are business facing. That is, they have names that are meaningful in terms of the business and system being constructed; possibly chosen from the ubiquitous language that's part of the project.</p>
+<p>Business facing names are frequently not good names for either modules or classes, especially if the names are in a language other than English, or otherwise contain characters outside of the permitted character set for Python identifiers.</p>
+<p>The fixture renames mechanism provides a way of translating one to the other. See the <a class="reference" href="FIT_FixtureNames.htm">Fixture Names</a> page for more discussion of this issue.</p>
+<p>There are several ways of doing this in batch, and one way with FitNesse.</p>
+<p>The easiest way in batch is to put the renames in a file named FixtureRenames.txt that is in the same directory as the test file. This provides a default mapping and a central place to maintain the list.</p>
+<p>A second way is to put the renames file name as the third positional parameter on the runner command. This lets you use multiple renames files.</p>
+<p>The third is to use the [fixture renames] section of the list of files text file.</p>
+<p>In FitNesse, the fixture renames file must be specified in the path parameters; any .txt file is taken as a fixture renames file.</p>
+</div>
+<div class="section" id="filerunner-wikirunner-and-htmlrunner">
+<h2><a class="toc-backref" href="#id16" name="filerunner-wikirunner-and-htmlrunner">FileRunner, WikiRunner and HtmlRunner</a></h2>
+<p>These runners default to executing one acceptance test at a time in a batch environment. While all runners can do directory or list of files processing, these runners' default parameters are optimized for single file execution.</p>
+<p>To run them, set the current directory to the root of the PyFit installation and issue the following command:</p>
+<p>python FileRunner.py [options] input-file output-file [rename-file]</p>
+<p>There is no current difference between FileRunner and WikiRunner; the parameters in SiteOptions are identical.</p>
+<p>The original difference between FileRunner and WikiRunner was that WikiRunner accepts HTML documents with one piece of custom markup: &lt;wiki&gt; stuff &lt;/wiki&gt;. That markup is produced by specially modified wikis to get around the fact that FIT cannot handle embedded tables. This is used by Ward Cunningham's Wiki, and is consequently scattered throughout the examples. Currently, the combined runner logic makes a test for the presence of the &lt;wiki&gt; tag, and does the appropriate adjustment.</p>
+<p>Although the FitLibrary changes allow embedded tables, they do not really solve this problem: the tables to be executed are inside the embedding table, while the runners expect them outside. The solution to the problem is for the wiki to only send the HTML to be run, and not the surrounding HTML on the wiki page. This is the strategy that FitNesse uses.</p>
+<p>HtmlRunner differs only in that the default options for it in SiteOptions include +s: it will process setup and teardown files if they exist in the same directory.</p>
+<p>In a future release, FileRunner will enforce standards mode; currently it does not do so. To insure release to release compatability you should use some other runner name.</p>
+</div>
+<div class="section" id="folderrunner">
+<h2><a class="toc-backref" href="#id17" name="folderrunner">FolderRunner</a></h2>
+<p>FolderRunner runs all of the files in the directory; it is also part of FitLibrary.</p>
+</div>
+</div>
+<div class="section" id="fitnesse-runners">
+<h1><a class="toc-backref" href="#id18" name="fitnesse-runners">FitNesse Runners</a></h1>
+<p>These runners are used with FitNesse. FitServer is executed by FitNesse itself when the user requests a Test or Suite. TestRunner is used from the command line; it can be included in automated test procedures. The FitNesse runners use a completely different implementation module from the batch runners.</p>
+<p>The earliest version of FitNesse that works with TestRunner is 20050405. The earliest version that runs with FitServer is 20040119. The very earliest versions of FitNesse require the undocumented and unsupported FitFilter program.</p>
+<div class="section" id="fitserver">
+<h2><a class="toc-backref" href="#id19" name="fitserver">FitServer</a></h2>
+<p>FitServer is executed from the Fitnesse server when a test or test suite is selected. It uses redirection on stdout and stderr to capture anything on these two files, and otherwise uses a network socket on localhost to pass the actual HTML. Because of this, FitServer always executes on the same machine as the FitNesse server that is executing the test.</p>
+<p>In order to execute the Python version of FitServer rather than the Java version, the following markup needs to be inserted in the test (or on a page above the test) on the Fitnesse server:</p>
+<div class="line-block">
+<div class="line">!define COMMAND_PATTERN {python &quot;%m&quot; %p}</div>
+<div class="line">!define TEST_RUNNER {&lt;full path to FitServer.py&gt;}</div>
+<div class="line">!path &lt;full path to directory containing fixtures to execute&gt;</div>
+</div>
+<p>The !path needs to go in a directory above the test or suite you intend to run. You do not need an !path to execute the fixtures in the distribution as long as FitServer.py is in the same directory as the fit, fitLib, fitnesse, eg, fat and test packages.</p>
+<p>If you've moved FitServer.py, you need to add !path statements for the standard FIT packages.</p>
+<p>Python FIT uses the !path widget to pass parameters to the FitServer. While the parameters all look like file names, they have specific identifying characteristics.</p>
+<p>If you require an application configuration module, you must specify it with an !path statement for the module. FitServer identifies it by the .py suffix. If you need parameters they must also be specified with !path statements; FitServer identifies them by the .parm suffix. FitServer removes the .parm suffix before giving them to your configuration module.</p>
+<p>Diagnostic options are single element names with .true, .false or .z appended.</p>
+<p>If FitNesse's file storage is not in the usual place (c:fitnesseFitNesseRootfiles for Windows), you may need to specify it in a !path element. The FitNesseRoot/files part will identify it as such. If you don't do this and the tests require access to files, they may not work.</p>
+<p>Don't worry about the page telling you these elements are classpaths; FitServer does its own processing and removes anything looks like a Java class or jar file.</p>
+</div>
+<div class="section" id="testrunner">
+<h2><a class="toc-backref" href="#id20" name="testrunner">TestRunner</a></h2>
+<p>TestRunner is a batch program that you can use to run FitNesse tests. It requires FitNesse release 20050405 or later; it will not run properly on earlier releases.</p>
+<p>To execute it, you should set the current directory to the root of the PyFit tree, and execute the following command:</p>
+<p>Python TestRunner.py [options] host port pagename</p>
+<div class="line-block">
+<div class="line">-a &lt;application configuration module&gt;</div>
+<div class="line">-b &lt;parameter&gt; for the application configuration module</div>
+<div class="line">+e Only save raw and HTML files with an error</div>
+<div class="line">+f Use FitNesse to format HTML output files. (depreciated)</div>
+<div class="line">+h format results as HTML and save to a file</div>
+<div class="line">+l FIT Specification level (1.1 only)</div>
+<div class="line">-o &lt;directory&gt; The directory for raw, HTML and XML files</div>
+<div class="line">-p &lt;pathlist&gt; The directories to add to the Python path</div>
+<div class="line">+r save raw test results to a file. (option for testing)</div>
+<div class="line">+v (verbose): prints test progress to stderr</div>
+<div class="line">+x produce an XML formatted run statistics file</div>
+<div class="line">+z specifies a diagnostic option</div>
+</div>
+<p>The -a and -b parameters are the same as for batch.</p>
+<p>The depreciated -f option determines how HTML output files will be formatted. The +f option requests that the FitNesse server format the output file; the result is an image of the page as it would appear if it had been run from FitNesse. The -f option says that the runner will format the HTML output itself; the result is just the HTML without the FitNesse framing page.</p>
+<p>The difference between the options is portability. The result of the +f option requires that the FitNesse server is up at the same network address as when the test was run. If it isn't, the output will be formatted incorrectly because the CSS files will not be accessable.</p>
+<p>The -f option is portable: the required CSS file is embedded in the HTML file itself.</p>
+<p>The -o &lt;directory&gt; option supplies a directory for output. This directory is used by the +h, +r and +x options. TestRunner does not support output to sdtout; if a directory is not supplied no output will be written. This behavior sometimes confuses people who are used to Unix command conventions. Support for output to stdout may be added in a future release.</p>
+<p>The +h option requests that the output be saved as HTML files for later viewing. It requires the -o option to supply a directory for the output. This differs from the Java TestRunner in that the output is saved as a single file for each test page; the Java version saves the entire output as one file. The output file base name is the full FitNesse path name without the Suite portion unless it's a single page test: then it's the name of the test. In all cases, .html is appended.</p>
+<p>The +e option interacts with the HTML output so that only files which have errors are saved. It does nothing if +h or +r is not specified.</p>
+<p>The +r option requests that the raw output file be saved. This is mainly a debugging option: the same information is saved in the HTML output file in a readily viewable form. The output file name is the same as the HTML file, with .raw.txt appended instead of .html.</p>
+<p>The +p option is the path information to add to the Python path. -p requests that the path information be gotten from the FitNesse server. Getting it from the server is easiest if the file setup on the machine running the tests is the same as the machine hosting the server; otherwise the path information should be supplied on the command.</p>
+<p>The -x option requests XML run statistics. These statistics are formatted by the TestRunner program; they differ from the output produced by FitNesse by not including the HTML output, and by including a section for the summary. The output file name is the name on the TestRunner command, with .xml appended.</p>
+<p>The +z options specify diagnostic options.</p>
+<p>host and port are the system and port for the FitNesse server being used for the test. This need not be on the same system as the tests, but it must be running.</p>
+<p>The page name must be the full path name, beginning with the root page, which is usually but not always FitNesse. Output file names are the page names of the tests that are run, with a .raw.txt or .html appended.</p>
+<p>FitNesse need not be running on the system that TestRunner is executed on, however it must be running on the system specified on the command.</p>
+</div>
+<div class="section" id="fitnesse-files">
+<h2><a class="toc-backref" href="#id21" name="fitnesse-files">FitNesse files</a></h2>
+<p>Access to FitNesse files is a complex topic since it depends on the exact environment.</p>
+<p>In general, files that are used in FitNesse tests, such as graphic images, are kept in a subdirectory of the FitNesse installation: the FitNesseRoot/files directory. The FitNesse server handles these properly when they're referenced in the HTML by a browser.</p>
+<p>The difficulty comes when one of these files needs to be accessed from the test fixtures, when a test needs to store a file back, or when a result HTML file is saved to the file system by TestRunner and accessed later.</p>
+<p>The current release only handles the basic case well: a test served from FitNesse which does not contain files that the fixtures need to access. Future development work will provide a mechanism for fixtures to access files in the FitNesse files directory. It will also provide partial support for storing files back; clean support will have to wait on FitNesse server development since there is no way that TestRunner can save into the FitNesse files on a remote system.</p>
+<p>Accessing files from a detached HTML result file is also a future development direction.</p>
+</div>
+</div>
+<div class="section" id="runner-customization">
+<h1><a class="toc-backref" href="#id22" name="runner-customization">Runner Customization</a></h1>
+<p>The SiteOptions.py module is where you set the default options for runners. This module contains a class for each named runner stub; you add runners by adding a stub script and a class that contains the options.</p>
+<p>See the module for documentation.</p>
+</div>
+<div class="section" id="statistics-file">
+<h1><a class="toc-backref" href="#id23" name="statistics-file">Statistics File</a></h1>
+<p>Both the regular batch and FitNesse batch runners put out a statistics file in XML format. These files are similar to each other, and also similar to the file put out by the Java version of FitNesse. They're quite simple; it's easier to look at them than to describe them.</p>
+<p>There is no DTD for them in any format.</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+Testing the User Interface Using FIT
+====================================
+
+Testing the user interface of a modern application is a difficult subject. FIT can be used for most testing needs, but it requires a particular method of constructing the interface.
+
+For this section, I'm going to use an example of a banking application that has four user interfaces: there is an on-line banking interface that uses HTML and the customer's browser, an ATM interface, and a rich client GUI for the tellers. We're going to focus on the transaction to transfer funds between accounts.
+
+To manage this, the developers have created a layered architecture. The user interface part of the application can be thought of in four layers: the presentation view, the presentation controller, the application layer and the domain layer (which contains the rest of the application, and which is presumably also layered.)
+
+The application layer (which could also be thought of as the transaction layer) contains the classes that actually do something, such as the transaction which transfers funds between accounts.
+
+This layer is very testable. The top of the layer (the part that the presentation view and presentation controllers call) is a very simple interface which requires three pieces of data: the from account number, the to account number, and the amount to transfer. Testing it simply requires writing a fixture which takes the three pieces of data, calls the application layer, and gets the results back.
+
+The interesting parts are the presentation controller and the presentation view layers. As we will see in the sections that deal with each of our three user interfaces, there are a number of reasons (other than the purely tactical reasons of testability) why we have to split the actual presentation logic along these lines.
+
+Two of the three interfaces force the split on the basis of the technology; the rich client GUI does not, but it's still a good idea. In addition, it's also common to find a single presentation controller that needs to present several presentation views during the transaction. This can be part of a wizard type interface, or it can be because of alert or confirmation boxes, or any number of other issues. Trying to deal with these issues in a horizontal fashion can quickly get out of control.
+
+Rich Client GUIs
+>>>>>>>>>>>>>>>>
+
+A modern GUI's purpose is to put information on the screen. Most GUI toolkits do not provide programatic testing interfaces, and even those that do make it very difficult, do not provide direct access to a pixel-level buffer, and insist on drawing to the screen even while they are being tested.
+
+Accordingly, these are either tested manually or using an operating system level capture and replay program. Some of these programs are very sophisticated and provide a high level of programability. However, the better ones are expensive and require a large amount of specialized expertise to use effectively. They are all very fragile in the face of even minor changes to the screen layout. This makes them not acceptable for a test tool that is supposed to be accessable to non-technical personnel on the project.
+
+Until the situation improves with GUI toolkits, the best strategy is to simply accept the situation and isolate the actual logic required by the UI from the purely presentation aspects. Different authors have different names for this strategy; I've called the two parts the presentation view and presentation controller. It works to the extent that the presentation view encapsulates all of the GUI toolkit interfaces, and has absolutely no logic associated with either the application or with the actual presentation logic.
+
+Put another way, everything that the user can do at their terminal must be reflected by the presentation view layer to the presentation controller layer. This lets us replace the presentation view layer with a FIT fixture, and simultaniously frees up the presentation view layer to where it can be worked on by usability experts without having a major impact on the remainder of the application.
+
+Once we do this, it is a simple matter to write a fixture that will work with the ActionFixture and the presentation control layer to press logical buttons, insert data into fields and check results. 
+
+This leaves the presentation view layer hanging. There are two strategies to handle this. The inexpensive one comes from the observation that the presentation view is not supposed to have any application or navigation logic so that manual testing does not need to be repeated. Once it's verified to work, it should continue to work as the rest of the application is changed around it.
+
+The other approach uses the capture and replay testers, but it mocks out the application controller layer! This lets one test the application view layer in isolation from the rest of the application on a known subset of the data, and still leaves the door open for running the same suite of automated test cases on the entire application periodically to verify that the testing mocks are indeed adequate.
+
+Web Based Applications (Browser interfaces)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Testing an application that uses a browser as the user interface poses somewhat different challenges, although it also has a number of similarities. The key similarity is that the presentation will naturally be in two layers. The presentation controller layer is part of the server application, and creates the HTML that is used by the browser; it also reacts to the user's activity.
+
+The key challenge is similar to the rich client GUI: keeping application logic out of the HTML. This is actually more of a challenge, since in many cases it's only the Javascript that lets the application react fast enough to provide a good user experience.
+
+The basic testing tools for the presentation controller layer are HTTPUnit, HTMLUnit and similar packages. These are essentially programmable browser interfaces minus all of the display logic: it lets you run an application and then parses the HTML so that your tests can pick it apart and see whether it contains what you expect.
+
+These packages are, however, programmer level tools. HTMLFixture is a Java FIT interface to HTMLUnit. It's availible as part of FitNesse, and should run with the batch version as well.
+
+These packages provide the ability to test at the presentation controller level. What they don't provide is the ability to test at the presentation view level. There are two approaches to that. The first is simply to use the same capture and replay programs that you use for rich client GUI applications. They will work, and they have the usual benefits and drawbacks. 
+
+The other approach is to programatically run the browser and directly inspect the DOM. There's a package named IEUnit that uses Javascript to run programatically run Internet Explorer. I don't know of any other packages, or of a FIT interface. You should notice that writing fixtures to do this shouldn't be incredibly difficult. If you're reading this, you have Python on the system, and if you're on a Windows machine working with Internet Explorer, you should have the Windows extensions.
+
+Oddball Display Engines (ATM Interface)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+I'm going to start this off by saying that I know nothing about ATM programming. I'm making the assumption for tutorial purposes that the vendors don't supply great testing tools, so the only hook you have is the data packets you send and receive from the box. This may not be correct; the vendors may actually supply the worlds best packages and if so, I apologize in advance for using them as a (bad) example.
+
+If you're faced with this situation, you're limited to testing at the presentation controller level, and you will have to write support that's similar to HTTPunit or HTMLunit. Otherwise, there's no real difference.
+
+

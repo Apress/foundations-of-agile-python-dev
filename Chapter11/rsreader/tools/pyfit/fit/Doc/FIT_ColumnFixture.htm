@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Column Fixture</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="column-fixture">
+<h1 class="title">Column Fixture</h1>
+<p>The column fixture is intended to apply each row to the fixture, producing a result. A slight variation on the column fixture can be used to load objects into a collection or rows into a data base table as a setup for a test.</p>
+<p>The concept is that each column corresponds to a separate call to the fixture, either to store a table value for later use, or to provide a calculated result using the previously stored values.</p>
+<p>ColumnFixtures (and the closely related CalculateFixture) are usually used for business rule checking.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#the-table-header" id="id8" name="id8">The Table Header</a><ul>
+<li><a class="reference" href="#overridable-methods" id="id9" name="id9">Overridable Methods</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#column-types" id="id10" name="id10">Column Types</a></li>
+<li><a class="reference" href="#the-label-row" id="id11" name="id11">The Label Row</a><ul>
+<li><a class="reference" href="#default-label-markup" id="id12" name="id12">Default label markup</a></li>
+<li><a class="reference" href="#disabling-markup" id="id13" name="id13">Disabling Markup</a></li>
+<li><a class="reference" href="#specifying-column-types-in-the-metadata" id="id14" name="id14">Specifying Column Types in the Metadata</a></li>
+<li><a class="reference" href="#displaying-the-identifier-and-column-type" id="id15" name="id15">Displaying the identifier and column type</a></li>
+<li><a class="reference" href="#do-it-yourself-label-processing" id="id16" name="id16">&quot;Do It Yourself&quot; Label Processing</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#the-table-body" id="id17" name="id17">The Table Body</a><ul>
+<li><a class="reference" href="#converting-the-cell-s-values" id="id18" name="id18">Converting the Cell's values</a></li>
+<li><a class="reference" href="#special-values" id="id19" name="id19">Special Values</a></li>
+<li><a class="reference" href="#processing-order" id="id20" name="id20">Processing Order</a></li>
+<li><a class="reference" href="#overrideable-methods" id="id21" name="id21">Overrideable Methods</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="the-table-header">
+<h1><a class="toc-backref" href="#id8" name="the-table-header">The Table Header</a></h1>
+<p>The first cell of the first row of the table contains the <a class="reference" href="FIT_FixtureNames.htm">fixture name</a>. Subsequent cells, if any, contain parameters for the fixture.</p>
+<p>To do anything useful, the column fixture must be subclassed.</p>
+<div class="section" id="overridable-methods">
+<h2><a class="toc-backref" href="#id9" name="overridable-methods">Overridable Methods</a></h2>
+<p>ColumnFixture supports three overridable methods that operate on a whole fixture basis; there are another three that operate on each row. These latter methods are described below as part of the table body description.</p>
+<p>The first two methods, setUpFixture(firstRow) and tearDownFixture(), are new in 0.8a2. They are both invoked from Fixture, setUpFixture() before any other processing is done and tearDownFixture() after all processing is finished. The parameter to setUpFixture(firstRow) is the row containing the fixture name, not the row containing the labels. That can be accessed via the .more attribute. Some more discussion of these two methods is in the <a class="reference" href="FIT_WritingFixtures.htm">Writing Fixtures</a> document.</p>
+<p>A third overrideable method, getTargetClass(), allows you to put the metadata dictionary and methods anywhere. It's not usually useful for ColumnFixture subclasses; it exists because RowFixture used to be a ColumnFixture subclass and it makes heavy use of this feature.</p>
+</div>
+</div>
+<div class="section" id="column-types">
+<h1><a class="toc-backref" href="#id10" name="column-types">Column Types</a></h1>
+<p>ColumnFixture gets its name because it has distinct column types. Python FIT supports eight column types ranging from the most common to several that are quite special purpose. There is a ninth one that is depreciated.</p>
+<p>The two basic types are the given and the calculated result. A given column stores the value in the cell into the fixture or SUT (Software Under Test); a calculated result column compares a result against the contents of the cell. These two types are the most common; most fixtures can get by without any of the rest of the types. These are also the only two types that are guaranteed to be in all versions of FIT.</p>
+<p>Another common type is a comment column. The text in the cells can be anything at all; the fixture completely ignores the column. This is a Python FIT extension and is not portable to any other version of FIT at this time, although it is being considered for inclusion into the FIT core specification.</p>
+<p>There are three column types that involve a reference to a symbol. This mechanism allows one to give a calculated result a name and then use the result later by using the name. The most common use for this facility is with data bases which want to generate a key that then has to be used later. Other common uses are with factors that change each time the test is run, such as dates and times or generated cryptographic keys.</p>
+<p>One type assigns calculated values to a symbol, the other two types correspond to the usual given and calculated result columns, except that the value that will be stored or checked is the stored value, not the name that is actually in the cell. Two of the three types are in the FitNesse versions of FIT and are not supported (yet) by other versions. The third is the one that checks a calculated result against a saved value; this is specific to Python FIT.</p>
+<p>There are two display columns that round out the set. The first displays the calculated result; the second displays the value associated with a symbol. These are both useful for debugging, and are Python FIT exclusive extensions.</p>
+<p>The final, depreciated column type is an unimplemented column. This should only appear during the development of a fixture, and it's usually better to leave such a column as a comment, especially if it's a result column.</p>
+<p>Column types are specified either by markup (see the topic &quot;Default label processing&quot;), by special keys in the metadata (see the topic &quot;Column Markup Variations&quot;) or by a special exit from the bind routine.</p>
+</div>
+<div class="section" id="the-label-row">
+<h1><a class="toc-backref" href="#id11" name="the-label-row">The Label Row</a></h1>
+<p>The second row contains the names (labels) of the columns. For most column types the name corresponds to a method, field or property in the fixture instance. Names in this row can be several words; they will be converted to Python identifiers using the procedure in the <a class="reference" href="FIT_LabelToIdentifierMapping.htm">label to identifier</a> documentation.</p>
+<div class="section" id="default-label-markup">
+<h2><a class="toc-backref" href="#id12" name="default-label-markup">Default label markup</a></h2>
+<p>By default, the column type is specified by special markup that is added before or after the names in the label row. The following special characters are used for markup: &quot;()&quot;, &quot;?&quot;, &quot;!&quot; and &quot;=&quot;. Not all column types can be specified with this markup scheme. The quotes are not part of the markup.</p>
+<p>A name with no markup signifies a given column, a name which is followed by a &quot;()&quot;, &quot;?&quot; or &quot;!&quot; is a calculated result column.</p>
+<p>A name which begins with an &quot;=&quot; is a calculated result that will be given a name and saved in the symbol table for later use. Since it's a calculated result it should end with a &quot;()&quot;, &quot;?&quot; or &quot;!&quot;, but Python FIT does not actually check for this.</p>
+<p>A name that ends with an &quot;=&quot; is a given where the value in the cell is the name that was assigned to the real value earlier.</p>
+<p>A column with no name is a comment column.</p>
+<p>A column where the name begins with a &quot;?&quot; is an unimplemented column. This feature is depreciated and will be removed in a future release.</p>
+<p>This markup style cannot be used to specify the checkSaved or either of the display column types.</p>
+<p>The markup style is enabled or disabled with the &quot;.markup&quot; metadata key. An operand of &quot;on&quot; enables markup, an operand of &quot;off&quot; disables markup. &quot;on&quot; is the default, and need not be included in the metadata.</p>
+</div>
+<div class="section" id="disabling-markup">
+<h2><a class="toc-backref" href="#id13" name="disabling-markup">Disabling Markup</a></h2>
+<p>Many people do not like any version of markup; they would prefer that the labels simply be given as is, and that the actions of the columns be understood from the table definitions. Consequently, markup interpretation can be turned off by including a &quot;.markup&quot; key with a value of &quot;off&quot; in the metadata.</p>
+</div>
+<div class="section" id="specifying-column-types-in-the-metadata">
+<h2><a class="toc-backref" href="#id14" name="specifying-column-types-in-the-metadata">Specifying Column Types in the Metadata</a></h2>
+<p>If markup is turned off, the column types must be specified in the metadata. This is done with an &quot;&lt;identifier&gt;.columnType&quot; key which has a value of the specific column type. This key, by the way, must be specified at the same level as the &quot;.renameTo&quot; key. It cannot be specified with the target of the rename. For example:</p>
+<div class="line-block">
+<div class="line">_typeDict[&quot;foo.columnType&quot;] = &quot;result&quot;</div>
+<div class="line">_typeDict[&quot;foo.renameto&quot;] = &quot;bar&quot;</div>
+<div class="line">_typeDict[&quot;bar&quot;] = &quot;Int&quot;</div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="30%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Column Type</td>
+<td>Classic Markup</td>
+<td>columnType value</td>
+</tr>
+<tr><td>given</td>
+<td>label</td>
+<td>given</td>
+</tr>
+<tr><td>result</td>
+<td>label(), ?, !</td>
+<td>result</td>
+</tr>
+<tr><td>save result</td>
+<td>=label(), ?, !</td>
+<td>saveResult</td>
+</tr>
+<tr><td>store saved result</td>
+<td>label=</td>
+<td>storeSaved</td>
+</tr>
+<tr><td>check saved result</td>
+<td>n/a</td>
+<td>checkSaved</td>
+</tr>
+<tr><td>comment</td>
+<td>&lt;blank&gt;</td>
+<td>comment</td>
+</tr>
+<tr><td>display result</td>
+<td>n/a</td>
+<td>display</td>
+</tr>
+<tr><td>display saved</td>
+<td>n/a</td>
+<td>displaySaved</td>
+</tr>
+<tr><td>unimplemented</td>
+<td>?label</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<p>Notice that the &quot;.columnType&quot; qualifier works even if the markup system is in effect, but it will only be applied to given columns; that is, columns where there is no markup.</p>
+</div>
+<div class="section" id="displaying-the-identifier-and-column-type">
+<h2><a class="toc-backref" href="#id15" name="displaying-the-identifier-and-column-type">Displaying the identifier and column type</a></h2>
+<p>There are times when it's not exactly obvious what the Python identifier is, or what the column type became. FIT will display the Python identifier and the column type in the label row cell if you put &quot;.display&quot; in the metadata, with an operand of &quot;on&quot;.</p>
+<p>Also, you can use the -z option on the runner command, with an operand of &quot;displayLabelmapping&quot;. If used, this overrides the .display metadata entry, and affects all fixtures that implement it.</p>
+</div>
+<div class="section" id="do-it-yourself-label-processing">
+<h2><a class="toc-backref" href="#id16" name="do-it-yourself-label-processing">&quot;Do It Yourself&quot; Label Processing</a></h2>
+<p>The default label process, possibly augmented by an Application Configuration module, is usually sufficient; however there are times when more flexibility is needed. When this occurs, an extended overrideable method can be enabled so that the fixture can process the labels in other ways than the default.</p>
+<p>This mechanism is one of the <a class="reference" href="FIT_LabelToIdentifierMapping.htm">methods</a> of writing fixture labels in some language other than English.</p>
+<p>Extended label processing is enabled by using the &quot;.extendedLabelProcess&quot; key with a value of &quot;on&quot;. When you use this key, the bind routine will call the processLabel(label, columnNumber) method before doing any other processing. This key must be in the fixture class object; the class object returned by the getTargetClass() method is not checked.</p>
+<p>ProcessLabel(label, columnNumber) provides more flexibility in processing the label row. It takes two parameters: the label and the column number, and it returns a tuple with two elements. It can also return None, which is the same as &quot;continue&quot;.</p>
+<p>The first element in the returned tuple is one of: &quot;given&quot;, &quot;result&quot;, &quot;saveResult&quot;, &quot;storeSaved&quot;, &quot;checkSaved&quot;, &quot;comment&quot;, &quot;display&quot;, &quot;displaySaved&quot;, &quot;ignore&quot;, &quot;continue&quot; or &quot;lookup&quot;.</p>
+<p>If the first element is &quot;given&quot;, &quot;result&quot;, &quot;saveResult&quot;, &quot;storeSaved&quot;, &quot;checkSaved&quot; or &quot;display&quot;, the second element must be the Python identifier. Conventionally, it will be the result of processing the original label with the markup (if any) stripped, however it doesn't have to have any relationship to the original label.</p>
+<p>If the first element is &quot;comment&quot;, &quot;displaySaved&quot; or &quot;ignore&quot;, the second element is ignored. It must, however, still be present.</p>
+<p>If the first element is &quot;continue&quot;, then the historical mechanism, including the variations in the &quot;.markup&quot; metadata key, will be used. The second element is ignored.</p>
+<p>If the first element is &quot;lookup&quot;, then the second element is the Python identifier. The column type will be gotten from the metadata using the mechanism described above in &quot;Specifying Column Types in the Metadata.&quot;</p>
+</div>
+</div>
+<div class="section" id="the-table-body">
+<h1><a class="toc-backref" href="#id17" name="the-table-body">The Table Body</a></h1>
+<div class="section" id="converting-the-cell-s-values">
+<h2><a class="toc-backref" href="#id18" name="converting-the-cell-s-values">Converting the Cell's values</a></h2>
+<p>The text format in the table is converted to and from the fixture's prefered type by a conversion routine called a <a class="reference" href="FIT_TypeAdapters.htm">Type Adapter</a>. In the original Java version, the correct type adapter was infered by reflection from the declaration. Since this is not possible in Python, the type must be declared in the fixture itself. This process is described in the Type Adapters page.</p>
+</div>
+<div class="section" id="special-values">
+<h2><a class="toc-backref" href="#id19" name="special-values">Special Values</a></h2>
+<p>ColumnFixture recognizes four special values in cells: an empty cell and the words &quot;error&quot;, &quot;blank&quot; and &quot;null&quot;.</p>
+<p>The first two are part of core FIT, the last two are FitNesse extensions that are not in all versions of FIT. Python Fit implements all three keywords as part of the type adapter mechanism. &quot;Error&quot; cannot be turned off, but &quot;blank&quot; and &quot;null&quot; can be since they are implemented as <a class="reference" href="FIT_CellHandlers.htm">cell  handlers</a>.</p>
+<p>In many column types, an empty cell is filled in with the current value of the field, in grey to emphasize that it was not in the input. For 'given' column types this depends on the identifier mapping to a field. It does not work at all for methods, and the result for a property may not be correct. It may also throw an exception if there is no default value for the field and the first cell in the column is blank.</p>
+<p>The keyword &quot;blank&quot; creates a zero length string on input, and matches a zero length string in a comparison. The &quot;blank&quot; cell handler is only active for string fields, the word &quot;blank&quot; has no special meaning for other types of field. If you need to use the literal word &quot;blank&quot; for a string field, you can either use the asis[] cell handler or turn off the &quot;blank&quot; cell handler. Or you can use an application value object or application specific type adapter rather than depending on the native string type.</p>
+<p>The keyword &quot;null&quot; creates and matches a None object. It's there for cases where the application concept incorporates some form of missing value, however using it as it's supplied is very bad programming practice in Python, and even worse programming practice in languages where &quot;null&quot; matches an uninitialized field. If you need to represent a missing value, you're better off creating a value object and using it as the type adapter.</p>
+<p>The keyword &quot;error&quot; matches an exception. It's currently an intrinsic part of the type adapter mechanism, and cannot be turned off. In some cases, the exception[] cell handler is a better choice for this function.</p>
+</div>
+<div class="section" id="processing-order">
+<h2><a class="toc-backref" href="#id20" name="processing-order">Processing Order</a></h2>
+<p>The column fixture always processes left to right, so there is a natural assumption that columns on the left contain given data that is stored in the fixture for use by columns on the right, which do the actual calculations. However, nothing enforces this view: given and calculated result columns can almost always be mixed freely.</p>
+<p>Fields, properties and methods can be used for any column type. However, it is not advisable to use a field as a result column unless a calculation has occured that provides a value. It is also not possible to use two different fields, methods or properties with the same identifier; this is a limitation of the Python language.</p>
+<p>It is also not possible to head two different columns with the same label and expect them to process differently unless they are marked up differently or they are translated to different identifiers, usually by the processLabel() routine.</p>
+<p>Using fields as givens can result in errors being reported in the wrong columns unless application objects or application specific type adapters are used. This is because the generic type adapters supplied with Python FIT will usually not do the error checking that the application really needs.</p>
+</div>
+<div class="section" id="overrideable-methods">
+<h2><a class="toc-backref" href="#id21" name="overrideable-methods">Overrideable Methods</a></h2>
+<p>There are four overrideable methods that support this convention: reset(), startOfRow(row), execute() and endOfRow(). StartOfRow(row) and reset() are called at the start of each row. Execute() is called before the first calculated result call, or at the end of the row if there are no calculated results. EndOfRow() is called at the end of each row.</p>
+<p>Both startOfRow(row) and endOfRow(row) are new in Python Fit 0.8a2. StartOfRow(row), unlike reset(), passes the first cell in the row so it can be saved. Both startOfRow(row) and endOfRow() are implemented out of the doRow() method, so any override of this method must do a super call to get them to work.</p>
+<p>These two exits can be enabled or disabled either by a metadata key, .takeRowExits, and by the <a class="reference" href="FIT_ConfigurationExit.htm">application configuration</a> routine's columnFixtureExits method. The .takeRowExits key in the metadata takes a True or False value. If present, it takes precedence over the columnFixtureExits. The default if neither is present is to take the exits.</p>
+<p>These four methods have an unfortunate problem: they aren't associated with a cell, so it's a bit difficult to tell where to put result or error information. This is normally not a problem with reset(), but it is a problem with execute(). The easiest way to solve this problem is to have startOfRow(row) save the first cell of the row.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

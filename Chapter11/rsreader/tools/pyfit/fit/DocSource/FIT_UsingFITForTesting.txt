@@ -1,0 +1,303 @@
+Using FIT for Testing
+=====================
+
+For some people, how to use FIT for testing seems to be obvious; for others there's a feeling of befuddlement at the beginning. I'm going to go through a simple example, showing quite a bit of my thought process along the way. The example is not, at this point, going to be backed up by working fixture code: it's directed at the customer or business analyst, not at the developer.
+
+The Example and Model
++++++++++++++++++++++
+
+To motivate the example, it's going to be about a relatively small slice of an ATM banking application: transfering money between accounts. While this is a relatively small example, it does have three screens, and it's embedded in a larger application that deals with such issues as checking the bank card against the PIN number, selecting the function and so forth. At the beginning we'er going to ignore these larger issues in the interests of keeping things short enough to digest. We'll add them in as we go on.
+
+Modern applications are built in a layered fashion, much like a layer cake, although it's sometimes useful to think of them as a series of clerks, each one of which passes information only to the clerk in front of her and behind her, doing something to the information as she processes it. The key thought here is that each layer, or each clerk, only talks to the two adjacent layers or clerks. 
+
+The specific model I'm going to use has five layers, called the View, Presenter, Application, Model and Data layers, abbreviated as VPAMD. It's a little more detailed than the models you see in the literature, but there is a reason for the detail.
+
++-------------+--------------------+
+| Layer       | Responsibility     |
++=============+====================+
+| View        | Writes on the      |
+|             | screen, handles    |
+|             | touches on screen. |
++-------------+--------------------+
+| Presenter   | Handles logical    |
+|             | events like "Button|
+|             | 6 pressed, tells   |
+|             | view what to draw. |
++-------------+--------------------+
+| Application | Handles task.      |
++-------------+--------------------+
+| Model       | Mechanism for tasks|
++-------------+--------------------+
+| Data        | The Data Base      |
++-------------+--------------------+
+
+Testing From the Outside
+++++++++++++++++++++++++
+
+Most people would start out testing an application like this from the outside: that is, they would either sit at a system and manually follow a testing script, or use an automated capture and replay system that captures keystrokes (in this case, screen touches) and verifies that what's drawn on the screen meets expectations. The manual version is not repeatable: it has to be redone at great expense for every version of the system shipped, and it's subject to the usual flock of manual errors. The automated capture and replay systems have other disadvantages, including expense, substantial training requirements, substantial time investments, and fragility in the face of changing requirements.
+
+I've heard of one company, and there are undoubtedly more, that's found it can't change its user interface because of the expense of changing all of the capture and replay tests.
+
+That's not to say that capture and replay testing is always a bad thing in all circumstances. It's well suited to testing the user interface; it's not well suited to testing the actual application logic.
+
+When one does capture and replay testing, or a manual equivalent of it, there is a better way of focusing on the issues and getting the rest of the detail out of the way. The following table illustrates this:
+
++------------------+--------------------+
+| Layer            | Responsibility     |
++==================+====================+
+| Tester           | Runs scripted tests|
++------------------+--------------------+
+| View             | Writes on the      |
+|                  | screen, handles    |
+|                  | touches on screen. |
++------------------+--------------------+
+| Presenter        | Handles logical    |
+|                  | events like "Button|
+|                  | 6 pressed", tells  |
+|                  | view what to draw. |
++------------------+--------------------+
+| Application Mock | Handles task with  |
+|                  | hard coded test    |
+|                  | data               |
++------------------+--------------------+
+
+The Application Mock in the table above isolates the test from the remainder of the application. As long as the mock successfully models what the real application would do with the given test data, we can be quite successful at testing the user interaction parts of the system. We also don't have to retest on every change to the parts of the system below the Presenter layer, which is a substantial savings.
+
+It also makes the tests run rapidly. We'll see another mock with the same functionality later.
+
+Testing at the Presenter Layer
+++++++++++++++++++++++++++++++
+
+The interface between the View layer and the Presenter layer is in terms of logical controls on a screen. In our little application snippet, the View classes tell the presenter things like: "Button 1 touched", and the presenter tells the view things like "Put 'Savings' as the text of button 1".
+
+Our stack now looks like this:
+
++-------------+---------------------------+
+| Layer       | Responsibility            |
++=============+===========================+
+| FIT tests   | Verifies Presenter actions|
++-------------+---------------------------+
+| Presenter   | Handles logical events    |
+|             | like "Button 6 pressed."  |
+|             | Tells what view to draw   |
++-------------+---------------------------+
+| Application | Handles task.             |
++-------------+---------------------------+
+| Model       | Mechanism for tasks       |
++-------------+---------------------------+
+| Data        | The Data Base             |
++-------------+---------------------------+
+
+The guts of a FIT test at this layer might look like this:
+
++--------------------------------------------------+
+| fit.ActionFixture                                |
++=======+=================+========================+
+| start | AccountTransfer |                        |
++-------+-----------------+------------------------+
+| check | currentScreen   | Enter From Account     |
++-------+-----------------+------------------------+
+| check | button1contents | Savings Account        |
++-------+-----------------+------------------------+
+| press | button1         |                        |
++-------+-----------------+------------------------+
+| check | currentScreen   | Enter To Account       |
++-------+-----------------+------------------------+
+| check | button2contents | Checking Account       |
++-------+-----------------+------------------------+
+| press | button2         |                        |
++-------+-----------------+------------------------+
+| check | currentScreen   | Amount Entry           |
++-------+-----------------+------------------------+
+| press | button2         |                        |
++-------+-----------------+------------------------+
+| press | button1         |                        |
++-------+-----------------+------------------------+
+| press | buttonDot       |                        |
++-------+-----------------+------------------------+
+| press | button5         |                        |
++-------+-----------------+------------------------+
+| press | buttonEnter     |                        |
++-------+-----------------+------------------------+
+| check | currentScreen   | Transaction Successful |
++-------+-----------------+------------------------+
+
+We might wrap this with the logon screen, selecting the correct transaction and verifying the account balances in order to make a complete test.
+
+This is, however, tedious, difficult to get right and hard to read. If this was all there was to FIT, we'd be quite justified in ignoring it. However, things are going to get better in the next couple of layers.
+
+This layer is still important even though it's most likely going to be coded by the business analyst, professional tester or developer rather than the customer.
+
+Before we leave this layer, though, there's one more item that justifies work at this layer: we can verify the accuracy of the Application Mock we created in the first layer.
+
++------------------+--------------------+
+| Layer            | Responsibility     |
++==================+====================+
+| FIT tests        | Verifies Presenter |
+|                  | actions.           |
++------------------+--------------------+
+| Presenter        | Handles logical    |
+|                  | events like "Button|
+|                  | 6 pressed, tells   |
+|                  | view what to draw. |
++------------------+--------------------+
+| Application Mock | Handles task with  |
+|                  | hard coded test    |
+|                  | data               |
++------------------+--------------------+
+
+We should, in other words, be able to run the same set of tests against both stacks: the real application and the one with the application layer mocked out.
+
+Testing the Application Layer
++++++++++++++++++++++++++++++
+
+The application layer is the next level down.
+
+Our stack now looks like this:
+
++----------------+--------------------+
+| Layer          | Responsibility     |
++================+====================+
+| FIT tests      | Verifies Presenter |
+|                | actions.           |
++----------------+--------------------+
+| Application    | Handles task.      |
++----------------+--------------------+
+| Model          | Mechanism for tasks|
++----------------+--------------------+
+| Mock Data Layer| Test Data          |
++----------------+--------------------+
+
+The interface between the Presentation Layer and the Application Layer is much more streamlined than the interface between the View layer and the Presentation layer. To reflect this, I'm going to show a much larger slice of the test, still using the Action Fixture.
+
++---------------------------------------------------+
+| fit.ActionFixture                                 |
++=======+==================+========================+
+| start | ATMApplication   |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Insert Bank Card       |
++-------+------------------+------------------------+
+| enter | bankCardNumber   | 1234-xxxx-etc.         |
++-------+------------------+------------------------+
+| check | currentScreen    | Enter Pin              |
++-------+------------------+------------------------+
+| enter | Pin              | Safety                 |
++-------+------------------+------------------------+
+| check | currentScreen    | Main Menu              |
++-------+------------------+------------------------+
+| press | Check Balance    |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Account List           |
++-------+------------------+------------------------+
+| press | Savings Account  |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Account Balance        |
++-------+------------------+------------------------+
+| check | currentScreen    | $10,291.42             |
++-------+------------------+------------------------+
+| check | currentScreen    | Main Menu              |
++-------+------------------+------------------------+
+| press | Check Balance    |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Account List           |
++-------+------------------+------------------------+
+| press | Checking Account |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Account Balance        |
++-------+------------------+------------------------+
+| check | Account Balance  | $241.92                |
++-------+------------------+------------------------+
+| check | currentScreen    | Main Menu              |
++-------+------------------+------------------------+
+| press | Transfer Money   |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Enter To Account       |
++-------+------------------+------------------------+
+| enter | Account Name     | Checking               |
++-------+------------------+------------------------+
+| check | currentScreen    | Enter From Account     |
++-------+------------------+------------------------+
+| enter | Account Name     | Savings                |
++-------+------------------+------------------------+
+| check | currentScreen    | Enter Amount           |
++-------+------------------+------------------------+
+| enter | Amount           | $1,000.00              |
++-------+------------------+------------------------+
+| check | currentScreen    | Transaction Successful |
++-------+------------------+------------------------+
+| press | Display Balance  |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Account List           |
++-------+------------------+------------------------+
+| press | Savings Account  |                        |
++-------+------------------+------------------------+
+| check | currentScreen    | Account Balance        |
++-------+------------------+------------------------+
+| check | currentScreen    | $9,291.42              |
++-------+------------------+------------------------+
+| press | exitWithReceipt  |                        |
++-------+------------------+------------------------+
+
+While this is also long and tedious, it's also the complete end to end process part of the test. A complete test would also load test data at the beginning and verify the contents of data base tables or other results at the end. I've omitted these details in the interests of a shorter presentation.
+
+This layer is where an unusually thorough customer would read the test, and might even write it. However, it's still likely that this test would be written by the business analyst, the developer or a professional tester.
+
+Testing the Model Layer
++++++++++++++++++++++++
+
+Testing at the model layer is where things get interesting. Here we're going to abandon ActionFixture in favor of DoFixture from the Fit Library. I'm also going to show an essentially complete test, omitting only one or two "technology facing" items at the front that are required to get things moving. I'm only going to show the table lines for the parts of the test that are naturally tabular.
+
++------------------------------------------------------+
+| load customers                                       |
++--------+-----------------+------------------+--------+
+| Name   | Customer Number | Bank Card Number |  Pin   |
++========+=================+==================+========+
+| Bonnie | 12334-786       | 311-555-1212     | Bobbie |
++--------+-----------------+------------------+--------+
+| Clyde  | 12334-787       | 311-555-1213     | Cotter |
++--------+-----------------+------------------+--------+
+| Junior | 12334-788       | 311-555-1214     | Diaper |
++--------+-----------------+------------------+--------+
+
+
++---------------------------------------------+
+| load accounts                               |
++-----------------+--------------+------------+
+| Customer Number | Account Type | Balance    |
++=================+==============+============+
+| 12334-786       | Savings      | $10,291.42 |
++-----------------+--------------+------------+
+| 12334-786       | Checking     | $241.92    |
++-----------------+--------------+------------+
+
+*login customer* 311-555-1212 *with pin* Bobbie
+
+check *the* savings *account balance* $10,291.42
+
+check *the* checking *account balance* $241.92
+
+*transfer* $1,000.00 *from* savings *to* checking
+
+check *the* savings *account balance* $9,291.42
+
+check *the* checking *account balance* $1,241.92
+
+*logout*
+
++--------------------------------------------+
+| verify accounts                            |
++-----------------+--------------+-----------+
+| Customer Number | Account Type | Balance   |
++=================+==============+===========+
+| 12334-786       | Savings      | $9,291.42 |
++-----------------+--------------+-----------+
+| 12334-786       | Checking     | $1,241.92 |
++-----------------+--------------+-----------+
+
+As a note to developers, this final section contains three fixtures: a DoFixture subclass that handles the entire test and two SetUpFixture subclasses to handle the initial data entry. The DoFixture contains seven methods. All of the fixtures can be reused and extended for other tests; none of them is specific to just this one test.
+
+Well, that's it! This final test is the one that the customer would probably write. It's short, to the point, and makes a reasonable example.
+
+
+
+

@@ -1,0 +1,14 @@
+<html><title>WrongKeyDuplicated</title><body>
+<h1><a href="WrongKeyDuplicated.html">WrongKeyDuplicated</a></h1>
+<h2>If there are several rows with the same key as the one that's wrong, it's treated as a replacement as well.</h2>
+Here the expected "|two|3|" was actually "|two|2|":<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td ColSpan=2>fitLib.specify.RowFixtureUnderTest</td></tr>
+<tr><td></td><td>s</td><td>a</td></tr>
+<tr><td>w</td><td>two</td><td>3</td></tr>
+<tr><td>rr</td><td>two</td><td>1</td></tr>
+<tr><td>rr</td><td>one</td><td>1</td></tr>
+<tr><td>Iw</td><td>two surplus</td><td>2</td></tr>
+</table>
+</body></html>

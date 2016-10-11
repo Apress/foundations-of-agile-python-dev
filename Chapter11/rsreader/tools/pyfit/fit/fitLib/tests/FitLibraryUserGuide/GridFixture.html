@@ -1,0 +1,49 @@
+<html><title>GridFixture</title><body>
+<h1><a href="GridFixture.html">GridFixture</a></h1>
+<a href="GridFixture.html">GridFixture</a> checks that a grid of values in the table matches the values in a 2D array.<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.specify.GridFixtureUnderTest</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=2>strings</td></tr>
+<tr><td>a</td><td>b</td></tr>
+<tr><td>c</td><td>d</td></tr>
+</table>
+<br>
+The method <i>string()</i> in class <i>GridFixtureUnderTest</i> is as follows:<br>
+<br>
+<hr>
+<pre>...
+    public Fixture strings() {
+        return new <a href="GridFixture.html">GridFixture</a>(new String[][] {
+            {"a", "b"}, {"c", "d"} });
+    }
+</pre>
+<hr>
+<br>
+The grid can contain graphics:<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=5>images</td></tr>
+<tr><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\wall.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\space.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\box.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\space.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\wall.jpg"></td></tr>
+</table>
+<br>
+The image file names in the table are compared against the File names supplied by the fixture.<br>
+<br>
+The method <i>images()</i> in class <i>GridFixtureUnderTest</i> is as follows:<br>
+<br>
+<hr>
+<pre>...
+    public Fixture images() {
+        return new <a href="GridFixture.html">GridFixture</a>(new <a href="ImageNameGraphic.html">ImageNameGraphic</a>[][] {
+            {   new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/wall.jpg"),
+                new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/space.jpg"),
+                new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/box.jpg"),
+                new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/space.jpg"),
+                new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/wall.jpg") }});
+    }
+</pre>
+<hr>
+<br>
+</body></html>

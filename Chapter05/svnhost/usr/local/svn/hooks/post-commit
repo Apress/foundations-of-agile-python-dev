@@ -1,0 +1,9 @@
+#!/bin/sh
+REPOS="$1"
+REV="$2"
+MASTER=buildmaster
+PORT=4484
+/usr/local/svn/bin/svn_buildbot.py --repository "$REPOS" \
+                                   --revision "$REV" \
+                                   --bbserver $MASTER \
+                                   --bbport $PORT

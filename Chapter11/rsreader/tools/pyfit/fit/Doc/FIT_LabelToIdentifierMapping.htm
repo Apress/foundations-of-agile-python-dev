@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Label to Identifier Mapping</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="label-to-identifier-mapping">
+<h1 class="title">Label to Identifier Mapping</h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#overview" id="id4" name="id4">Overview</a></li>
+<li><a class="reference" href="#recommended-approaches" id="id5" name="id5">Recommended Approaches</a></li>
+<li><a class="reference" href="#the-pieces-of-the-puzzle" id="id6" name="id6">The Pieces of the Puzzle</a><ul>
+<li><a class="reference" href="#automatic-translation-routines" id="id7" name="id7">Automatic translation routines</a><ul>
+<li><a class="reference" href="#camel-and-gracefulnames" id="id8" name="id8">Camel and gracefulNames</a></li>
+<li><a class="reference" href="#extended-camel" id="id9" name="id9">Extended Camel</a></li>
+<li><a class="reference" href="#displaying-the-translated-result" id="id10" name="id10">Displaying the translated result</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#columnfixture-and-rowfixture-exits" id="id11" name="id11">ColumnFixture and RowFixture exits</a></li>
+<li><a class="reference" href="#application-configuration-module-exit" id="id12" name="id12">Application Configuration Module Exit</a></li>
+<li><a class="reference" href="#renameto-metadata-qualifier" id="id13" name="id13">&quot;.renameTo&quot; metadata qualifier</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h1><a class="toc-backref" href="#id4" name="overview">Overview</a></h1>
+<p>Labels are used in most fixtures to refer to fields and routines in the fixture or in the Software Under Test (SUT). Labels should be terms that the business naturally uses to refer to the concepts, while identifiers need to conform to the rules of the Python language. Good labels are usually not directly usable as Python identifiers, and good Python identifiers are frequently incomprehensible, or at least confusing, to the application people who help define the FIT tests.</p>
+<p>This means that the labels must somehow be translated to the associated Python identifier.</p>
+<p>There is a standard routine, called camel, in all versions of FIT to do this translation. The exact implementation of this routine is implementation dependent; different versions of FIT will not produce the same identifiers from the same input.</p>
+<p>In addition, this standard routine only works for the English language. That is unfortunate, but it is also inevitable since Python, like almost all computer languages, requires that identifiers contain only numerals and letters used by the English language. Any attempt to translate other languages to Python identifiers would produce unusable gibberish.</p>
+</div>
+<div class="section" id="recommended-approaches">
+<h1><a class="toc-backref" href="#id5" name="recommended-approaches">Recommended Approaches</a></h1>
+<p>Most applications will take one of four approaches:</p>
+<ol class="arabic simple">
+<li>Do nothing. This creates inconsistency between classic fixtures and Fit Library fixtures, and also creates portability problems between batch and FitNesse.</li>
+<li>Use a minimal mapLabel() routine to force use of the &quot;camel&quot; translation routine. This provides a consistent translation policy at the expense of ignoring what may be significant distinctions, i.e. diacritical marks and special characters, in the business side language.</li>
+<li>Use a minimal mapLabel() routine to force use of the &quot;extended&quot; translation routine, and add &quot;.renameTo&quot; metadata qualifiers whenever the result is not satisfactory as an identifier.</li>
+<li>Use the mapLabel() routine to standardize on an application specific vocabulary.</li>
+</ol>
+</div>
+<div class="section" id="the-pieces-of-the-puzzle">
+<h1><a class="toc-backref" href="#id6" name="the-pieces-of-the-puzzle">The Pieces of the Puzzle</a></h1>
+<p>In Python FIT, there are a number of facilities that work together to convert a label into a Python identifier.</p>
+<div class="section" id="automatic-translation-routines">
+<h2><a class="toc-backref" href="#id7" name="automatic-translation-routines">Automatic translation routines</a></h2>
+<p>There are three translation routines. By default, one of these routines is selected depending on the environment and the fixture, which can create a significant amount of confusion since the rules depend on who wrote the base fixture.</p>
+<p>These routines are generically named &quot;camel routines&quot; because they produce identifiers with internal capital letters, producing an effect somewhat like a camel's hump(s).</p>
+<p>The three routines are named &quot;camel&quot;, &quot;gracefulNames&quot; and &quot;extended&quot;. The extended routine is the only one that can be used for languages other than English; camel and gracefulNames both strip all characters that are not digits or English letters.</p>
+<p>The routine can be selected on a per-fixture basis with the &quot;.useToMapLabel&quot; metadata key. This key takes the name of one of the three versions of the camel routine as its value.</p>
+<p>The routine can be selected on a global basis in the <a class="reference" href="FIT_ConfigurationExit.htm">application configuration</a> module by using the mapLabel() routine.</p>
+<div class="section" id="camel-and-gracefulnames">
+<h3><a class="toc-backref" href="#id8" name="camel-and-gracefulnames">Camel and gracefulNames</a></h3>
+<p>The camel and gracefulNames routines are almost identical. They process a label by:</p>
+<ol class="arabic simple">
+<li>Replacing a leading digit with its spelled-out equivalent</li>
+<li>Making any letter that follows white space or a special character upper case</li>
+<li>Removing all special characters other than underscores</li>
+<li>Removing all white space within the identifier.</li>
+<li>Adds a trailing &quot;_&quot; character if the result is a Python keyword.</li>
+</ol>
+<p>In addition, gracefulNames makes any letter which follows a digit upper case.</p>
+</div>
+<div class="section" id="extended-camel">
+<h3><a class="toc-backref" href="#id9" name="extended-camel">Extended Camel</a></h3>
+<p>The extended routine does two things in addition to camel. First, it translates a number of special characters to their names, and second, it translates any unrecognizable characters to their hex equivalents.</p>
+<p>The latter feature has both a good side and a bad side. The good side is that this is the only routine that can handle languages other than English. The bad side is that the result is practically unreadable. This, in turn, means that it needs to be used in conjunction with the &quot;.renameTo&quot; metadata qualifier to turn it into a useable Python identifier.</p>
+<p>The list of special characters and their names is maintained in the Variations.py module. It includes all of the special characters in the ASCII character set (that is, the first Unicode block), four additional currency symbols that are likely to turn up in English language applications (the Pound, Euro, Yen and cent). There are no plans to extend this list since it would cause the translations to change from release to release.</p>
+</div>
+<div class="section" id="displaying-the-translated-result">
+<h3><a class="toc-backref" href="#id10" name="displaying-the-translated-result">Displaying the translated result</a></h3>
+<p>You can display the translated result in the label cell in two different ways.</p>
+<p>You can use the &quot;.display&quot; metadata key with an operand of &quot;on&quot; in any fixture that's derived from ColumnFixture (or possibly other fixtures - see the individual writeups.)</p>
+<p>You can also use the -z option with an operand of &quot;displayLabelmapping&quot; on the runner command. This option overrides the &quot;.display&quot; metadata entry.</p>
+</div>
+</div>
+<div class="section" id="columnfixture-and-rowfixture-exits">
+<h2><a class="toc-backref" href="#id11" name="columnfixture-and-rowfixture-exits">ColumnFixture and RowFixture exits</a></h2>
+<p>ColumnFixture and RowFixture contain special exits that allow the fixture writer to handle the translation from label to identifier. While these exits are intended to replace the markup these fixtures use to specify column types, they can also be used to translate non-English languages.</p>
+<p>The downside of using these exits is that each fixture needs its own exit, and also that all of the root fixtures do not contain the exit mechanism. Some of the root fixtures, such as ActionFixture and DoFixture, are designed to work directly with application modules, so there is no place to put an exit.</p>
+</div>
+<div class="section" id="application-configuration-module-exit">
+<h2><a class="toc-backref" href="#id12" name="application-configuration-module-exit">Application Configuration Module Exit</a></h2>
+<p>The first thing each of the camel routines does is call the <a class="reference" href="FIT_ConfigurationExit.htm">Application Configuration</a> module with a mapLabel() request. This routine can handle the request several different ways. It can select one of the three camel routines or handle the entire translation itself. It can also ignore the request, in which case the camel routine will do what it would have done anyway.</p>
+<p>Using this routine to do the translation requires that the application create a standard vocabulary, frequently known as a Ubiquitous Language. This is highly recommended by most authorities in the software development field, but it's usually used only on large systems.</p>
+</div>
+<div class="section" id="renameto-metadata-qualifier">
+<h2><a class="toc-backref" href="#id13" name="renameto-metadata-qualifier">&quot;.renameTo&quot; metadata qualifier</a></h2>
+<p>The final, optional step of the process is the &quot;.renameTo&quot; metadata qualifier. This is a very generic mechanism that lets the developer change the result of any of the other routines to an identifier that works better with the program being developed. It allows pinpoint control, but doesn't deal with the initial translation. For more information on this, see the metadata section in the <a class="reference" href="FIT_TypeAdapters.htm">Type Adapters</a> writeup.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

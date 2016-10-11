@@ -1,0 +1,288 @@
+FIT Distribution
+----------------
+
+The PyFIT distribution is a series of directories that exist under the fit directory. This top level fit directory contains the `runners`__. It is not the fit directory that contains the standard fit package.
+
+__ Fit_Runners.htm
+
+.. contents::
+
+
+1. fit
+======
+
+   The basic fixtures that come with most implementations of FIT.
+
+   +--------------------------+----------------------------------+
+   | Fixture Name             + Fixture Description              |
+   +==========================+==================================+
+   | `ActionFixture`__        | Fixture for activity sequences   |
+   +--------------------------+----------------------------------+
+   | `ColumnFixture`__        | Used for row by row repetitive   |
+   |                          | processing. Must be subclassed   |
+   +--------------------------+----------------------------------+
+   | PrimitiveFixture         | A sample fixture of mainly       |
+   |                          | academic interest                |
+   +--------------------------+----------------------------------+
+   | `RowFixture`__           | Used to verify the contents of   |
+   |                          | collections.                     |
+   +--------------------------+----------------------------------+
+   | `Summary`__              | Displays collected summary stats.|
+   +--------------------------+----------------------------------+
+   | TimedActionFixture       | Timed Activity Sequences         |
+   +--------------------------+----------------------------------+
+
+    __ FIT_ActionFixture.htm
+    __ FIT_ColumnFixture.htm
+    __ FIT_RowFixture.htm
+    __ FIT_Summary.htm
+
+   
+   Fixtures which are either specific to Python FIT, or from other versions of FIT
+
+   +--------------------------+----------------------------------+
+   | Fixture Name             + Fixture Description              |
+   +==========================+==================================+
+   | `CellHandlerInspector`__ | Displays current cell handlers   |
+   +--------------------------+----------------------------------+
+   | `CellHandlerLoader`__    | Adds and removes cell handlers   |
+   +--------------------------+----------------------------------+
+   | `Comment`__              | Does nothing                     |
+   +--------------------------+----------------------------------+
+   | `Import`__               | Assigns aliases (Depreciated)    |
+   +--------------------------+----------------------------------+
+
+    __ FIT_CellHandlers.htm
+    __ FIT_CellHandlers.htm
+    __ FIT_CommentFixture.htm
+    __ FIT_Import.htm
+
+   Modules that aren't fixtures, but are either necessary for installation tailoring or useful.
+
+   +------------------+----------------------------------+
+   | Name             + Description                      |
+   +==================+==================================+
+   | ScientificDouble | Floating point wrapper that does | 
+   |                  | precision right.                 |
+   +------------------+----------------------------------+
+   | ScientificFloat  | Same as ScientificDouble, can be |
+   |                  | used as its own type adapter.    |
+   +------------------+----------------------------------+
+   | SiteOptions      | Defaults module for runners      |
+   +------------------+----------------------------------+
+
+  Implementation modules of no interest to the test writer. Fixture writers may be
+  interested in some of them.
+
+   +------------------------+-------------------------------------+
+   | Component Name         + Fixture Description                 |
+   +========================+=====================================+
+   | Counts                 | Utility that maintains right, wrong |
+   |                        | ignored and exception counts.       |
+   +------------------------+-------------------------------------+
+   | FitException           | Main exception class, all kinds     |
+   |                        | of interesting goodies.             |
+   +------------------------+-------------------------------------+
+   | FitGlobals             | Contains configuration stuff that   |
+   |                        | may need to be changed to make it   |
+   |                        | work.                               |
+   +------------------------+-------------------------------------+
+   | FitNesseExceptions     | Exception classes used in Fitnesse. |
+   |                        | Will eventually be removed.         |
+   +------------------------+-------------------------------------+
+   | `Fixture`__            | Base class for all fixtures,        |
+   |                        | Contains lots of utilities          |
+   +------------------------+-------------------------------------+
+   | FixtureLoader          | Imported module used by Fixture.    |
+   +------------------------+-------------------------------------+
+   | Options                | Utility module used by the runners  |
+   |                        | to parse and hold options           |
+   +------------------------+-------------------------------------+
+   | `Parse`__              | HTML Parser                         |
+   +------------------------+-------------------------------------+
+   | RunnerImplementation   | All batch runners                   |
+   +------------------------+-------------------------------------+
+   | taBase                 | All the basic type adapters         |
+   +------------------------+-------------------------------------+
+   | taProtocol             | Type Adapter Protocol Handlers      |
+   +------------------------+-------------------------------------+
+   | taTable                | Type Adapter module directory       |
+   +------------------------+-------------------------------------+
+   | `TypeAdapter`__        | Type Adapter factory methods and    |
+   |                        | accessors.                          |
+   +------------------------+-------------------------------------+
+   | Utilities              | Some stuff that doesn't fit         |
+   |                        | elsewhere.                          |
+   +------------------------+-------------------------------------+
+   | Variations             | Different camel and annotations.    |
+   |                        | This is unlikely to remain in the   |
+   |                        | same form next release.             |
+   +------------------------+-------------------------------------+
+
+    __ FIT_WritingFixtures.htm
+    __ FIT_Parse.htm
+    __ FIT_TypeAdapters.htm
+
+
+2. fitLib.
+==========
+
+   Fixtures which are part of the `FitLibrary`__.
+
+   __ FitLib_Basic.htm
+
+   +------------------------+----------------------------------+
+   | Fixture Name           | Fixture Description              |
+   +========================+==================================+
+   | `ArrayFixture`__       | checks contents of an ordered    |
+   |                        | collection.                      |
+   +------------------------+----------------------------------+
+   | `CalculateFixture`__   | An alternative to ColumnFixture  |
+   +------------------------+----------------------------------+
+   | `CombinationFixture`__ | Verify all combinations of two   |
+   |                        | variables                        |
+   +------------------------+----------------------------------+
+   | `ConstraintFixture`__  | True or False fixture            |
+   +------------------------+----------------------------------+
+   | `DisplayUtility`__     | An enhancement to the Fit Library|
+   |                        | which allows an inline display of|
+   |                        | a collection.                    |
+   +------------------------+----------------------------------+
+   | `DoFixture`__          | A highly recommended alternative |
+   |                        | to all the rest of the fixtures  |
+   +------------------------+----------------------------------+
+   | `DotGraphics`__        | An example of an interface to a  |
+   |                        | a graphics visualization package.|
+   +------------------------+----------------------------------+
+   | FixtureFixture         | Used to test fixtures            |
+   +------------------------+----------------------------------+
+   | `ImageFixture`__       | Array of image tags              |
+   +------------------------+----------------------------------+
+   | `SequenceFixture`__    | Slight variation on DoFixture    |
+   +------------------------+----------------------------------+ 
+   | `SetUpFixture`__       | Variation on ColumnFixture, used |
+   |                        | for setup tasks.                 |
+   +------------------------+----------------------------------+
+   | `SetFixture`__         | Variation on RowFixture          |
+   +------------------------+----------------------------------+
+   | SpecifyFixture         | Used to test fixtures            |
+   +------------------------+----------------------------------+
+   | `SubsetFixture`__      | Same as SetFixture, except that  |
+   |                        | it only looks for partials.      |
+   +------------------------+----------------------------------+
+
+   __ FitLib_ArrayFixture.htm
+   __ FitLib_CalculateFixture.htm
+   __ FitLib_CombinationFixture.htm
+   __ FitLib_ConstraintFixture.htm
+   __ FitLib_DisplayUtility.htm
+   __ FitLib_DoFixture.htm
+   __ FitLib_DotGraphics.htm
+   __ FitLib_ImageFixture.htm
+   __ FitLib_DoFixture.htm
+   __ FitLib_SetUpFixture.htm
+   __ FitLib_ArrayFixture.htm
+   __ FitLib_ArrayFixture.htm
+
+
+   Implementation modules of no interest to the test writer. Fixture writers may be
+   interested in some of them.
+
+   +------------------------+-------------------------------------+
+   | Component Name         + Fixture Description                 |
+   +========================+=====================================+
+   | ExtendedCamelCase      | Obsolete. It's currently a proxy for|
+   |                        | the camel routine in Fixture.       |
+   +------------------------+-------------------------------------+
+   | FitLibraryExceptions   | being obsoleted in favor of         |
+   |                        | FitException.                       |
+   +------------------------+-------------------------------------+
+   | FitLibraryFixture      | Base class for FitLibrary Fixtures  |
+   +------------------------+-------------------------------------+
+   | MethodTarget           | FitLibrary version of TypeAdapter   |
+   +------------------------+-------------------------------------+
+   | ParseUtility           | FitLibrary included module          |
+   +------------------------+-------------------------------------+
+
+   The fitLib directory also contains all of the specification tests and a good deal of
+   documentation, all of which is still Java-centric.
+
+3. fitnesse.
+============
+
+   This directory contains a small number of modules for FitNesse, of which the most important
+   is the FitServerImplementation module. This is the base module for both FitServer and
+   TestRunner.
+
+   While there are a large number of fixtures in the fixtures directory, most of them are
+   for testing FitNesse. The following are the only fixtures that are generally useful and 
+   documented within FitNesse.
+
+   +------------------------+-------------------------------------+
+   | Component Name         + Fixture Description                 |
+   +========================+=====================================+
+   | `Comment`__            | Moved to fit directory              |
+   +------------------------+-------------------------------------+
+   | RowEntryFixture        | Not supported. Use `SetUpFixture`__ |
+   |                        | from the Fit Library instead.       |
+   +------------------------+-------------------------------------+
+   | `TableFixture`__       | Handles tables that look like       |
+   |                        | business forms.                     |
+   +------------------------+-------------------------------------+
+
+   __ FIT_CommentFixture.htm
+   __ FitLib_SetUpFixture.htm
+   __ FitNesse_TableFixture.htm
+
+
+4. fat, the FIT Acceptance Tests.
+=================================
+
+   This directory contains everything that's been shipped as FIT acceptance and specification
+   tests. It's got the fixtures as well as the HTML source and results directories.
+
+5. eg, or the FIT `Examples`__.
+===============================
+
+   There are numerous examples scattered throughout the directories. The eg directory
+   contains many of the examples shipped with the original version of FIT; most of them
+   work.
+
+__ FIT_Examples.htm
+
+6. Documentation.
+=================
+
+   All of the basic PyFit documentation is in the Doc directory. The root of the HTML tree is
+   AAStart.htm, which is not entirely intuitive. The odd name puts the root at 
+   the top of the directory, where it belongs.
+
+   The source is in the DocSource directory. It uses the Docutils package. The DocSource
+   directory also contains a make.py script and an html2.cmd script. The first is a trivial
+   make utility that checks if a file has been updated before running docutils. The second
+   is the script that actually invokes Docutils. If you're not running Windows XP, you'll 
+   need to change this to whatever your scripting language needs.
+
+   Docutils is not part of the normal Python distribution; you need to get the current
+   version from Sourceforge.
+
+   There is extensive documentation on FitLibrary in the FitLib directory. This is
+   accessable for batch. It has not been converted from its Java origins to becoming
+   Python-centric. The FitNesse version of the documentation comes with FitNesse release
+   20050405 and later. The FitNesse version of the specification tests must be downloaded
+   from SourceForge.
+
+7. Tests.
+=========
+
+There are a variety of tests in the tests subdirectory. This directory also contains a number of Windows XP command files that I use to run the unit and acceptance tests. They're set up to use the 'cmd1.cmd' command file to create a command window. Double clicking on this file will open a properly set up command window where the rest of the testing commands can be entered.
+
+The "ab.cmd prod" script runs all of the unit and acceptance tests that don't require FitNesse to be up. This script contains mostly python commands. For use on Windows, it requires the location of your Python installation. Since it's essentially a list of python execution commands, it should be very easy to convert to the shell scripting host of choice for non Windows systems. Please report any problems that this script reports; I don't have access to non-windows systems to test.
+
+The 'a all', 'a allp2 and 't all' commands run the batch acceptance and unit tests. Both sets should run without failures. Both the 'a all' and 'a allp2' commands use a file list to pick out the tests to run.
+
+The 'flt all' and 'fla +r all' commands run the Fit Library unit and specification tests. The unit tests run without failures, the specification tests should end with 207 successes, no failures and no exceptions. There is a file in fitLib that explains each of the five tests that were removed from the test suite, as well as the 16 tests that were modified. 
+
+The spec1_1 command file runs the FIT 1.1 specification tests. This test should end with 3 successes and 1 failure; the failure is due to the inclusion of some speculative work in one of the tests that are not expected to pass. (In fact, the fixtures don't exist!) You will need to manually inspect the test results to determine whether all of the manditory tests passed.
+
+The 'fnt all', fna c1f and 'fna row' commands run the FitNesse tests. Your FitNesse installation must be up and running for the last two of these to succeed; the unit tests do not need FitNesse. The TestRunner commands in the fna.cmd file may need to be changed if your FitNesse installation is not at port 80 on localhost. At the moment, not all of the FitNesse specification tests have been implemented; I don't know when that will be corrected.

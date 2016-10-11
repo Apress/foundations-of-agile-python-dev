@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Parse</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="parse">
+<h1 class="title">Parse</h1>
+<p>The Parse module contains a single class: Parse. This class is responsible for parsing HTML into a tree of nodes. This is not a general purpose HTML parser; it only deals with the tags it is told to, and it has a very limited capability to handle embedded tables, but no other form of recursion.</p>
+<p>In particular, it does not handle HTML comments or any form of scripting. It also does not handle a number of tags which are needed by facilities in Fit Library, including the ListTree, ImageName and DotGraphics facilities. The existing mechanisms (RawString and CellAccess in TypeAdapter) are workarounds for this lack.</p>
+<p>At the moment the description is strongly tied to HTML, however the future development direction of Python FIT is to extend the internal parse tree in the direction of an input-independent representation which supports more node types. In particular, I'm looking at direct support of Word, Excel and OpenOffice.org on all platforms, as well as extending the node tree to directly include &lt;head&gt;, &lt;body&gt;, &lt;meta&gt;, &lt;link&gt;, &lt;style&gt;, &lt;a&gt;, &lt;img&gt;, &lt;ul&gt; and &lt;li&gt; tags.</p>
+<div class="section" id="parse-nodes">
+<h1><a name="parse-nodes">Parse Nodes</a></h1>
+<p>The node is the central data structure in the tree. The Fit book has a very nice diagram in chapter 37.2 on page 308. There is also a good sketch at fit.c2.com in the older documentation section. It will be useful to have one or the other of these in front of you while reading the following description.</p>
+<p>Conceptually, nodes have five data attributes and a number of methods. The concrete implementation has seven data attributes, and therein lies the story.</p>
+<p>The five conceptual attributes are named leader, tag, body, end and trailer. Of these, tag and end are the simplest; they are character strings with the beginning and ending tags respectively. Since this application does not process unclosed tags, both of them are required; neither can be None or an empty string.</p>
+<p>Leader is the next simplest: it is whatever text is in front of the tag that isn't part of some other node. It is possible for there to be no such text. Notice that when there isn't any text, one of the Parse calls plugs in a newline!</p>
+<p>The other thing to know about Leader is that if two tags on the same level have text between them, the text is handled by the leader field of the following tag, not by the trailer field of the preceeding tag. The only significant consequence of this is that when Fitnesse is processing chunked output, each chunk ends with the end of a table, and does not include the text before the next table. To change this would require changing the invariant that relates trailer and more.</p>
+<p>Body is the first complex attribute, since it is actually two attributes: body and parts. Body is used when the data between the beginning and ending tag is pure text (including unparsed tags), and parts is used when it contains parsed nodes. Only one of these two attributes contains live data. You should always test the parts attribute for None before attempting to use the body attribute; testing the body attribute by itself is not sufficient.</p>
+<p>The final conceptual attribute is trailer. It handles whatever follows the tag on the same level. There are two concrete attributes: trailer and more. Trailer is a string that contains any data following the last tag on that level; more is the next tag on the same level. You should always test more for None before attempting to use trailer.</p>
+</div>
+<div class="section" id="unicode-and-other-character-sets">
+<h1><a name="unicode-and-other-character-sets">Unicode and other character sets</a></h1>
+<p>PyFit generally processes internally in Unicode, however all of the wrinkles and edge cases haven't been totally worked out yet. Parse usually doesn't care if its input is an 8-bit string or a unicode string. Data coming from the standard runners will be in unicode, but parse requests from other places might be either.</p>
+<p>Some of the Parse functions do not work well with unicode; they should be avoided. In particular, the str() builtin function does not work unless the data is in the 7-bit ASCII range.</p>
+<p>The toPrint() method always returns an 8-bit string; if any of the data was in unicode, this string will be the utf-8 encoded version.</p>
+<p>The toString() method will return either an 8-bit string or a unicode string depending on whether there were any unicode strings in the input.</p>
+</div>
+<div class="section" id="constructors">
+<h1><a name="constructors">Constructors</a></h1>
+<p>The Java version of this module contained four overloaded constructors; this version replaced all of the parameters with keywords, and requires one of two patterns.</p>
+<p>The normal method of parsing a document is to read it into a string, and then call Parse(text, (tags) [,defaultEncoding]), where tags is a tuple consisting of the tags to be parsed, in hierarchical order. If you don't specify them, they are: (&quot;table&quot;, &quot;tr&quot;, &quot;td&quot;). The only other useful set is (&quot;wiki&quot;, &quot;table&quot;, &quot;tr&quot;, &quot;td&quot;). All of the runners test for the presence of the wiki tag and pass the correct tuple.</p>
+<p>The other call to parse constructs a single node, and requires at least the tag= keyword. It also accepts the body=, parts= and more= keywords. These four parameters fill in the parts of the requested node. It is up to the caller to handle splicing the new node into the parse tree, and changing any other fields that are defaulted incorrectly.</p>
+</div>
+<div class="section" id="standard-methods">
+<h1><a name="standard-methods">Standard Methods</a></h1>
+<p>&lt;node&gt;.size() returns the number of sibling nodes.</p>
+<p>&lt;node&gt;.last() returns the last sibling node.</p>
+<p>&lt;node&gt;.leaf() returns the lowest child node.</p>
+<p>&lt;node&gt;.at(i, j, k) returns the node addressed by i, j, k. In normal use, &lt;node&gt; is a table cell, and at(i) will return a table node, at(i, j) will return a row node, and at(i, j, k) will return a cell node.</p>
+<p>&lt;node&gt;.text() returns the content of the body attribute, after a considerable amount of laundry. In particular, it removes any HTML tags it finds, which renders it unsuitable for handling unparsed HTML. This is an issue for Fit Library.</p>
+<p>unformat(), unescape() and replacement() remove nodes and &amp; symbols, respectively.</p>
+<p>addToTag(text) and addToBody(text) add the text to the end of the tag or the body, respectively. They currently do little or no checking against adding duplicate attributes.</p>
+<p>__str__() returns a printable form of the modified HTML. It's called by the str() builtin function. This is the standard way of converting the tree back to HTML. It always returns an 8bit string in the current Python encoding; it will throw an exception if there are any characters that can't be represented in that encoding, which is usually 7-bit ASCII.</p>
+<p>&lt;node&gt;.toString() returns the document in either 8bit or unicode, as appropriate. It will be in unicode if there are any unicode strings in the document tree.</p>
+<p>&lt;node&gt;.toPrint() returns the document as an 8bit string, in either the current encoding or in UTF-8. It is the preferred method of rendering the document before either writing it to disk or transmitting it elsewhere.</p>
+<p>&lt;node&gt;.toNodeList() is a debuging tool; it produces a list, one line per node, that shows the structure of the tree.</p>
+<p>footnote() is a utility method that builds a footnote. Use it with caution as it has a number of environmental assumptions. It will eventually be replaced by a better method of handling linked HTML documents.</p>
+<p>The == and != operators are also supported.</p>
+</div>
+<div class="section" id="annotation-methods">
+<h1><a name="annotation-methods">Annotation Methods</a></h1>
+<p>Note that the eventual direction for annotation is to provide an annotation attribute in the parse node and place an annotation object on that attribute. The actual change to the parse node for annotation will take place on the conversion of a parse tree to an output string. These methods are all consequently temporary and may be removed or significantly altered in future releases; the annotation methods in Fixture should be used.</p>
+<p>Most of the annotation methods have been moved here from Fixture; what is left in Fixture is proxies for these methods, plus the tabulate functionality (add into the count object) which these methods do not support.</p>
+<p>These methods, in turn, use the real annotation methods in Variations. This indirection is needed because the exact markup to add to the HTML differs depending whether one is in FitNesse, batch or standards compliant batch.</p>
+<p>&lt;node&gt;.right(actual) annotates the cell with a green background. If actual is not None (None is the default) it also adds the text for expected and actual.</p>
+<p>&lt;node&gt;.greenLabel(actual) adds the text for expected and actual if actual is not None. If actual is None, it does nothing.</p>
+<p>&lt;node&gt;.wrong(actual, escape) annotates the cell with a red background. If actual is not None (the usual case) it also adds the text for expected and actual to the body. If escape is True (the default) it escapes ampersands and angle brackets first.</p>
+<p>&lt;node&gt;.redLabel(actual, escape) adds the text for expected and actual to the cel body. If actual is None (not the usual case) it returns without doing anything. If escape is True, it escapes ampersands and angle brackets in the actual field.</p>
+<p>&lt;node&gt;.ignore() annotates the cell with the grey background for an ignored cell.</p>
+<p>&lt;node&gt;.error(msg) annotates the cell with the red background and then adds the message after escaping ampersands and angle brackets. Notice that this is not the same as wrong(), which also adds expected and actual tags in a red color that contrasts with the background.</p>
+<p>&lt;node&gt;.info(msg) adds the message to the body, using a grey color for the text.</p>
+<p>&lt;node&gt;.exception(msg, exc=True, bkg=&quot;exception&quot;) annotates the cell as right, wrong or exception, and adds either a stack trace or message depending on whether exc is True or False. It encapsulates the presentation logic for an exception under a variety of different conditions, and is probably only useful to the exception subclasses of the CheckReturn class.</p>
+<p>&lt;node&gt;.label(msg) wraps the msg string in a &lt;span&gt; tag with whatever markup is appropriate for a message in an error.</p>
+<p>&lt;node&gt;.greenLabel(msg) wraps the msg string in a &lt;span&gt; tag with whatever markup is appropriate for a message in a right context</p>
+<p>&lt;node&gt;.gray(msg) wraps the msg string in a &lt;span&gt; tag with whatever markup is appropriate for a message in an information context.</p>
+<p>&lt;node&gt;.escape(aString) edits the string, replacing ampersands, left angle brackets, runs of spaces and returns (in all three major configurations) with either HTML entities or &lt;br /&gt; tags.</p>
+</div>
+</div>
+</body>
+</html>

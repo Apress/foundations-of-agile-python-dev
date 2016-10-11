@@ -1,0 +1,28 @@
+<html><title>TestReturnedFixture</title><body>
+<h1><a href="TestReturnedFixture.html">TestReturnedFixture</a></h1>
+<h2>Use a returned fixture:</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>get slice</i></td><td>0</td><td>0</td></tr>
+<tr><td></td><td ColSpan=3>s</td></tr>
+<tr><td>r</td><td ColSpan=3>A0a</td></tr>
+<tr><td>r</td><td ColSpan=3>A0b</td></tr>
+</table>
+<ul><li><i>And another:</i></li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>get slice</i></td><td>1</td><td>2</td></tr>
+<tr><td></td><td ColSpan=3>s</td></tr>
+<tr><td>r</td><td ColSpan=3>B2a</td></tr>
+<tr><td>r</td><td ColSpan=3>B2b</td></tr>
+</table>
+<ul><li><i>And another is wrong:</i></li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>get slice</i></td><td>1</td><td>2</td></tr>
+<tr><td></td><td ColSpan=3>s</td></tr>
+<tr><td>w</td><td ColSpan=3>BB2a</td></tr>
+<tr><td>report</td><td ColSpan=3>BB2a missing</td></tr>
+<tr><td>w</td><td ColSpan=3>BB2b</td></tr>
+<tr><td>report</td><td ColSpan=3>BB2b missing</td></tr>
+<tr><td>Iw</td><td ColSpan=3>B2a surplus</td></tr>
+<tr><td>Iw</td><td ColSpan=3>B2b surplus</td></tr>
+</table>
+</body></html>

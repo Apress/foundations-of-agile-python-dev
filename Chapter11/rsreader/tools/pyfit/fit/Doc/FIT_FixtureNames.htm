@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Fixture Names</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="fixture-names">
+<h1 class="title">Fixture Names</h1>
+<p>All tables which FIT interprets begin with a special row. The first cell of this row contains the name of the fixture, remaining cells (if any) contain parameters that the fixture can use. Certain fixtures (ActionFixture and DoFixture being good examples) also have fixture names in other places.</p>
+<p>Fixture names that are acceptable to the fixture loading mechanism have the same syntax as names used in the Python import statement. A name in this form will be refered to as &quot;technology facing&quot;.</p>
+<p>While it is possible to supply fixture names that can be used directly by the fixture loading mechanism, it is usually better to supply &quot;Business Facing&quot; names; that is names that are meaningful in terms that the business people on the project actually use.</p>
+<p>This requires a translation step. There are two mechanisms to do this translation: the new Application Configuration exit and the classic mechanism. Only one of them will be used.</p>
+<div class="section" id="the-application-configuration-exit">
+<h1><a name="the-application-configuration-exit">The <a class="reference" href="FIT_ConfigurationExit.htm">Application Configuration</a> Exit</a></h1>
+<p>If an Application Configuration exit is installed, the mapFixture routine will be invoked as the first step. This routine can either return None, in which case the classic mechanism will be invoked, or it can return the name required by the fixture loading mechanism.</p>
+</div>
+<div class="section" id="classic-translation-mechanism">
+<h1><a name="classic-translation-mechanism">Classic Translation Mechanism</a></h1>
+<p>This mechanism has existed for some time. The normalization mechanism will continue to be maintained; the Fixture Renames and Remembered Packages features may be depreciated in a future release.</p>
+<div class="section" id="normalization">
+<h2><a name="normalization">Normalization</a></h2>
+<p>Python Fit makes a hard distinction between names which contain a period, and names which do not.</p>
+<p>Names which do not contain a period are assumed to be business facing: that is, they represent words or phrases that are meaningful for the business. They may be part of the Ubiquitous Language created for the application.</p>
+<p>Names which do not contain a period, and which do contain a space, are normalized as follows. First, quotes are removed and then the phrase is converted to title case. This means that the first character of each piece is converted to upper case, and all other letters in the piece are converted to lower case. Finally, all characters which are not letters or numbers are removed.</p>
+<p>For example, &quot;Susie's storage&quot; becomes &quot;SusiesStorage&quot;, while &quot;spam, spam, spam!&quot; becomes &quot;SpamSpamSpam&quot;.</p>
+</div>
+<div class="section" id="rename-table">
+<h2><a name="rename-table">Rename Table</a></h2>
+<p>FIT next checks the rename table for both technology and business facing names. The first check is to see if there is an exact match. If there is, the name will be replaced and the new name used to search for the module.</p>
+<p>If there is not, FIT will attempt to match on the first part of the name, checking for longer matches first. If a match is found, the matched part of the name is replaced.</p>
+<p>The renames table is initially loaded from a configuration file. For batch execution, the default file is named &quot;FixtureRenames.txt&quot; and is located in the directory containing the tests. For FitNesse, the proper file is specified using the !path widget; any name ending with .txt is assumed to be a configuration file. A different configuration file can be specified on the batch runners, including the FitNesse TestRunner.</p>
+<p>Support for the file within FitNesse has a number of difficulties having to do with locating it in the file system, and may be withdrawn in the future. The Application Configuration exit facility should be used instead.</p>
+</div>
+<div class="section" id="remembered-packages-feature">
+<h2><a name="remembered-packages-feature">Remembered Packages feature.</a></h2>
+<p>This feature came in from FitNesse, and its use is strongly discouraged. It's maintained only for compatability with tests written for FitNesse.</p>
+<p>It works by remembering packages. A package is all parts of a name above the actual module; it has nothing to do with the Python package mechanism (although a package in this sense is also a Python package).</p>
+<p>When it sees a single element name, i.e. a name without a period, it will search for that module in all remembered packages. It searches in the order in which the package is first added to the list of packages. Changes in a test can result in a change in the search order.</p>
+<p>Packages can be added to the list by the Import fixture, described below. The Rememberd Packages table is initialized with the basic &quot;fit&quot; package; this means that it is not necessary to write, for example, fit.Summary. The single name Summary will do as well.</p>
+</div>
+<div class="section" id="import-fixture">
+<h2><a name="import-fixture">Import Fixture</a></h2>
+<p>Entries can be placed in either the remembered packages table or the renames table using the <a class="reference" href="FIT_Import.htm">import</a> fixture. Doing this is strongly discouraged; the facility is present only to support tests from FitNesse versions of FIT. Its use violates the principle that anything in a test should be business facing rather than technology facing.</p>
+<p>The import fixture may be depreciated in a future release. The Application Configuration exit provides a much more consistent way of doing this.</p>
+</div>
+</div>
+<div class="section" id="the-loading-process">
+<h1><a name="the-loading-process">The Loading Process</a></h1>
+<p>There is an interesting ambiguity in loading the requested fixture. Since Python modules can contain several fixture classes, the last qualifier can be either the fixture class name, or both the module and fixture class name. Put another way, it is not necessary to supply the class name if it is the same as the module name.</p>
+<p>Python FIT normally resolves this ambiguity smoothly.</p>
+</div>
+</div>
+</body>
+</html>

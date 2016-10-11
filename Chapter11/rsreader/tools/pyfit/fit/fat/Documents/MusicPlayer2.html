@@ -1,0 +1,113 @@
+<html><head><title>Music Player with Table Fixture</title></head>
+<body>
+<h1><center>Music Player with Table Fixture</center></h1>
+<p>This version of the Music Player example shows what can be done with a specialized display that looks a bit more like an actual music player rather than a refuge spreadsheet.</p>
+
+<p>This is a simulation. That is, we're actually simulating the passage of time. The "Current Time" field in the far right is the simulated time from when we start the player, given in minutes and seconds. Commands take five seconds. This isn't because the box is particularly slow, it's because the operator has to take some time to push the buttons. Since we don't want to create a random time (it would make duplicating the times impossible) and we also don't want to enter a time for each command, we'll just arbitrarily use five seconds.</p>
+
+<p>The first thing we're going to do is invoke a DoFixture and then have it load our music player simulator. We slide it to the right and grey it out because it contains a bunch of "technology facing" stuff that the end user shouldn't have to deal with.</p>
+<p><table align=right BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td colspan=2>fitLib.DoFixture</td></tr>
+<tr><td>start</td><td>eg.MusicPlayer2</td></tr>
+</table></p>
+<p>&nbsp;</p>
+
+<p>The first table is below. Each entry is the same: it starts with a command and the top of the music player. Each of the fields in the first row is checked after each command.</p>
+<p>The music player also displays the inventory sorted in various different ways. However, the inventory display does not have to be included in the table. If it isn't there, it isn't checked.</p>
+
+<p>reset player is simply the starting command; it puts the music player into its starting state, which is displayed below.</p>
+
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td colspan=6>reset player</td></tr>
+<tr><td>Total Songs</td><td>Songs Displayed</td><td>Player Status</td
+   ><td>Alarm</td><td>Time Remaining</td><td>Current Time</td></tr>
+<tr><td>57</td><td>1 to 10 of 57</td><td>Stopped</td
+   ><td>&nbsp;</td><td>0:00</td><td>0:00</td></tr>
+</table>
+
+<p>Now we want to select a song to play. We select the song by specifying the number from the far left column on the display. The selection list doesn't have to be displayed, but it does help. After the command, the selected song is marked with an * instead of the number.</p>
+
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>select song</td><td colspan=5>2</td></tr>
+<tr><td>Total Songs</td><td>Songs Displayed</td><td>Player Status</td
+   ><td>Alarm</td><td>Time Remaining</td><td>Current Time</td></tr>
+<tr><td>57</td><td>1 to 10 of 57</td><td>Stopped</td
+   ><td>&nbsp;</td><td>3:42</td><td>0:05</td></tr>
+<tr><td>#</td><td><i>Name</i></td><td><i>Artist</i></td
+   ><td><i>Album</i></td><td><i>Year</i></td><td><i>Time</i></td></tr>
+<tr><td>1</td><td>Akila</td><td>Toure Kunda</td><td>The Toure Kunda Collection</td>
+    <td>1996</td><td>4:25</td></tr>
+<tr><td>*</td><td>American Tango</td><td>Weather Report</td><td>Mysterious Traveller</td>
+    <td>1974</td><td>3:42</td></tr>
+<tr><td>3</td><td>Ananas</td><td>James Taylor</td><td>Hourglass</td>
+    <td>1997</td><td>5:44</td></tr>
+<tr><td>4</td><td>Another Grey Morning</td><td>James Taylor</td><td>JT</td>
+    <td>1977</td><td>2:44</td></tr>
+<tr><td>5</td><td>Cellohachi Part 1</td><td>Gideon Freudmann</td><td>Sound Of Distant Deer</td>
+    <td>1998</td><td>4:04</td></tr>
+<tr><td>6</td><td>Cellohachi Part 2</td><td>Gideon Freudmann</td><td>Sound Of Distant Deer</td>
+    <td>1998</td><td>3:35</td></tr>
+<tr><td>7</td><td>Cellohachi Part 2</td><td>Gideon Freudmann</td><td>Sound Of Distant Deer</td>
+    <td>1998</td><td>2:04</td></tr>
+<tr><td>8</td><td>Coolsville</td><td>Laurie Anderson</td><td>Strange Angels</td>
+    <td>1989</td><td>4:37</td></tr>
+<tr><td>9</td><td>Copperline</td><td>James Taylor</td><td>New Moon Shine</td>
+    <td>1991</td><td>4:22</td></tr>
+<tr><td>10</td><td>Dice Are Rolling</td><td>Andrew Lloyd Webber</td><td>Evita</td>
+    <td>1979</td><td>5:07</td></tr>
+</table>
+
+<p>Selecting the song doesn't do anything but mark it as selected in the display. However, it does take a small amount of time. The actual selection is almost instantanious, but the person operating it takes 5 seconds.</p>
+
+<p>The next logical thing to do is tell the player to start playing it. All operator commands are presumed to take five seconds, at least if the player isn't playing. Loading the CD takes four seconds (you didn't think this was a really modern player with everything in flash memory, did you?)</p>
+
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td colspan=6>start playing selected song</td></tr>
+<tr><td>Total Songs</td><td>Songs Displayed</td><td>Player Status</td
+   ><td>Alarm</td><td>Time Remaining</td><td>Current Time</td></tr>
+<tr><td>57</td><td>1 to 10 of 57</td><td>Loading</td
+   ><td>&nbsp;</td><td>3:42</td><td>0:10</td></tr>
+</table>
+
+<p>Now what happens? We hear it go click, whir and then play our song. Not much to see, so we're just going to move ahead a minute and see what the status will look like at that time. The command, as usual, also takes five seconds.</p>
+
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>advance</td><td>60</td><td colspan=4>seconds</td></tr>
+<tr><td>Total Songs</td><td>Songs Displayed</td><td>Player Status</td
+   ><td>Alarm</td><td>Time Remaining</td><td>Current Time</td></tr>
+<tr><td>57</td><td>1 to 10 of 57</td><td>Playing</td
+   ><td>&nbsp;</td><td>2:41</td><td>1:15</td></tr>
+</table>
+
+<p>Much as someone likes this song, waiting for it to finish is somewhat like watching grass grow, or at least listening to grass grow. So let's see how many songs we have by James Taylor. We can do this while the current song is playing - this player can do searches while it's playing something.</p>
+
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>show all songs where</td><td>artist</td><td>is the same as song</td
+   ><td colspan=3>3</td></tr>
+<tr><td>Total Songs</td><td>Songs Displayed</td><td>Player Status</td
+   ><td>Alarm</td><td>Time Remaining</td><td>Current Time</td></tr>
+<tr><td>57</td><td>1 to 5 of 5</td><td>Playing</td
+   ><td>&nbsp;</td><td>2:36</td><td>1:20</td></tr>
+<tr><td>#</td><td><i>Name</i></td><td><i>Artist</i></td
+   ><td><i>Album</i></td><td><i>Year</i></td><td><i>Time</i></td></tr>
+<tr><td>*</td><td>American Tango</td><td>Weather Report</td><td>Mysterious Traveller</td
+   ><td>1974</td><td>3:42</td></tr>
+<tr><td>1</td><td>Ananas</td><td>James Taylor</td><td>Hourglass</td
+   ><td>1997</td><td>5:44</td></tr>
+<tr><td>2</td><td>Another Grey Morning</td><td>James Taylor</td><td>JT</td
+   ><td>1977</td><td>2:44</td></tr>
+<tr><td>3</td><td>Copperline</td><td>James Taylor</td><td>New Moon Shine</td
+   ><td>1991</td><td>4:22</td></tr>
+<tr><td>4</td><td>Handyman</td><td>James Taylor</td><td>JT</td
+   ><td>1977</td><td>3:18</td></tr>
+<tr><td>5</td><td>Sailing to Philadelphia</td><td>James Taylor</td><td>October Rose</td
+   ><td>2001</td><td>5:43</td></tr>
+</table>
+
+<p>The command has, as usual, taken five seconds. While it found five songs, there are six displayed. This is a very smart little box: if the display doesn't include the currently playing song, it puts it into the display anyway, with an * for the number.</p>
+
+
+
+
+
+</body></html>

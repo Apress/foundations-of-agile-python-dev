@@ -1,0 +1,31 @@
+#!/bin/sh
+# PRE-COMMIT HOOK
+#
+# The pre-commit hook is invoked before a Subversion txn is
+# committed. Subversion runs this hook by invoking a program
+# (script, executable, binary, etc.) named 'pre-commit' (for which
+# this file is a template), with the following ordered arguments:
+#
+# [1] REPOS-PATH (the path to this repository)
+# [2] TXN-NAME (the name of the txn about to be committed)
+#
+# The default working directory for the invocation is undefined, so
+# the program should set one explicitly if it cares.
+#
+# If the hook program exits with success, the txn is committed; but
+# if it exits with failure (non-zero), the txn is aborted, no commit
+# takes place, and STDERR is returned to the client. The hook
+# program can use the 'svnlook' utility to help it examine the txn.
+#
+
+IGNORE='[^\/]+/(?!thirdparty)/.+'
+ADDR='dev@sample.org'
+
+/Users/svn/bin/whitespace_check "$REPOS" "$TXN" "$IGNORE" || exit 1
+/Users/svn/bin/syntax_check "$REPOS" "$TXN" "$IGNORE" || exit 1
+/Users/svn/bin/length_check "$REPOS" "$TXN" "$IGNORE" || exit 1
+/Users/svn/bin/complexity_check "$REPOS" "$TXN" "$IGNORE" -m $ADDR
+/Users/svn/bin/lint_check "$REPOS" "$TXN" "$IGNORE" -m $ADDR
+
+# All checks passed, so allow the commit.
+exit 0

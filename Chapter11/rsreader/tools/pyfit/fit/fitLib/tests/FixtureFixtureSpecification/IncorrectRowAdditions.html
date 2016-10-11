@@ -1,0 +1,18 @@
+<html><title>IncorrectRowAdditions</title><body>
+<h1><a href="IncorrectRowAdditions.html">IncorrectRowAdditions</a></h1>
+The text of the row that's been inserted has to match what's expected, otherwise this difference is reported:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td ColSpan=3>fitLib.FixtureFixture</td></tr>
+<tr><td></td><td>fixture</td><td ColSpan=2>fitLib.FixtureUnderTest</td></tr>
+<tr><td></td><td></td><td ColSpan=2>insertTwoRows</td></tr>
+<tr><td>-rw</td><td>Irw</td><td>one</td><td>two</td></tr>
+<tr><td></td><td>Irw</td><td>one</td><td>three</td></tr>
+<tr><td>Iw</td><td ColSpan=3>Actual Rows:</td></tr>
+<tr><td>I</td><td></td><td ColSpan=2>fitLib.FixtureUnderTest</td></tr>
+<tr><td>I</td><td></td><td ColSpan=2>insertTwoRows</td></tr>
+<tr><td>I-rw</td><td></td><td>one</td><td>two</td></tr>
+<tr><td>I-rw</td><td></td><td>one</td><td>two</td></tr>
+</table>
+</body></html>

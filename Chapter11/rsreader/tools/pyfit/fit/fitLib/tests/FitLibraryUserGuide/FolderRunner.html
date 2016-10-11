@@ -1,0 +1,31 @@
+<html><title>FolderRunner</title><body>
+<h1><a href="FolderRunner.html">FolderRunner</a></h1>
+Run <a href="FolderRunner.html">FolderRunner</a> as follows:<br>
+<hr>
+<pre>java -cp javaFit1.1b.jar;fitLibrayForFit.jar fit.runner.FolderRunner testDiry reportDiry
+</pre>
+<hr>
+You will need to add to the classpath (<i>cp</i>) for any application code that you're testing.<br>
+<ul><li><a href="FolderRunner.html">FolderRunner</a> runs <i>Fit</i> on every file in the <i>testDiry</i> and writes a report file into the corresponding place in the <i>reportDiry</i>.</li>
+<li>For each directory within <i>reportDiry</i>, it creates a file <i>reportIndex.html</i>, which gives the results of the tests in that directory and sub-directories. It also provides links into all of the reports.</li>
+<li><a href="FolderRunner.html">FolderRunner</a>  handles both HTML and XLS spreadsheet files.</li></ul>
+<h3>Spreadsheet files</h3>
+<ul><li><a href="FolderRunner.html">FolderRunner</a> uses <i>SpreadsheetRunner</i> which in turn uses <i>Poi</i> to read XLS files.</li>
+<li><i>SpreadsheetRunner</i> uses spreadsheet borders to work out where the tables are in the spreadsheet (just the first sheet).</li>
+<li>See the directory <i>testFolders</i> in the distribution of <i>FitLibrayForFit</i> for examples of the use of spreadsheet files (these are used in my Fit tests for <a href="FolderRunner.html">FolderRunner</a> itself).</li>
+<li>Add the poi jar in the classpath when using such files. (Download poi from http://jakarta.apache.org/poi)</li></ul>
+<h3><i>SetUp</i> and <i>TearDown</i></h3>
+The following special files may be in the <i>testDiry</i> or any of its sub-directories, and are used as follows:<br>
+<ul><li>A <i>SetUp</i> file is effectively added to the start of each test in the directory (including sub-directories). The file may be <i>SetUp.htm</i>, <i>SetUp.html</i> or <i>SetUp.xls</i> (in any mixture of uppercase and lower case).</li>
+<li>A <i>TearDown</i> file is effectively added to the endof each test in the directory (including sub-directories). The file may be <i>TearDown.htm</i>, <i>TearDown.html</i> or <i>TearDown.xls</i> (in any mixture of uppercase and lower case).</li></ul>
+Before running a test, all  <i>SetUp</i> files that appear in the current directory and all those above it (up to the level of the <i>testDiry</i>) are (effectively) added to the start of the test. They are added with the top-most first.<br>
+<br>
+All  <i>TearDown</i> files that appear in the current directory and all those above it (up to the level of the <i>testDiry</i>) are (effectively) added to the end of the test. They are added with the top-most last.<br>
+<br>
+NB: this differs from the <i>FitNesse</i> approach, which only takes the closest <i>SetUp</i> or <i>TearDown</i>.<br>
+<h3>Planned changes</h3>
+<ul><li>Use the foreground colour of spreadsheet cells as well to determine where the tables are.</li>
+<li>Look in all sheets of the spreadsheet</li>
+<li>Consider handling tables that are side-by-side.</li>
+<li>Provide more details to help in the use of spreadsheets.</li></ul>
+</body></html>

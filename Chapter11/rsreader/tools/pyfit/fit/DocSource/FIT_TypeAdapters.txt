@@ -1,0 +1,441 @@
+Using Type Adapters
+===================
+
+.. contents::
+
+General
++++++++
+
+The type adapter mechanism provides a standard interface between the cells of a table and the objects that encapsulate the application concepts that the cells represent. It also provides a number of utility facilities that make writing fixtures easier.
+
+FIT works best when the values in the cells are represented by application specific value objects. Using the generic type adapters described below is easy but has a number of disadvantages, the most obvious being a lack of application specific error reporting in the proper cells.
+
+In addition to the primary function of creating, checking and rendering an object for each cell of the table, it accesses the method, property or field in the fixture that handles that cell, and provides the `cell handler`__ mechanism.
+
+__ FIT_CellHandlers.htm
+
+It's possible to write fixtures that don't use the type adapter mechanism. PrimitiveFixture and Summary are good examples in the basic fit directory; there are others in the specification tests and the examples. However, the fixtures you can write this way are fairly simple and special purpose. The more general purpose a fixture is, the more likely you'll want to let the type adapter mechanism handle the details. ColumnFixture is a good, if somewhat complex, example of normal use. RowFixture is another example that gives a somewhat different perspective.
+
+An example that gives a comparison between the two approaches is the TableFixture acceptance test in fit.AccTests, with the fixtures in fit.AccTestFixtures.
+
+There are four tasks that you need to do when working with the type adapter mechanism. Some of them are needed all the time, some of them are fairly special purpose. The tasks are:
+
+1. Bind a type adapter chain to a field, method or property.
+2. Specify the type information for a field, method or property.
+3. Invoke a type adapter when processing a Parse cell.
+4. Write specialized type adapters.
+
+Binding a Type Adapter
+++++++++++++++++++++++
+
+The standard type adapter chain is bound to a specific method, field or property using the on factory function of the TypeAdapter module: TypeAdapter.on(). This factory function uses a number of subfunctions that can be used independently for more specialized purposes; you will frequently see them used in unit tests.
+
+The on factory function
+>>>>>>>>>>>>>>>>>>>>>>>
+
+There are six parameters, of which the first two are required.
+
+1. instance. This is the instance to access for the field, method or property. If it is None, then the fifth parameter (targetClass) is required. If you use this option, the accessor object must also be updated with an instance of targetClass before any access methods are called.
+
+2. name. This is the name of the field, method or property. A null string is a request for an unbound accessor; that is an accessor that doesn't access a method, field or property. The unbound accessor will store an object so that methods such as get, put and check work properly.
+
+3. metaData. This is a metadata dictionary. If it is not provided, the metadata must be in the dictionary named _typeDict in the class referenced either by instance or by targetClass.
+
+4. owner. This is optional. It is a back link to the fixture if the actual instance in the first parameter is not the fixture. Certain type adapters and cell handlers need this.
+
+5. targetClass. This is the target class. It's only needed if instance is None.
+
+6. accClass. This is the specific accessor class to use. It's mostly used for unit tests and in special circumstances when the caller wants to force the use of the AccessorBaseClass, which does not access memory at all. MethodTarget uses it.
+
+The object returned is an accessor. This has the responsibility of locating the proper field, method or property and accessing the data appropriately. It proxies the calls to the actual type adapter object so it is unnecessary to deal with two objects. The proxy mechanism also handles the interface to the cell handlers and to the parse exit.
+
+Accessors
+>>>>>>>>>
+
+Accessor objects have the responsibility of accessing the field, property or method. They also serve as proxies for type adapter modules. The accessor base class implements most of the advanced behavior of the type adapter mechanism.
+
+There are four accessor classes: two to access methods, one for fields and properties, and one (the accessor base class) which does not access anything. The accessor base class provides a facility for caching a single value and retrieving it later. The unbound accessor is occasionally useful in classic FIT, and is heavily used by the Fit Library.
+
+The accessor object has a number of useful methods.
+
++ get() retrieves the value from the field or property, or invokes a getter type method.
+
++ set(value) stores a value into a field or property, or invokes a setter type method.
+
++ invoke() invokes a getter (that is, a parameterless) method. It's mainly used by the ActionFixture's "press" command.
+
++ setParseExit(executable) sets an exit for the parse(text) method. This exit, if present, is taken in the parse(cell) routine before the type adapter's parse method is called. It is not taken by the type adapter. There is a description of the exit below. The parse exit facility is depreciated.
+
++ clearParseExit() removes a parse exit and restores the default.
+
++ target. This field should be set to the instance that will be accessed for the get, set and invoke methods. It's only necessary to set it when the application processes multiple instances. RowFixture does this: it needs to change the instance for each object in the collection.
+
+The accessor object has a number of methods that implement the type adapter mechanism. They are:
+
++ parse(cell). This method returns a parsed object or throws an exception. The parse routine calls the cell handlers. The routine should be called with the parse cell; calling it with a string to parse will result in reduced functionality and the inability to use certain advanced type adapters and cell handlers.
+
++ toString(object) This is the reverse: it converts an object to a string. The protocol object decides if this will be done with the str() builtin function or the toString() method.
+
++ equals(a, b) compares two objects. The first operand must be a cell, a string or an object of the type being compared. The cell is the prefered version, although all of the supplied type adapters will work correctly with a string. The float type adapter needs either the cell or a string to do a good comparison, it has reduced functionality if you pass it a float object. The second operand is an object of the type being compared.
+
++ stringEquals is an alias for equals(a, b). It was needed by a previous version of the protocol.
+
+In addition, the accessor implements the check() and parseAndSet() functions.
+
++ check(cell) is the type adapter's part of the check function. It returns a CheckResult object that can then be used to annotate the cell and tabulate the result. 
+
++ parseAndSet(cell) combines the parse(cell) and set(object) functions. It differs from them in that it will only accept a cell; the parse(cell) function also accepts strings. It also supports the exception[] cell handler, and it returns a CheckResult object. The result of the parse is bound to the CheckResult's parseResult attribute.
+
+Protocols
+>>>>>>>>>
+
+Type adapters can be designed to use any of five protocols; these vary from simple protocols that are useful in the vast majority of cases to more complex protocols that are needed for some of the more advanced type adapters.
+
+One of the five is used for application-specific value objects. The protocol itself serves as the adapter; no additional adapter code is needed.
+
+Adapters must have a fitAdapterProtocol identifier with a value of "Basic", "EditedString", "RawString" or "CellAccess". Basic access is assumed if the fitAdapterProtocol identifier is missing. A more detailed discussion of the differences among these four protocols is below.
+
+The factory function for a protocol object is: taProtocol.getProtocolFor(adapter). It takes the type adapter or application-specific value object's class as its only parameter, so the type adapter needs to have been acquired first.
+
+Type Adapters.
+>>>>>>>>>>>>>>
+
+The term adapter is somewhat of a misnomer; FIT works best when it can work directly with application value classes without needing special adapter classes to mediate.
+
+To be usable by FIT, an object needs to be able to do three things: it needs to be able to create an instance of itself from the contents of a Parse cell; it needs to be able to check whether its value matches the value in a parse cell, and it needs to be able to render itself into a parse cell.
+
+Most objects in an application do not, of course, know anything about Parse cells. Bridging that gap is the function of the protocol handlers and adapters described below.
+
+FIT supplies a group of adapter classes which do these services for the basic Python types and a few Python library modules. 
+
+Application objects that can be created from a character string, can compare themselves for equality, and can render themselves to a character string can be used directly, without the need for a special adapter. Most applications contain large numbers of value objects that fall into this category.
+
+When the application does not contain a suitable value object, it is necessary to write an adapter for one.
+
+The rest of this document describes how to use existing classes and how to write adapters. The supplied adapter classes are not intended to be extended as part of normal FIT usage.
+
+Metadata
+++++++++
+
+Unlike languages such as Java, C++ and C#, Python does not have a way of finding out what types a method or property requires by introspection. This information must be supplied to the type adapter mechanism by the fixture. In some cases, FIT can infer some of this information dynamically, in other cases it must be supplied.
+
+The required information can be supplied when the type adapter is created as the third parameter to the on(...) factory function. It can also be supplied in the class object for the instance containing the field, method or property referenced in the on(...) factory function.
+
+In both cases, the information is contained in a dictionary. If it's in the class object, the dictionary is bound to the _typeDict identifier.
+
+Since the primary purpose of the metadata dictionary is to provide additional information about the fields, properties and methods used in a FIT test, the keys are the Python identifiers of those objects, frequently with a dot and a qualifier added. 
+
+Type Declarations
+>>>>>>>>>>>>>>>>>
+
+There are two somewhat different approaches to providing type information, depending on whether you are dealing with a classic fixture or one of the flow type fixtures from the Fit Library. The difference is that the classic fixtures all assume that they are dealing with fields, properties, or getter or setter type methods. In other words, each named entity has one and only one type. This latter restriction is not strictly true for properties, but the current version of Python FIT does not support properties where the types of the getter and setter are different.
+
+The flow fixtures from the Fit Library (DoFixture, SequenceFixture and CalculateFixture, among others) make exactly the opposite assumption: many of the named items do not reference memory at all, and the ones that do are all methods with multiple parameters. Each of the parameters, plus the return value, may have a distinct type.
+
+The classic mechanism is the one supported by the TypeAdapter module and described in this writeup. FitLibrary's support for methods with multiple parameters is encapsulated in the MethodTarget module, which uses the basic type adapter module for each parameter and the return value. MethodTarget is not further described here.
+
+This means that type information is given in two ways. For the classic fixture, the key for a type information item is the method, property or field name. For the Fit Library flow type fixtures, it is the method name with ".types" appended. In both cases, the name to use is the result of processing the name given in the HTML with either the "camel", the "Graceful Names" or the "Extended Camel" routine. These somewhat fanciful names come from the major effect: running separate words together and converting the first letter of each word to upper case, giving an effect somewhat like a camel's hump.
+
+There are a number of different kinds of type definition. A plain character string requests one of the standard type adapters from the TypeAdapter module. They are described farther on in this document.
+
+A character string beginning with a "$" is a special return value that is used by the flow type fixtures from the Fit Library. "$SUT" (System Under Test) is a method of using an application module without having to write a specialized fixture. "$Array", "$Row", "$Set" and "$Subset" create a specialized wrapper that invokes the ArrayFixture, RowFixture, SetFixture or SubsetFixture internally. Likewise, "$Display" invokes the Display Utility.
+
+A direct reference to a class gives access either to an application Value Object, or to an adapter for an application Value Object. The interfaces for both of these cases are described below.
+
+A character string beginning with an "@" is a request to the `Application Configuration`__ module to resolve the type adapter.
+
+__ FIT_ConfigurationExit.htm
+
+A classic fixture type definition could look like this: (_typeDict["spam"] = "Int"). One for the flow type fixtures could look like this: (_typeDict["spam.types"] = ["Int", "String", "Float"]). The latter would be interpreted as a method named spam, with two parameters, a string and a float, which returns an int.
+
+There is one further wrinkle. Some type adapters allow additional meta pieces. If you need them in the flow type declaration, you insert a dictionary in the list at the appropriate place. The keys are the same as they would be for a classic fixture.
+
+Type Inference
+>>>>>>>>>>>>>>
+
+FIT can, in some cases, infer the proper type adapter to use for an identifier. If you want FIT to attempt this, you request the "Default" type adapter. If you leave the type information out of the metadata completely, TypeAdapter will supply the Default type adapter if the Application Configuration exit allows it. This ability is off by default.
+
+This only applies to the basic type information. All other metadata must still be supplied. There is more detail under the Default type adapter, below.
+
+RenameTo Metadata qualifier
+>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The RenameTo metadata qualifier allows one to take a single identifier and use a different identifier or several different identifiers to implement it.
+
+There are a number of reasons to use a rename. The user may have good reasons to use the same name for several different methods. Extended Camel can produce some very unreadable names, especially when dealing with languages other than English. And, of course, the user may use different names for what is, in fact, the same field or routine.
+
+A simple rename looks like this:
+
+| _typeDict["spam.RenameTo"] = "ham"
+| _typeDict["ham"] = "String"
+
+This says that everywhere the FIT tests uses 'spam', it will look for 'ham' as the method, field or property.
+
+A more complex example could look like this:
+
+| _typeDict["spam.RenameTo"] = {"get": "ham", "put": "pepper", 3: "meal"}
+| _typeDict["ham"] = "String"
+| _typeDict["pepper"] = "Int"
+| _typeDict["meal.types"] = ["String", "Int", "Boolean", "Float"]
+
+This says that there are three methods that can be referenced by the name 'spam' in the FIT test: a getter named 'ham', a setter named 'pepper' and a method with three parameters named "meal". Things usually don't get quite this complex, but some of the FitLibrary acceptance tests use that facility.
+
+If you have both a getter and setter that use the same name in a classic fixture, it is usually simpler to use a property.
+
+Special entries for fixtures derived from ColumnFixture and RowFixture
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The ".columnType" qualifier is used by fixtures derived from `ColumnFixture`__ and `RowFixture`__ to specify the type of columns when those fixtures have the usual markup turned off.
+
+__ FIT_ColumnFixture.htm
+__ FIT_RowFixture.htm
+
+The ".markup" key is used to turn markup off.
+
+The ".extendedLabelProcess" key uses an exit to determine the column type and potentially translate the label.
+
+Special Entry to control the label to identifier mapping
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+the ".useToMapLabel" key is used to specify which of the three `camel routines`__ will be used for the fixture: "camel", "gracefulNames", or "extended". The `application exit`__ can set this translation on an application-wide basis; when it does this key is ignored.
+
+__ FIT_LabelToIdentifierMapping.htm
+__ FIT_ConfigurationExit.htm
+
+
+Special Entries to control Cell Handlers.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+`Cell handlers`__ can be turned on and off on a per request basis by using the ".addCellHandlers" and ".removeCellHandlers" qualifiers. The value is a list of cell handlers that are to be enabled or disabled for that particular request. The list can contain either the names of built-in cell handlers or references to objects to be used as cell handlers.
+
+__ FIT_CellHandlers.htm
+
+The entries to enable the asis[] handler and disable the blank and null handlers for a particular method named spam are:
+
+| _typeDict["spam"] = "String"
+| _typeDict["spam.addCellHandlers"] = ["AsisCellHandler"]
+| _typeDict["spam.removeCellHandlers"] = ["BlankCellHandler", "NullCellHandler"]
+
+Standard Type Adapters
+++++++++++++++++++++++
+
+There are a variety of standard type adapters which cover the standard Python types as well as some useful library routines, such as dates. These type adapters are provided for convenience; in many cases it is better for the application to provide specific type adapters.
+
+Default
+>>>>>>>
+
+This adapter is new in 0.8. It allows a limited amount of dynamic type inference and can reduce the number of metadata entries substantially in many circumstances.
+
+The Default type adapter does one of three different things, depending on context. In addition, the Application Configuration routine is consulted at two different points. The first of these two gives or withholds permission to attempt to use the Default type adapter when there is no metadata; the second can prohibit use of an object or can supply an adapter.
+
+If the identifier is a field and there is an object, other than None, a method or a descriptor (property) bound to it in the class, then that object will be used as the type adapter. This mechanism cannot magically make an object usable; it must be a valid application value object, application type adapter or fundamental type that is supported by a supplied type adapter. This is done at the time the Type Adapter instance is created; the adapter will not change if the identifier in the class is rebound. It also will not work if the adapter needs additional metadata to function properly.
+
+If it's a method, property or other descriptor, then what happens depends on whether it's a given or a calculated result. For a given, the Default adapter is replaced by the String adapter, and it becomes the method's responsibility to do any type conversion needed.
+
+For a calculated result, it looks at the object that comes back from calling the method, property or descriptor, and uses that as the adapter to parse the cell contents before calling the equals method. Without assistance it cannot handle objects which require adapters.
+
+The Application Configuration exit's "canDefaultMissingMetadata" routine can permit or deny the ability to use the Default type adapter if metadata is missing for a request. This is set to deny permission, and can only be changed by an Application Configuration exit. It is always legitimate to use the Default type adapter explicitly.
+
+Likewise, the "getAdapterForObject" routine can either deny permission to use an object or it can supply an adapter. This routine is consulted for fields and calculated results; it is not consulted for givens since there is no object to examine.
+
+Strings
+>>>>>>>
+
+Strings are normally stripped of leading and trailing blanks. If you need to process leading or trailing blanks you should use the asis[] `cell handler`__. In some circumstances you can use a non-breaking space. Whether or not it is stripped depends on a number of factors. Remember that this cell handler needs to be specifically enabled; it is not on by default.
+
+__ FIT_CellHandlers.htm
+
+There are several special values, including error, null and blank. Error is a standard FIT feature; null and blank are features of the FitNesse versions of FIT that are supported by Python FIT in both FitNesse and batch mode.
+
+Null and blank are cell handlers that are normally on. They can be turned off if desired; see the cell handler documentation. There is currently no way of turning the error keyword off; however it can be encapsulated in the asis[] cell handler if needed.
+
+You can also use the standard Python string literal syntax, including normal strings, unicode strings and raw strings. This function uses the same "safe evaluate" that the list and tuple type adapters use. This is a Python FIT special feature, and will probably be depreciated in favor of the asis[] cell handler.
+
+TaggedString
+>>>>>>>>>>>>
+
+TaggedString is a specialty type adapter that allows access to the text of a cell without having HTML tags removed. It uses RawString access to bypass processing by the .text() routine.
+
+It does not support any cell handlers or special processing; what you see is what you get. 
+
+It's here because of the inclusion of TaggedString in the FitLibrary distribution of 2005/09/19. If you need this level of access, it's probably better to write an application specific class and an application specific adapter that uses either the RawString or CellAccess protocols. See the ListTree and `ImageName`__ facilities in Fit Library for examples of how to use RawString access.
+
+__ FitLib.ImageFixture.htm
+
+This type adapter cannot be accessed from the Default type adapter.
+
+Ints
+>>>>
+
+String to Int conversions are done by the standard int() constructor. Conversions to string are done using the standard str() function. Comparisons are done by converting the character form to int and then doing the comparison.
+
+There is also a long type adapter that is totally obsolete since the int and long unification. It will eventually be an alias for the int type adapter.
+
+Floats
+>>>>>>
+
+Floats are a very messy subject. As a general rule, it's best to use an application specific type adapter instead of the provided float type adapter. Part of this is because of the inherent difficulty of using raw floating point correctly, taking all of the corner cases into account, and part of it is that the next version of the FIT specification (2.0) may disallow checking a raw floating point number.
+
+String to Float conversions are done by the standard Float constructor. Conversions to string are done using the standard str() function. However, see below for how exceptional values are handled.
+
+The check operation is done as follows:
+
+The first thing that is done is to check if the value from the cell was a range or epsilon expression. Range expressions are value op _ op value, where the two values are the boundaries of the range, and the two ops are <, <=, >, or >=. The Unicode version of the <= and >= operators are also accepted. The operators must be compatable: either both must be < or <=, or both must be > or >=.
+
+If it is a range expression, the two boundary values are converted to floats and the comparison is done in the expected manner.
+
+An epsilon expression is value +/- value, where the two values are floats. The mathematical symbol for the +/- operation can also be used. An epsilon expression is checked in the obvious way.
+
+If neither is true, the comparison is done using a default epsilon of half the distance to the next higher or lower float with the same number of decimal digits. In other words, if the cell contains 3.14, then the comparison will be equal if it is between 3.135 and 3.145.  
+
+Some older user-written fixtures may not support the above comparison methods. If they don't, then the comparison is done by subtracting the two values, rounding the result to a specified number of decimal places, and comparing to zero. The default is four places, although this can be changed by using the .precision metadata tag. For example:
+
+_typeDict["spam.precision"] = 6
+
+would require that the two numbers be equal to approximately six decimal places.
+
+Any of these checks may be disabled, either globally by the `application configuration`__ module's fpTypeAdapterCheck routine or via the .checkType metadata qualifier. 
+
+__ FIT_ConfigurationExit.htm
+
+The return value from the fpTypeAdapterCheck routine and the operand of the .checkType metadata qualifier is a three character string. The first character controls the check operation for a bare float, the second controls whether the explicit epsilon format is permitted, and the third controls whether range checks are allowed. Permissible values of the first character are "c" for compare, "e" for the implicit epsilon, and "f" for fail. Permissable second characters are "e" and "f", and for the third character are "r" and "f". "f" means fail with an exception in all three cases.
+
+The .checkType metadata qualifier overrides the fpTypeAdapterCheck routine. If neither is present, the default is "eer". Note that the default for release 2.0 strict standards mode may be "fff".
+
+Python does not do a good job of handling floating point exceptional values. This is because Python's floating point support is actually a thin wrapper on top of the C library's floating point support, and different combinations of processor, operating system and compiler handle exceptions differently. This version of FIT recognizes five of the exceptional values defined by the IEEE-754 Floating Point standard, that is, Inf, +Inf, -Inf, NaN and Ind. You can use these values to create floats using the parse() routine, and you can compare to them using either the Equals or the StringEquals routine. Printing using the str() routine will recognize the proper bit patterns and present the right value. All comparisons are case insensitive. 
+
+This facility does not solve the general portability issue. It only helps if the C library actually creates an exceptional value when it's supposed to, and does the proper thing with it when it's handed a float with an exceptional value. Different C libraries vary in this regard. It also requires that the processor itself conform to the IEEE-754 floating point standard. This is unlikely to be an issue.
+
+This has also only been tested with one combination of processor, operating system and compiler: the standard combination of Windows XP, using the Microsoft compiler on the Intel architecture.
+
+Complex
+>>>>>>>
+
+Complex numbers must be entered as one or two floats. The imaginary part must have the letter 'j' immediately following, without any intervening spaces. The real part is not similarly annotated. If both a real and imaginary part are entered, they must be entered as real + imag.
+
+To make a meaningful comparison between two complex numbers, you need to specify a precision in the metadata. For example, if you have a complex variable named spam, you need to specify something like: _typeDict["spam.precision"] = 0.5. The equals routine computes the distance between the two complex numbers as if they were points on a plane, and compares that distance to the specified precision.
+
+If you need anything else, you should create an application class to represent the domain concept, and which can also be used directly as a type adapter.
+
+Boolean
+>>>>>>>
+
+A boolean is a value that can contain either true or false. This type adapter accepts "1", "True", "+", and "Yes" as text values that mean true (regardless of case, and without the quotes.) It accepts "0", "False", "-" and "No" as false values. Notice that this is a significant difference from the Java version: that version specifies a few values as true, and accepts everything else as false. That's a software developer idiom that simply leads to confusion in specifying acceptance tests.
+
+You can, however, add your own values to the lists of acceptable true and false words. You do this by adding an entry to the metadata dictionary with either a "true" or a "false" attribute. For example, if your variable is named "foo" and you want to make "spam" a false word, you would enter something like: _typeDict["foo.false"] = ["spam"]. Notice that this needs to be entered with Python's list syntax, although a single entry can be entered by itself.
+
+Booleans are converted from string to either 0 or 1 in Release 2.2, and to True and False in release 2.3 and greater. This is done by a simple keyword lookup. Booleans are always converted to string by using the str() function. This will result in a 0 or 1 in release 2.2, and the words True or False in 2.3 and later.
+
+Comparisons are done by converting to boolean, and then comparing.
+
+There is no generic support for localizing the values used by this type adapter. If support is ever added, it will be a call on the `application configuration`__ module.
+
+__ FIT_ConfigurationExit.htm
+
+Date
+>>>>
+
+The Date type adapter provides an interface to the struct_time from the time standard module. It also accepts the date and datetime classes from the datetime standard module. In fact, it will accept any object which has a timetuple method that returns either a struct_time or the earlier 9 element tuple.
+
+The parse() routine accepts a date and creates a 9 element tuple. The year, month and day can be in any order as long as the year is specified as 4 digits, the month is alphabetic and the day is between 1 and 31 inclusive. The month can be abbreviated to either two or three characters; in fact only the first three characters are checked. Parse ignores all special characters, so it can be formatted in any manner that makes sense to the application, as long as the elements are separated by at least one non-alphameric character.
+
+Comparison is done by invoking parse() and then comparing the first three elements of the 9 element tuple. 
+
+Output is always in Year, Month, Day format, with a 4 digit year, an alphabetic month and a numeric day separated by one space.
+
+This version does not use the built-in strftime and strptime routines, and it does not have any customization options. There are no plans to add any; if support for dates beyond what this module supplies is needed, it is best that the application wrap the domain concept in a class that can be used as an application specific type adapter.
+
+This type adapter cannot be accessed from the Default type adapter.
+
+Generic
+>>>>>>>
+
+The Generic type adapter is a proxy for any value object that supports construction from a string, and also supports the __eq__() and __str__() magic methods. These are the methods that underly the == operator and the str() built-in function. In other words, generic allows you to directly use just about any value object from your application.
+
+The Generic type adapter requires a .ValueClass entry in the metadata. This references the class object for the value objects.
+
+For example:
+
+| from fit.ScientificDouble import ScientificDouble
+| _typeDict["foo"] = "Generic"
+| _typeDict["foo.ValueClass"] = ScientificDouble
+
+Generic is obsolete: the type adapter redesign now allows you to use application objects directly.
+
+The distributed ScientificDouble class requires the Generic type adapter; the ScientificFloat class does not.
+
+This type adapter cannot be accessed from the Default type adapter.
+
+Lists, Tuples, Dictionaries and more complex structures
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The List, Tuple and Dict type adapters allow you to create lists, tuples and dictionaries of arbitrary complexity using Python's standard syntax. The primary limitation is that it only allows you to create basic objects: that is, ints, strings, floats, complex numbers and the built-in constants True, False and None. At present, any attempt to create anything else will result in an exception. The add and subtract operators are only allowed when assembling a complex number. Any other operator, or add and subtract in any other context, will result in an exception.
+
+The List and Tuple type adapters also support a shorthand way of creating single level sequences of any type that has a type adapter. To invoke this, you do two things. First, you do not enclose the sequence in the parentheses or brackets you would otherwise need, and second, you must declare the type of element in the _typeDict with the Name.scalarType extension key.
+
+It's also not necessary to enclose a dictionary in braces, but the dict type adapter doesn't support the .scalarType key; leaving the braces off is simply a convenience.
+
+At present, the comparison operation will not diagnose exactly where in the structure a mismatch occured. 
+
+Using an application-specific value object directly.
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Any object that supports construction from a single string, supports an == comparison with an object of the same type, and returns a string from the str() builtin function can be used directly. FIT detects this case by exclusion: the class does not contain any of these identifiers: fitAdapterProtocol, parse, equals or toString.
+
+The string used for construction and comparisons will be the result of the text() method of the table cell. If one needs more privileged access, an adapter is required. 
+
+The ScientificFloat class from the fit directory is an example of an object that can be used directly. It has the required capabilities, and it does not fit the definition for either a builtin Type Adapter or an application adapter.
+
+Writing an adapter for an application object
+++++++++++++++++++++++++++++++++++++++++++++
+
+There are times when the application has an object with the required functionality, but that object does not have the correct interface, so it cannot be used directly. It needs an adapter class.
+
+An adapter class for an application object must not derive from TypeAdapter, and it must have three specific methods and two fields. Its constructor must only take the required self parameter.
+
+From an Object Oriented theory viewpoint, it is an example of the strategy pattern rather than the adapter pattern. The adapter pattern would require it to hold a reference to the application object which it is adapting. These adapters do not do so; in fact the only reason that they need to be instantiated is so that individual instances can hold a reference to a metadata dictionary.
+
+fitAdapterProtocol
+>>>>>>>>>>>>>>>>>>
+
+This is a simple string variable that takes one of four values: "Basic", "EditedString", "RawString" and "CellAccess". The parse and equals methods will be given different parameters depending on the value of this field. Additional protocol methods may be added in the future, although this is unlikely.
+
+parse(cell or string)
+>>>>>>>>>>>>>>>>>>>>>
+
+The parse method constructs the application value object from the string, which is the content of the parse cell. This value is the result of the text() method for protocol values of "Basic" and "EditedString", and it is the raw contents of the parse node's body field if the protocol value is "RawString". The Tree module from the FitLibrary is a good example of an object that requires RawString access.
+
+equals(anObject, anotherObject)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The equals method compares two objects for equality. If the protocol value is "Basic", the first parameter will be the result of calling the adapter's parse method on the parse node's text() method. If the protocol value is "EditedString", the first parameter is the string that is the result of the text() method. If it is "RawString" the first parameter is the unprocessed content of the parse node's body field. If it is "CellAccess", it is the Parse cell from the test. Treat it gently!
+
+toString(anObject, [cell])
+>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This method produces the character string that FIT is to insert into the parse node. If the protocol is "CellAccess", the cell will be passed as the second parameter. Otherwise the protocol value is irrelevant.
+
+metaData, name and typeName
+>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+These three variables are injected into the instance after it is constructed. They are useful if the adapter takes additional metadata keys. The GraphicTypeAdapter from the FitLibrary is an example of how this functionality is used.
+
+isCellHandlerApplicable(handlerName)
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This optional method gives the adapter a chance to reject cell handlers.
+
+Parse Exits (depreciated)
++++++++++++++++++++++++++
+
+Note: Parse exits are being depreciated. I consider them to be a mistake that arose from a lack of understanding of one of the features in the Java version of FIT when I was initially converting it.
+
+A parse exit is an executable object that takes a text string and returns a tuple. The first member of the tuple is a result code, the second depends on the code. The possible returns are:
+
++ "OK". The second member is the result of the parse. The type adapter's parse routine is not called.
+
++ "continue". Parse will continue by calling the cell handlers. If the second member is None, the cell handlers will be called with the original operand to parse; if it is a character string, the cell handlers are called with that string.
+
++ "error". The second operand is a string that will become the args attribute of a ParseError exception. Most of the standard fixtures intercept ParseError and return the message as the "actual" in the cell.
+
+The parse exit and cell handler interface is called from the adapter class; it is not availible to routines that use the protocol object or the type adapter object directly.

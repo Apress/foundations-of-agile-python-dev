@@ -1,0 +1,36 @@
+<html><title>ExtendedCamelCase</title><body>
+<h1><a href="ExtendedCamelCase.html">ExtendedCamelCase</a></h1>
+Consider the names of <i>enter</i>, <i>press</i> and <i>check</i> "fields" in <i>ActionFixture</i>, and the column header labels in <i>ColumnFixture</i> and <i>RowFixture</i>. In the original Fit, these needed to conform to the lexical form of programming language identifiers. In some cases, camel casing was used to provide some flexibility.<br>
+<br>
+Camel casing takes a string like "the first one" and converts it into a camel form of identifier, "theFirstOne".<br>
+<br>
+But this had some problems when non-programmers are creating Fit tables:<br>
+<ul><li>A valid identifier in one language would not be in another</li>
+<li>Certain identifiers can't be used, such as "case", "for", "do", etc in Java.</li></ul>
+In addition, unicode can't be used for such names, because in general there is little support for unicode in development tools.<br>
+<br>
+Extended camel is used with all the FitLibrary fixtures and takes camel casing one step further. It converts a name into a valid identifier in the language concerned. For example, in Java the name "% discount" is translated into "percent discount", which is then camel-cased into "percentDiscount". <br>
+<br>
+This can result in some weird and/or long identifiers. There's no need to work out such identifiers, however, as an unknown identifier is displayed in a error messages in a Fit table. These weird identifiers don't need to "pollute" the application, as they only need to appear in fixture code.<br>
+<br>
+Here's some examples:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fit.specify.TestCamelCase</td></tr>
+<tr><td>name   </td><td></td><td> identifier </td></tr>
+<tr><td>" hi " </td><td></td><td> quoteHiQuote </td></tr>
+<tr><td>^`{}~  </td><td></td><td> caretBackquoteLeftBraceRightBraceTilde </td></tr>
+<tr><td>two words      </td><td></td><td> twoWords </td></tr>
+<tr><td>2 words        </td><td></td><td> twoWords </td></tr>
+<tr><td>cost $         </td><td></td><td> costDollar </td></tr>
+<tr><td>!!             </td><td></td><td> bangBang </td></tr>
+<tr><td>meet @         </td><td></td><td> meetAt </td></tr>
+<tr><td>rick@rimuResearch.com  </td><td></td><td> rickAtRimuResearchDotCom </td></tr>
+<tr><td>               </td><td></td><td> blank </td></tr>
+<tr><td>case           </td><td></td><td> case_      </td></tr>
+</table>
+<br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

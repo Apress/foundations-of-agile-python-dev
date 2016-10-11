@@ -1,0 +1,20 @@
+<html><title>AnotherTreeExample</title><body>
+<h1><a href="AnotherTreeExample.html">AnotherTreeExample</a></h1>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4>fit.specify.CalculateFixtureUnderTest</td></tr>
+<tr><td>1</td><td>2</td><td></td><td>+</td></tr>
+<tr><td>a</td><td>b</td><td></td><td><ul><li>a</li><li>b</li></ul></td></tr>
+<tr><td>A<ul><li>a</li></ul></td><td>B<ul><li>b</li></ul></td><td></td><td><ul><li>A<ul><li>a</li></ul></li><li>B<ul><li>b</li></ul></li></ul></td></tr>
+</table>
+<br>
+Here's the relevant code:<br>
+<hr>
+<pre>public class CalculateFixtureUnderTest extends fit.CalculateFixture {
+	public ListTree plus12(ListTree t1, ListTree t2) {
+		return new ListTree("", new ListTree[]{ t1, t2 });
+	}
+}</pre>
+<hr>
+<br>
+<br>
+</body></html>

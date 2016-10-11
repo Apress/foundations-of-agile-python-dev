@@ -1,0 +1,53 @@
+<html><title>WhenActionsFail</title><body>
+<h1><a href="WhenActionsFail.html">WhenActionsFail</a></h1>
+Let's look at what happens when an action fails.<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td> ChatStart </td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>connect user</i></td><td>sarah</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>user</i></td><td>sarah</td><td><i>creates</i></td><td>fit</td><td><i>room</i></td></tr>
+</table>
+<br>
+There should be no occupants in the "fitNesse" room:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>occupants</i></td><td>fit</td><td>0</td></tr>
+</table>
+<br>
+Sarah can't enter an unknown room:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>user</i></td><td>sarah</td><td><i>enters</i></td><td>unfit</td><td><i>room</i></td></tr>
+</table>
+<br>
+We can expect that, by putting <i>reject</i> in the first cell:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>reject</td><td><i>user</i></td><td>sarah</td><td><i>enters</i></td><td>unfit</td><td><i>room</i></td></tr>
+</table>
+<br>
+and an unknown user can't create a room:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>reject</td><td><i>user</i></td><td>george</td><td><i>creates</i></td><td>unfit</td><td><i>room</i></td></tr>
+</table>
+<br>
+Sarah hasn't entered the room, so she can't be in there:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>users in room</i></td><td>fit</td></tr>
+<tr><td ColSpan=2><i>name</i></td></tr>
+<tr><td ColSpan=2>sarah</td></tr>
+</table>
+<br>
+Here's a <i><a href="DoFixtureSummary.html">DoFixtureSummary</a></i>.<br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

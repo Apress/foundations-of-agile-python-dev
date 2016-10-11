@@ -1,0 +1,21 @@
+ImageFixture
+++++++++++++
+
+The Image Fixture provides a two dimensional array of images. It's best used in a situation where there are a relatively small number of images that are to be mapped into an array. See the example on page 83 and 84 of the `FIT Book`__.
+
+__ Fitbook_Intro.htm
+
+There is an associated object, the ImageNameGraphic, which handles one image name graphic. It can be used in other fixtures to provide support for named images. This object is in the ImageFixture module, not in a separate module of its own.
+
+A good place to use these objects might be in conjunction with the `TableFixture`__, where one of several pictures could be inserted to indicate status.
+
+__ FitNesse_TableFixture.htm
+
+ImageNameGraphic, in turn, requires the support of the `GraphicTypeAdapter`__, a generic type adapter mechanism for handling tables containing "<img ...>" and "<a ...>" tags. The GraphicTypeAdapter requires a ".class" qualifier to tell it what class it's adapting. The metadata for a method, field or property is thus:
+
+| _typeDict = {"name": GraphicTypeAdapter,
+               "name.class": ImageNameGraphic}
+
+__ FitLib_GraphicTypeAdapter.htm
+
+

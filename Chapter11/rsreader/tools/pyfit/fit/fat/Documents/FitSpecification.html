@@ -1,0 +1,273 @@
+<html>
+<head>
+	<title>Wiki: Fit Specification</title>
+</head>
+<body bgcolor=#FFFFFF link=#d06040 vlink=#806040>
+	<h1>Fit Specification</h1>
+<p>This is the original version of the FIT specification distributed with the early version of FIT. It's mostly of historical interest although it's still being included as part of the FIT 1.0 and 1.1 specs.</p>
+	<wiki><p>Here we describe the framework in sufficient precision to be useful to framework implementors. We will use the framework to test itself. This leads to circular logic that can be unraveled more easily by the computer than a beginner learning the framework. Beginners might want to ReadMore of this site before continuing here.
+<p>Each of the following sections will become a specification document in its own right. Each bullet with a section is to become the FitAcceptanceTests.
+<p><a href="run.cgi">http:run.cgi</a>
+<p><hr>
+<p><strong>Parse</strong>
+<p>A parser builds an in memory model of an html document. The model preserves all of the content while exposing table data to further processing. This allows input to be prepared with a variety of tools.
+<p><UL>
+<li> word tables
+<li> excel tables
+<li> wiki tables
+<p></UL>
+Tables are sometimes used to format html pages, as is the case with wiki. In this case a unique tag, &lt;wiki&gt;, is used to surround the tables that are to be parsed as tests.
+<p><UL>
+<li> wiki tables within table
+<p></UL>
+The visible text within a cell is extracted and treated as a string, free of formatting.
+<p><UL>
+<li> markup tags
+<li> character escapes
+<li> leading and trailing spaces
+<p></UL>
+The parsed tables can be modified in memory and a revised document written. 
+<p><UL>
+<li> cell background color
+<li> cell contents
+<li> additional rows 
+<li> additional columns
+<p></UL>
+<hr>
+<p><strong>Check</strong>
+<p>Expected values specified in cells are tested for equality with actual values extracted from the program under test. 
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=4> fat.Equals </td></tr>
+<tr><td> type </td><td> x </td><td> y </td><td> = </td></tr>
+<tr><td> boolean </td><td> true </td><td> TRUE </td><td> true </td></tr>
+<tr><td> integer </td><td> 00001 </td><td> 1 </td><td> true </td></tr>
+<tr><td> real </td><td> 1000 </td><td> 1e3 </td><td> true </td></tr>
+<tr><td> string </td><td> abc </td><td> ABC </td><td> false </td></tr>
+</table>
+<p>A sequence of values can be entered and checked as a single (composite) value. 
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=5> fat.Equals </td></tr>
+<tr><td> type </td><td> x </td><td> y </td><td> = </td></tr> 
+<tr><td> integers </td><td> 1, 3, 5 </td><td> 01,03,05 </td><td> true </td></tr> 
+<tr><td> integers </td><td> 1, 3, 5 </td><td> 01,05,03 </td><td> false </td></tr> 
+<tr><td> booleans </td><td> true, true, false </td><td> true, false </td><td> false </td></tr> 
+<tr><td> strings </td><td> a , b , c </td><td> a,b,c </td><td> true </td></tr> 
+</table>
+<p><p>Domain values can be constructed from cell contents. Equality comparisons will be subject to appropriate domain rules (i.e. delegated to the domain objects.)
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=4> fat.Equals </td></tr>
+<tr><td> type </td><td> x </td><td> y </td><td> = </td></tr> 
+<tr><td> date </td><td> Jan 1, 1995 </td><td> January 1, 1995 </td><td> true </td></tr>
+<tr><td> money </td><td> $10000 </td><td> $10,000.00 </td><td> true </td></tr>
+</table>
+<p><p>Floating point numbers are checked to the precision that is normal in the host language. It is possible for a domain object to infer precision from the string representation of expected values. For example, ScientificDouble checks equality to the precision implied by the number of significant digits in a value.
+<p><UL>
+<li> non-zeros -- 123.45 is 5 digits
+<li> zeros between non-zeros -- 100003 is 6 digits
+<li> zeros in the fraction part -- 12.20 is 4 digits
+<li> but not leading zeros -- 0001000 is 4 digits
+<li> and not exponent digits -- 6.02e23 is 3 digits
+<li> left argument (receiver) controls precision
+</UL></p>
+<p> Note that the first row is supposed to be false,
+but it's more work than I want to go to in order to
+disable the scientificdouble logic in the type adapter</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=4> fat.Equals </td></tr>
+<tr><td> type </td><td> x </td><td> y </td><td> = </td></tr>
+<tr><td> real </td><td> 123.45 </td><td> 123.449 </td><td> true </td></tr>
+<tr><td> scientific </td><td> 123.45 </td><td> 123.449 </td><td> true </td></tr>
+<tr><td> scientific </td><td> 100003 </td><td> 100003.1 </td><td> true </td></tr>
+<tr><td> scientific </td><td> 100003.1 </td><td> 100003 </td><td> false </td></tr>
+<tr><td> scientific </td><td> 12.20 </td><td> 12.210 </td><td> false </td></tr>
+<tr><td> scientific </td><td> 12.21 </td><td> 12.210 </td><td> true </td></tr>
+</table>
+<p><p>Improperly specified values may throw exceptions which are reported in the cell that contains the invalid number. Improper value detection is only as good as would be expected in the host language. (We are assuming that incorrectly converted values will lead to detected errors elsewhere.)
+<p><UL>
+<li> xyz is not an integer
+<li> 10000000000000000000000000 may or may not be an integer
+<p></UL>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3> fat.Table </td></tr>
+<tr><td> fat.Equals </td><td>&nbsp;</td></tr>
+<tr><td> type </td><td> x </td></tr>
+<tr><td> integer </td><td> 200 </td></tr>
+<tr><td> integer </td><td> xyz </td></tr>
+</table>
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3> fat.Color </td></tr>
+<tr><td> white </td><td> white </td></tr>
+<tr><td> white </td><td> white </td></tr>
+<tr><td> white </td><td> white </td></tr>
+<tr><td> white </td><td> yellow </td></tr>
+</table>
+<p>Some character strings have special meaning outside of type conversion. 
+<p><UL>
+<li> blank -- omit check, report value (reported in gray letters)
+<li> error -- expect an error
+<p></UL>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3> fat.Table </td></tr>
+<tr><td> fat.Divide </td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td> x </td><td> y </td><td> divide() </td></tr>
+<tr><td> 100 </td><td> 2 </td><td> 50 </td></tr>
+<tr><td> 100 </td><td> 2 </td><td>&nbsp;</td></tr>
+<tr><td> 100 </td><td> 0 </td><td> error </td></tr>
+<tr><td> 100 </td><td> 0 </td><td>&nbsp;</td></tr>
+</table>
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3> fat.Color </td></tr>
+<tr><td> white </td><td> white </td><td> white </td></tr>
+<tr><td> white </td><td> white </td><td> white </td></tr>
+<tr><td> white </td><td> white </td><td> green </td></tr>
+<tr><td> white </td><td> white </td><td> gray/white </td></tr>
+<tr><td> white </td><td> white </td><td> green </td></tr>
+<tr><td> white </td><td> white </td><td> gray/white </td></tr>
+</table>
+<p>The framework looks for parse support in different places.
+<p><UL>
+<li> fixture
+<li> domain object
+<li> type adapter
+<p></UL>
+The framework will allow fixtures to implement custom parsing.  
+<p><UL>
+<li> yea = true
+<li> nay = false
+<p><p></UL>
+<hr>
+<p><strong>Fixture</strong>
+<p>The first cell of a table specifies how that table will be interpreted. Normally this is the name of an objet, a Fixture, that is specifically written for this purpose. 
+<p><UL>
+<li> case Foo != foo
+<li> package alpha.Foo != beta.Foo
+<p></UL>
+By default cells are processed in order, by table, by row within tables, and by cell within rows. Distinct routines handle sequencing (plural) and interpretation (singular).
+<p><UL>
+<li> doTables -- sequence tables within a document
+<li> doTable -- interpret a table
+<li> doRows -- sequence rows within a table
+<li> doRow -- interpret a row
+<li> doCells -- sequence cells within a row
+<li> doCell -- interpret a row
+<p></UL>
+The default interpretation of a cell is to mark it as ignored.
+<p>Cells contain givens or expected results. The fixture is responsible for distinguishing givens from expected results, checking expected results against actuals, and indicating the result with the background annotation as follows.
+<p><UL>
+<li> white -- no check wanted (blank input)
+<li> green -- right: expected equals actual
+<li> red -- wrong: expected not equal actual
+<li> yellow -- exception: trouble computing actual or comparing result
+<li> gray -- ignore: desired check not possible
+<p></UL>
+Fixtures cooperate to count the number of each result.
+<p><UL>
+<li> counts accumulate between tables
+<li> counts are summarized as "# right, # wrong, # exceptions, # ignores".
+<li> runner fixtures (e.g. AllFiles) can control accumulation of counts
+<p></UL>
+Fixtures cooperate to accumulate state that can be summarized at any point in the processing of a document.
+<p><UL>
+<li> state variables 
+<li> state lifetime
+<li> state summary
+<p></UL>
+<hr>
+<p><strong>PrimitiveFixture</strong>
+<p>The primitive fixture does not depend on TypeAdapter. Type specific functions handle all checking.
+<p><UL>
+<li> checkBoolean
+<li> checkInteger
+<li> checkFloat
+<li> checkString
+<p><p></UL>
+<hr>
+<p><strong>ColumnFixture</strong>
+<p>A column fixture distinguishes givens from expected values by the form of the column head.
+<p><UL>
+<li> name is setter or field
+<li> name() is getter or field
+<li> camel case -- present value ( ) = presentValue()
+<li> deprecate execute()
+<p></UL>
+<hr>
+<p><strong>RowFixture</strong>
+<p>A row fixture expects all rows to be expected values. The fixture is assumed to have access to actual rows which it pairs with expected rows. 
+<p><UL>
+<li> name is field or getter
+<li> name() is getter
+<li> camel case
+<p></UL>
+Rows are matched by comparing just enough values from the left most columns to get a unique match.
+<p><UL>
+<li> some given, none actual -- missing row
+<li> none given, some actual -- surplus rows
+<li> one given, one actual -- check remaining columns
+<li> many given, many actual -- match on more columns
+<p></UL>
+Missing and surplus rows are marked as such in their first column
+<p><UL>
+<li> each counts as one wrong
+<li> surplus rows added to table in gray
+<p></UL>
+<hr>
+<p><strong>ActionFixture</strong>
+<p>An action fixture distinguishes given from expected values based on keywords in the first column.
+<p><UL>
+<li> enter -- put given in setter or field
+<li> check -- check value with getter or field
+<li> press -- call action (no check other than for execptions)
+<li> start -- new actor
+<p></UL>
+An actor represents some interface state such as the currently active window. The actor gives meaning to many of the words in the second column (field to be entered and buttons to be pressed). 
+<p><UL>
+<li> actor persists between tables
+<li> initial actor is action fixture (subclass) itself
+<li> start with no argument specifies initial actor
+<p></UL>
+Start could have various meanings depending on the nature of the interface being modeled.
+<p><UL>
+<li> create a new actor
+<li> return to an existing actor
+<p></UL>
+Other actions, like press, can change the current actor.
+<p><UL>
+<li> replace the current actor with a new actor
+<li> replace the current actor with another preexisting actor
+<li> restore the previous actor 
+<p></UL>
+Subclasses of action fixture can add new action words.
+<p><UL>
+<li> camel case
+<p></UL>
+<hr>
+<p><strong>Runner</strong>
+<p>A runner creates top-level Fixtures and provides them with parsed documents to be annotated. 
+<p><UL>
+<li> top-level fixture is instance of Fixture
+<p></UL>
+A runner retrieves and disposes of documents as appropriate to its environment. The FileRunner reads and writes html files.
+<p><UL>
+<li> input-file only -- default output
+<li> input-file output-file -- specific output
+<li> input-directory only -- default output in directory
+<li> input-directory output-directory -- default outputs in specific directory
+<li> index.html result summaries
+<li> - is standard in/out
+<p></UL>
+A runner signals the presence of errors to its environment so that subsequent processing can be triggered.
+<p><UL>
+<li> exit status is sum of wrong and exceptions up to 255
+<li> main is factored to simplify RunnerFixtures
+<p></UL>
+A runner establishes run specific state that may influence loading and/or configuration of the program under test.
+<p><UL>
+<li> AssemblyPath ???
+<p></UL>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=2> fit.Summary </td></tr></table></wiki>
+<hr>
+	Last edited September 15, 2003
+</body>
+</html>
+

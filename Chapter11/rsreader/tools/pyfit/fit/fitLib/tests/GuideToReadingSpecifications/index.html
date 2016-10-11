@@ -1,0 +1,111 @@
+<html><title>GuideToReadingSpecifications</title><body>
+<h1>GuideToReadingSpecifications</h1>
+<i>FixtureFixture</i> specifications take a little effort to learn to read, as they are very compact. They're intended for implementors of Fit and of general-purpose fixtures.<br>
+<br>
+I have used such tests to drive the development of several fixtures, including most of the ones in the <i>FitLibrary</i>. I also bootstrapped <i>FixtureFixture</i> with tests in itself.<br>
+<br>
+<i>Latest news</i>: I am in the process of converting the tests to use <i>SpecifyFixture</i>, which makes use of embedded tables. This makes the tests <b>much</b> easier to read as you can see directly what's expected.<br>
+<h3>Why bother?</h3><br>
+For tests that are expected to pass, you can simply write the tests directly without <i>FixtureFixture</i>. But if tests are expected to fail, such as with a <i>wrong</i> value or an <i>exception</i>, it's a pain to have to manually check that the results reported are as expected.<br>
+<br>
+For example, [[<i>plus()</i>][^ColumnFixtureUnderTest]] adds the values of <i>a</i> and <i>b</i>:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fit.specify.ColumnFixtureUnderTest</td></tr>
+<tr><td>a</td><td>b</td><td>plus()</td></tr>
+<tr><td>0</td><td>12</td><td>13</td></tr>
+<tr><td>1</td><td>2</td><td>3</td></tr>
+</table>
+<br>
+We expect that "13" is to be considered <i>wrong</i> and that the cells is to be colored red (run the test and see). The "3" is <i>right</i> and is to be colored green.<br>
+<h2>Automating the test</h2><br>
+We can use <i>FixtureFixture</i> to define the expected colorings of that table:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4><i>fit.ff.FixtureFixture</i></td></tr>
+<tr><td><i>fixture</i></td><td ColSpan=3><b>fit.specify.ColumnFixtureUnderTest</b></td></tr>
+<tr><td><i>---</i></td><td><b>a</b></td><td><b>b</b></td><td><b>plus()</b></td></tr>
+<tr><td><i>--w</i></td><td><b>0</b></td><td><b>12</b></td><td><b>13</b></td></tr>
+<tr><td><i>--r</i></td><td><b>1</b></td><td><b>2</b></td><td><b>3</b></td></tr>
+</table>
+<br>
+We've wrapped the table above inside a <i>FixtureFixture</i> table (the inner table is shown in <b>bold</b> above). The second row of the whole table defines the <i>fixture</i> to be tested. The first column of the following rows specifies the expected coloring of the cells in the rest of that row:<br>
+<ul><li>The second row of the inner table is not colored at all, so the first column specifies the coloring as "---". The "-" means no color. A trailing "-" doesn't need to be shown, so the "---" can be shortened to "".</li></ul>
+<ul><li>The last cell of the third row of the inner table is expected to be colored red (<i>wrong</i>), so the first column specifies the coloring as "--w". The "-" means no color.</li></ul>
+<ul><li>The last cell of the fourth row of the inner table is expected to be colored green (<i>right</i>), so the first column specifies the coloring as "--r".</li></ul>
+When you run the test, you'll see that the first column is colored green, and that the internal colorings are not included in the counts (1 <i>right</i> and 1 <i>wrong</i> are from the first table above):<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.Summary</td></tr>
+</table>
+<br>
+This means that we can have a whole suite of tests that are expected to all pass, even though the embedded tables don't.<br>
+<h3>What are we testing</h3><br>
+In order to test the fixture, we need an underlying System Under Test (SUT) with simple and known behavior. So our tests check that the fixture works appropriately for that SUT. This is a little backwards from usual tests, but follows the general principle that testing involves checking the consistency of two distinct "systems". <br>
+<h3>Expecting errors and exceptions</h3><br>
+An error is given for the value "thirteen" because a number is expected.<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fit.specify.ColumnFixtureUnderTest</td></tr>
+<tr><td>a</td><td>b</td><td>plus()</td></tr>
+<tr><td>0</td><td>12</td><td>thirteen</td></tr>
+</table>
+<br>
+We can specify that with an "e":<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4><i>fit.ff.FixtureFixture</i></td></tr>
+<tr><td><i>fixture</i></td><td ColSpan=3><b>fit.specify.ColumnFixtureUnderTest</b></td></tr>
+<tr><td></td><td><b>a</b></td><td><b>b</b></td><td><b>plus()</b></td></tr>
+<tr><td><i>--e</i></td><td><b>0</b></td><td><b>12</b></td><td><b>thirteen</b></td></tr>
+</table>
+<h3>Added Text</h3><br>
+We can also check that error messages are added to a cell, as expected. Consider the added text in the first table above. We can specify that as follows:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4><i>fit.ff.FixtureFixture</i></td></tr>
+<tr><td><i>fixture</i></td><td ColSpan=3>fit.specify.ColumnFixtureUnderTest</td></tr>
+<tr><td></td><td><b>a</b></td><td><b>b</b></td><td><b>plus()</b></td></tr>
+<tr><td><i>--w</i></td><td><b>0</b></td><td><b>12</b></td><td><b>13</b></td></tr>
+<tr><td><i>report</i></td><td><i>0</i></td><td><i>12</i></td><td><i>13 expected12 actual</i></td></tr>
+<tr><td><i>--r</i></td><td><b>1</b></td><td><b>2</b></td><td><b>3</b></td></tr>
+<tr><td><i>report</i></td><td></td><td></td><td><i>3</i></td></tr>
+</table>
+<br>
+We've added two extra <i>report</i> rows, which don't add to the inner table. Instead, these rows specify the text that's expected to be reported in the row above. We expect the "13" cell to have " expected12 actual" to be added; notice that this doesn't include the HTML line. On the other hand, we expect the "3" cell to be unchanged. Any empty cells in a <i>report</i> row, as we see in the last row, mean that that cell is not to be checked.<br>
+<h3>Added Cells and Rows</h3><br>
+Cells added to a row can be checked with <i>report</i>.<br>
+<br>
+So that leaves added rows. <i>SummaryFixture</i> is a good example of a fixture that adds rows:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.Summary</td></tr>
+</table>
+<br>
+We can specify that as follows:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3><i>fit.ff.FixtureFixture</i></td></tr>
+<tr><td><i>fixture</i></td><td ColSpan=2><b>fit.Summary</b></td></tr>
+<tr><td ColSpan=3><i>I-w</i></td></tr>
+<tr><td><i>report</i></td><td><i>counts</i></td><td><i>2 right, 2 wrong, 0 ignored, 1 exceptions</i></td></tr>
+<tr><td ColSpan=3><i>I</i></td></tr>
+<tr><td><i>report</i></td><td ColSpan=2><i>run date</i></td></tr>
+<tr><td ColSpan=3><i>I</i></td></tr>
+<tr><td><i>report</i></td><td ColSpan=2><i>run elapsed time</i></td></tr>
+</table>
+<br>
+The "I" rows specify that a row will be inserted at that point, along with any colorings. The <i>report</i> following applies to that inserted row. Notice that we don't check the <i>run date</i> value, as it  depends on when the test is run.<br>
+<br>
+Why do the counts differ in the two tables above? It's because when <b>fit.Summary</b> is in an inner table, it reports the counts for all previous inner tables. That way, the sequence of inner tables act the same, whether or not they are embedded or stand alone.<br>
+<h3>Why aren't the tests more specific?</h3><br>
+There are currently differences in the way that some errors are reported in the <i>Fit</i> within <i>FitNesse</i> and in <i>Fit</i> from http://fit.w2.com. So some definitions/tests currently just expect an exception, but don't check the details.<br>
+<h3>More on <i>FixtureFixture</i></h3><br>
+For more details of <i>FixtureFixture</i>, see:<br>
+<ul><li>http://www.cs.auckland.ac.nz/~rick/xpPaperResources.htm</li></ul>
+<ul><li><i>Test Driving Custom Fit Fixtures', Rick Mugridge, </i>XP2004'', Springer-Verlag, pp 11-19.</li></ul>
+<ul><li>The [[specification][.FitSpecifications.FixtureSpecifications]] of the core and FitLibrary fixtures.</li></ul>
+<ul><li>The [[specification][.FitSpecifications.FixtureFixtureSpecification]] of <i>FixtureFixture</i> itself (these are complex!).</li></ul>
+<br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li></ul>
+<ul><li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Constraint Fixture</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="constraint-fixture">
+<h1 class="title">Constraint Fixture</h1>
+<p>The Constraint Fixture is a variation on the Calculate Fixture where the result of the calculation is either all True or all False. Consequently, there is no column in the table that represents the result: all the columns are given values.</p>
+<p>Since this is a part of the Fit Library, the name of the method that is invoked is created by combining the labels of all of the columns. The invoked method must be defined to return a boolean. Whatever it returns is coerced to a boolean before being checked as equal to True or False, using Python's normal rules for deciding truth.</p>
+<p>The expected result is the first parameter of the table.</p>
+<p>This fixture can be used to advantage for business rule tests where the same table is to be used to test integration with a workflow. It allows the business rules to be separated by the path taken through the workflow.</p>
+<p>See the specification test for further details.</p>
+</div>
+</body>
+</html>

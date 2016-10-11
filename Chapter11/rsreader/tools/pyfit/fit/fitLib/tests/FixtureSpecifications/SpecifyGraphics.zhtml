@@ -1,0 +1,12 @@
+<html><title>SpecifyGraphics</title><body>
+<h1><a href="SpecifyGraphics.html">SpecifyGraphics</a></h1>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=2>fitLib.FlowFixtureFixture</td></tr>
+<tr><td></td><td>fitLib.specify.DoGraphics</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td>show</td><td ColSpan=2>graph</td></tr>
+<tr><td>--w</td><td>check</td><td>graph</td><td><img src="../../files/ChatGraph.gif"></td></tr>
+</table>
+</body></html>

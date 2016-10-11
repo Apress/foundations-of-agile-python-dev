@@ -1,0 +1,53 @@
+ArrayFixture, SetFixture and SubsetFixture
+------------------------------------------
+
+These are three of four fixtures that can be used to check whether the contents of a collection are as expected. The other one is RowFixture, from the basic FIT package. 
+
+.. contents::
+
+Environment-specific usage
+>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+Using an ArrayFixture, SetFixture or SubsetFixture subclass with classic FIT
+=============================================================================
+
+The first cell in the first row is the name of a RowFixture subclass.
+
+Cells following the fixture name can contain parameters to your subclass. You can use the inherited getArgs() method or process the first row specially in doTable().
+
+Your subclass must implement both the query() method and the getTargetClass() method. The query() method returns the contents of the collection. The getTargetClass() method returns a class object which contains the metadata dictionary bound to the _typeDict attribute.
+
+Using ArrayFixture, SetFixture or SubsetFixture directly with classic FIT
+==========================================================================
+
+To use one of these fixtures directly in classic FIT, a previous fixture must have stored an object with attributes named collection and metaData in the symbol table using self.setSymbol(key, value). The object containing the elements of the collection must be bound to the collection attribute, and the dictionary containing the metadata entries needed by the table must be bound to the metaData attribute. The object may be of any class which has the two required instance attributes. PyFit does not supply a class for this purpose.
+
+The name of the symbol must be in the second cell of the first row of the table, immediately following the cell containing fitLib.someFixture which invokes the fixture. This behavior will not be inherited by subclasses; it is only availible if these fixtures are invoked directly.
+
+Using ArrayFixture, SetFixture or SubsetFixture from a FIT Library DoFixture
+============================================================================
+
+There are two ways of using these fixtures in a Fit Library DoFixture or SequenceFixture. The easiest way is to do it the same way as in classic FIT: the first row of the table contains two cells, the first of which invokes the fixture while the second one contains the name of the symbol with the object specifying the collection and meta data.
+
+The recommended way is to create a domain specific method that internally invokes the fixture. This must be the first row of the table; the remainder of the table is the same as other usages of these fixtures.
+
+The invoking method must return a tuple of two items: the first is the collection, and the second is a dictionary containing the metadata describing the attributes of the elements.
+
+The metadata entry for the command must specify $Array, $Set or $Subset as the returned value type.
+
+General Usage in all environments
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The collection can be a dictionary or any object that implements either the sequence or iterator protocol other than a string. Most of the time it will be a Python list, although it's possible to use application collection objects directly as long as they behave like either sequences or iterators. If it's a dictionary, the values will be used as the collection; the keys will be ignored except for ArrayFixture, where they will be used to sort the values into order.
+
+Each member of the resulting sequence is an object whose attributes represent one row to be matched. Objects may be of mixed types and may be dictionaries. 
+
+The second row contains the names of the columns. Each name corresponds to a field, method or property in the data objects in the collection, or to a key if the data object is a dictionary. Methods are distinguished from fields and properties by reflection; the decorators ( (), ! and ? )used in ColumnFixture are not needed, and are not accepted.
+
+All attributes named in the table must have metadata in the metadata dictionary. See the `Type Adapters`__ writeup for details.
+
+__ FIT_TypeAdapters.htm
+
+This setup is flexible enough that one can use a file object which is open for 'rt' as the collection, and then use the __str__ attribute and all zero parameter methods of the string data type. Because of the underscores, the __str__ attribute must be the result of aliasing some other name with the RenameTo metadata qualifier. 
+

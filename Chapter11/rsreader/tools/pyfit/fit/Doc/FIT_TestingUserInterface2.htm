@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Testing the User Interface Using FIT</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="testing-the-user-interface-using-fit">
+<h1 class="title">Testing the User Interface Using FIT</h1>
+<div class="section" id="the-problem-with-manual-testing">
+<h1><a name="the-problem-with-manual-testing">The problem with manual testing.</a></h1>
+<p>The basic problem with manual testing is that it's time consuming and not repeatable on demand. Consequently, it's best that we restrict manual testing to those places where human judgement provides a benefit; in other words, usability and look and feel issues.</p>
+<p>The standard way of handling this issue is the four layer architecture. Counting from the outside in, layer 1 is the GUI, layer 2 is the task oriented controller, layer 3 is the actual application and layer 4 is the persistance mechanism.</p>
+<p>This is sometimes incorrectly refered to as the MVC, or Model, View, Controller architecture, with layer 1 being the view, layer 2 being the controller and layer 3 being the model. Richard Pawson's Ph.D. thesis debunks this view, including extensive quotes from the actual originator of the MVC architecture about what he intended it to be. The thesis is online at www.nakedobjects.org. I recommend it highly, although it is not light reading. The MVC architecture implemented in Smalltalk-80 is a pale imitation of what was intended, and the common explanation of that architecture are so far off the mark that they are positively baroque.</p>
+</div>
+<div class="section" id="testing-at-the-task-oriented-interface-level">
+<h1><a name="testing-at-the-task-oriented-interface-level">Testing at the task oriented interface level</a></h1>
+<p>The essential idea behind this is that you can remove all of the application logic from the GUI layer and then replace it by the FIT fixtures required by ActionFixture or DoFixture. Shoving the application logic down into layer two is beneficial in two ways. The first is that it simplifies writing the FIT fixtures; the second is that it makes the GUI transparent to application logic.</p>
+<p>In any case, attention to the XP simple design principle of relentlessly removing duplication will shove the application logic into layer two as soon as you start FIT testing.</p>
+<p>FIT tests designed in this way closely model the typical interactions a user would have in a task oriented interface.</p>
+</div>
+<div class="section" id="testing-at-the-domain-model-level">
+<h1><a name="testing-at-the-domain-model-level">Testing at the Domain Model level</a></h1>
+<p>Testing at level 3 (the domain model) seems to lead to a great deal of confusion both about how one would do it, and whether it actually has any utility as a customer or acceptance testing techinque. It is not, after all, the actual user visible interface, nor is it isomorphic to it.</p>
+<p>It is possible to do, and to do quite productively. The key is that the upper part of the domain layer has to be &quot;behaviorally complete&quot; domain objects. If it consists of a hodge-podge of objects that are crafted on techincal grounds, then there is indeed no point to FIT testing.</p>
+<p>The best information on this is the Naked Object model, at www.nakedobjects.org. Unfortunately, the software is Java and DotNet rather than Python, but writing a FIT fixture to handle the same implementation protocol would be relatively simple.</p>
+</div>
+</div>
+</body>
+</html>

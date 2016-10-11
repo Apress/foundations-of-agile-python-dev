@@ -1,0 +1,24 @@
+# Acceptance tests for features specific to Python FIT, as well as some
+# features from the FitNesse Java and C# versions.
+[options]
++q yt
+[files]
+ColumnFixtureExtensions.htm
+CellHandlers.htm
+-c FloatingPointExtensions.htm
+TableFixture.htm
+
+# This next one turns on the label map diagnostics
++z displayLabelmapping ColumnFixtureExtensions.htm
+
+BaseErrorMessages.htm
+RowFixtureAT.htm
+
+# install an application configuration module
+-a fit.AccTestFixtures.ApplicationConfiguration1 -b LabelMapping.extended UseExtendedCamel.htm
++a fit.AccTestFixtures.ApplicationConfiguration1 ApplicationTypeAdapterDictionary.htm
++a fit.AccTestFixtures.ApplicationConfiguration1 ErrorMessageMapping.htm
+
+# turn off css for this one.
+-c LabelMapping.htm
+

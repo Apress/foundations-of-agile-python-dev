@@ -1,0 +1,226 @@
+FIT For Developing Software
+===========================
+
+by Rick Mugridge and Ward Cunningham
+Prentice-Hall, June 2005
+
+Fit For Developing Software - the Framework for Integrated Tests is the new book on the FIT framework. While it's quite well written, it deals only with the Java version of FIT, and the chapter on FitNesse is already out of date.
+
+This section provides side notes to the book on differences with PyFit. Notes are going to be organized by chapter and sometimes page number, sometimes with references into the main documentation; other parts of the PyFit documentation are organized by function.
+
+This document is not intended to be a tutorial on using Python Fit. That's the function of the main documentation.
+
+.. contents::
+
+Part I. Introducing Fit Tables
+------------------------------
+
+Chapter 3, Figure 3.1 General Notes
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+You'll notice that several cells are italicized. This is emphasis for the reader, it means nothing to FIT and does not usually affect the test in any way. This kind of markup can be used freely to provide emphasis and readability. You should stay away from background highlighting, however, since that can prevent you from seeing the results of tests.
+
+There is one exception to being able to use emphasis freely, however. Certain kinds of values interpret HTML markup and may be confused by the presence of emphasis markup they are not expecting. These will be pretty obvious.
+
+The parenthesis after the names for the calculated columns is an idiom that's specific to ColumnFixture type fixtures. There is a good deal of discussion about markup in the FIT developer community, and Python FIT allows you to use a style either with or without markup. See the `ColumnFixture`__ and `RowFixture`__ writeups for details.
+
+__ FIT_ColumnFixture.htm
+__ FIT_RowFixture.htm
+
+This kind of markup is not needed for other kinds of fixtures, and Python Fit does not allow it. 
+
+Chapter 3.3, Questions and Answers
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+PyFit differs from other versions in how it treats true and false values. You can use t, true, y, yes, 1 and + for true values, and f, false, n, no, 0 and - for false values, in either upper or lower case. Any other value is an error. The use of all values other than the true values for false, as well as 0 and 1 are programmer idioms that unfortunately crept into the user interface. 
+
+Your developer can also specify other values for either true or false when he writes the fixtures. This can be useful if the FIT tests are written in some language other than English, but it does not change the values displayed on an error.
+
+Chapter 4.3, Questions and Answers, p28.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Comments in tables is an interesting question. In general, you can put comments before or after tables, using any markup that your word processor will accept for an HTML document. Calculate, Column and Row fixtures have a convention that allows comment columns; ActionFixture allows additional cells on the end of each row. DoFixture has a note special action. Whether other fixtures allow embedded columns is specific to the fixture. Consult your developers, who can accomodate you.
+
+Chapter 5. Testing Lists
+>>>>>>>>>>>>>>>>>>>>>>>>
+
+It's probably useful at this point to emphasise that the term list, as used in this chapter, is not restricted to a sequentially ordered sequence of items. It refers to any collection of items, organized however the application finds most useful. The PyFit documentation uses the term collection throughout for the same concept.
+
+The footnote on p.31 mentions that RowFixture type fixtures usually do not use the parenthesis notation. In fact, you cannot use this notation in Python Fit, it is restricted to ColumnFixture type fixtures.
+
+Chapter 6.2, Tip about setup tables.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+It's technically unnecessary to include a final calculate type column for a table that's used to set up values. ColumnFixture derived tables can use the execute() method instead. This method is called before the first calculate column of each row, or at the end of the row if there are no calculate columns. This is not a Python Fit special feature: it is a standard feature of all Fit implementations.
+
+In release 0.8a2 and following, it's also possible to use the special endOfRow() method for the same effect.
+
+The downside of using either the execute() method or the endOfRow() method is that there is no obvious place to post errors: they go into either the first or last cell on the row.
+
+Chapter 6.3, Questions and Answers, p46.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+If you leave the first cell in a column blank for a given value column, many Python Fit fixtures will throw an exception (that is, a cell colored yellow.) Whether there is a default value depends on how the developer coded the fixture. Don't do this.
+
+Special values like blank, and as we will see later, error and null, create interesting gotchas. They mean that you can't enter the literal words blank, error or null, even if you want to. If you need to do this, either the developer who works on the fixture needs to deal with the issue, or you can use a Python Fit special feature called the asis cell handler. The asis cell handler needs to be enabled by the developer who writes the fixture. See the documentation page on `cell handlers`__ for details of how to use this. You can also have the fixture writer disable special handling of blank and null, although there is currently nothing you can do about the error keyword.
+
+__ FIT_CellHandlers.htm
+
+Chapter 7. Running FIT.
+>>>>>>>>>>>>>>>>>>>>>>>
+
+The current version of PyFit does not support using spreadsheets directly. Whether they will work if saved as HTML is not something I've tested. Support may be in a future release.
+
+I also have not tested Mozilla, FrontPage or Dreamweaver, although I know of no reason why they should not work. Microsoft Word files, saved as HTML, definitely do work. So does any editor that creates correct HTML directly.
+
+The batch `runner`__ in PyFit is quite different from the Java version; your developer should review the documentation.
+
+__ FIT_Runners.htm
+
+Chapter 8. FitNesse.
+>>>>>>>>>>>>>>>>>>>>
+
+The current version of FitNesse is somewhat different from the version documented in the book. Given publication schedules, this is as inevitable as it is unfortunate; see the www.fitnesse.org site for current details.
+
+The same version of Python FIT runs under both FitNesse and batch; in most cases it mixes features from both environments with wild abandon. Future releases will try to clarify this situation.
+
+Chapter 9. Expecting Errors.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+PyFit fully supports the error keyword as described. It also supports two cell handlers that give you more detailed control over errors; see the exception and fail `cell handler`__ writeups for details.
+
+__ FIT_CellHandlers.htm
+
+Chapter 10. FitLibrary
+>>>>>>>>>>>>>>>>>>>>>>
+
+PyFit contains most of FitLibrary. Exclusions are as noted.
+
+Chapter 11. A variety of Tables.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+DotGraphics, the package used to produce the second picture, is not officially supported, although there is prototype code in this release. This release also does not do well on making graphics that work in the input HTML work properly in the result HTML. The table fixture is supported, and there is a quite interesting acceptance test you might like to examine to see some of the possibilities.
+
+Part III - Introducing Fit Fixtures.
+------------------------------------
+
+Chapter 21.1 Column Fixtures. Questions and Answers, p181ff
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Fixtures derived from ColumnFixture need some way to distinguish between given and calculated columns. Most versions of Fit use parenthesis for this purpose. PyFit and FitNesse versions also allow a ? or ! following the name. PyFit does not use the parenthesis or question mark to indicate that the fixture implements the column using a method; either given or calculated columns can use fields, methods or properties, as appropriate.
+
+Python FIT's version of ColumnFixture has a substantial number of enhancements, including eight column types, the ability to dispense with markup and a diagnostic mode that will tell you the column type and the translated value of a label.
+
+PyFit handles floating point comparisons sanely. The precision is set by the actual value in the cell. For example, 3.14 will compare equal to any value between 3.135 and 3.145 (with the usual fuzz on the boundaries.) 3.14159 will compare equal to any value between 3.141585 and 3.141595.
+
+The boundary can be widened or narrowed by a special entry in the metadata for the column. PyFit also supports the range notation from FitNesse, and the numeric range cell handler.
+
+Chaper 21.1 Note on CamelCasing
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Batch and FitNesse have slightly different rules for how they convert the header of a table to an identifier that can be used in a Python program. The exact rules are specific to each programming language. Frankly, I should have used one set of rules for both batch and FitNesse, but I didn't figure that out until too late.
+
+Whether a fixture uses camelCase or extendedCamelCase depends on the fixture. Most (but not all) fixtures that are part of the FitLibrary use extended camel case.
+
+There is a feature, the `Application Configuration`__ module, which can force all fixtures to use a single consistent camel routine. This feature also provides some support for writing tests in a language other than English.
+
+__ FIT_ConfigurationExit.htm
+
+Chapter 21.4 ColumnFixture in General
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+PyFit processes column fixtures somewhat differently due to two factors. One is that it supports the symbol store and retrieve mechanism from FitNesse, and the second is that it supports fields, methods and properties for both given and calculated columns.
+
+See the columnFixture documentation for the store and retrieve markup, and the TypeAdapter documentation (which will be discussed further as notes to Chapter 25) for additional information. In general, it means that errors may be reported in different places from the Java version.
+
+We should also note that ColumnFixture itself calls an overridable method before processing the first cell of a row (reset()), and before processing the first calculation cell of a row (execute()). Prior to release 0.8a2 it did not call an overridable method before or after the table, or after the row. In 0.8a2 and later releases it does call overridable methods in these situations. See the ColumnFixture documentation for details.
+
+Chapter 22. ActionFixture.
+>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+While the actor (that is, the class instantiated by the start command) currently has to be a subclass of fit.Fixture, it may not have to in future releases. PyFit uses an entirely different mechanism for parsing user-defined values.
+
+Chapter 23. List Fixtures.
+>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The latest version of PyFit provides substantially improved collection testing fixtures. In particular, it is no longer necessary to subclass ArrayFixture, RowFixture, SetFixture or SubsetFixture, provided that previous fixtures do the necessary setup. See the writeups for `ArrayFixture`__ and `RowFixture`__ for details.
+
+__ FitLib_ArrayFixture.htm
+__ FIT_RowFixture.htm
+
+In general, you should read the PyFit documentation rather than depending on the Fit book for details of these fixtures.
+
+Chapter 24. Fixtures for Sequences of Tables.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This chapter recommends passing values between fixtures using static variables. The equivalent Python idiom is to use a variable at the module level, although it is quite reasonable to use a variable in a handy class object.
+
+However, I recommend using the symbol table to pass values between fixtures. The reason is that the test level symbol table is reset for each new test, while module and class level variables are not, leading to subtle problems with data leaking from one test to another.
+
+Of course, there are times when you want this behavior (such as retaining a single data base connection for a suite of tests) but usually you don't. When you do, there is a higher level symbol table which can be used. This level, the run level, also contains parameters from the runner command  line.
+
+Chapter 25. Using Other Values in Tables.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+PyFit has a completely different approach to `type adapters`__ than the one outlined in this chapter. In particular, since Python cannot report the types of identifiers, methods or properties by reflection, the fixture writer must supply them in a metadata dictionary. Also, PyFit does not support the parse exit in the fixtures; this functionality requires user type adapters. See the type adapter writeup for details.
+
+__ FIT_TypeAdapters.htm
+
+Chapter 26. Installing and Running FIT.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The previous versions of Python Fit resides in the data library of the Yahoo FitNesse and ExtremeProgramming mailing lists. This version and subsequent versions reside at the Python Cheese Shop. Accessing either of the mailing list data libraries requires joining one of these mailing lists.
+
+See the PyFit documentation on the `runners`__. They are considerably different from the ones described in this chapter.
+
+__ FIT_Runners.htm
+
+Chapter 28. FitLibrary Fixtures.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+There are a number of differences in these fixtures, mostly due to the necessity of supplying metadata for the type adapter mechanisms.
+
+Chapter 29. Custom Table Fixtures.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The second example in this chapter uses Dot Graphics, which only has a prototype implementation that has several serious known problems. The Image Fixture also has problems with accessing the same images from both the source and result HTML. These should be fixed in release 0.9
+
+Part IV - Developing Fixtures for Rent-A-Party Software
+-------------------------------------------------------
+
+There are a number of practical issues in this section.
+
+Chapter 32. Testing Fixtures through the user interface
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This chapter discusses integration testing, although not under that name. I've written some `additional material`__ on this issue. You may find it interesting, although I'm not at all happy with its present form.
+
+__ FIT_ArchitecturalMotifs.htm
+
+Chapter 33. Restructuring the Application for testing.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+One issue in structuring an application for testing has been glossed over. The more the application can be structured with value objects that can be used in the type adapter mechanism (in preference to the supplied type adapters) the better the test experiance will be. 
+
+Ward Cunningham discusses this issue in depth in his `Checks pattern language`__ paper.
+
+__ http://www.c2.com
+
+Alistair Cockburn gives an excellent critique of the standard layered architecture and an alternative in his `Ports and Adapters (Hexagonal) Architecture`__ paper.
+
+__ http://alistair.cockburn.us/crystal/articles/hpaaa/hexagonalportsandadaptersarchitecture.htm
+
+Chapter 35. Running Calculation Tests Indirectly
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This continues the theme from chapter 32, and the same paper is applicable.
+
+Part V - Custom Development
+---------------------------
+
+PyFit has not changed the basic architecture, but there are lots of detail changes from what is presented in the book. A lot of functionality has been refactored into different modules. For example, the check routine has been moved from Fixture to TypeAdapter, and the annotation routines have been moved to Parse. What is left in Fixture is proxy routines for compatability.
+
+The diagram of a parse tree should be studied closely, otherwise it will be more valuable to use the documentation supplied with PyFit.
+
+There are numerous fixtures and type adapters supplied with the different examples and acceptance test suites; studying these in conjunction with the documentation will be quite helpful.
+

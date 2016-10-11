@@ -1,0 +1,26 @@
+<html><title>SpecifyTrees</title><body>
+<h1><a href="SpecifyTrees.html">SpecifyTrees</a></h1>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=2>fitLib.FlowFixtureFixture</td></tr>
+<tr><td></td><td>fitLib.specify.DoTree</td></tr>
+</table>
+<p>The fourth line was wrong in the original - tee tree returns its input, so it can't cause an error.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>--r</td><td>check</td><td>tree</td><td ColSpan=2><ul><li>a</li><li>BB</li></ul></td></tr>
+<tr><td></td><td>show</td><td ColSpan=3>tree</td></tr>
+<tr><td></td><td>show</td><td>tree</td><td ColSpan=2><ul><li>A</li><li>B</li></ul></td></tr>
+<tr><td>---r</td><td>check</td><td>tee tree</td><td>A<ul><li>B</li></ul></td><td>A<ul><li>B</li></ul></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td>show</td><td ColSpan=2>it</td></tr>
+<tr><td>--r</td><td>check</td><td>it</td><td>B<ul><li>a</li><li>BB</li></ul></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td ColSpan=3>it</td></tr>
+<tr><td>--r</td><td>check</td><td>title</td><td>B</td></tr>
+<tr><td></td><td>show</td><td ColSpan=2>children</td></tr>
+<tr><td>--w</td><td>check</td><td>children</td><td>[a, b]</td></tr>
+</table>
+</body></html>

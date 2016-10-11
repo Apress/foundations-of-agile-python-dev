@@ -1,0 +1,47 @@
+Testing GUIs
+============
+
+How to use FIT to test user interfaces is a subject that baffles people when they first run across the package. It's not particularly difficult, but it does take a slightly different way of looking at user interface programming.
+
+In the beginning, there was Model, View, Controller. This came out of the Xerox Parc project that created Smalltalk, and for a long while it was the way to think about graphical user interfaces. The basic concept is that of separation of concerns: the Model was the bulk of the application, the View was responsible for painting the screen, and the Controller was responsible for handling the mouse and keyboard.
+
+This seemed reasonable until people started working with multiple interfaces. If your application has, for example, a GUI, a browser interface, a command line interface and an XML type services interface, you're in a much more complicated situation. One of the first things people noticed was that the View and the Controller for any given interface were rather tightly coupled, which lead to a layered architecture rather than the neat triangle of the MVC design pattern.
+
+The layered architecture pattern is the key to using FIT to test an application with a rich GUI user interface. In this pattern, there are normally five layers (really! The more common three layer approach doesn't work well for a number of reasons.) The five layers are the GUI, the Navagation, the Application, the Domain and the Persistance or Data Base layer. 
+
+Each layer has specific concerns. The outermost layer, the GUI layer, is the only layer that deals directly with the GUI toolbox. It should have no business or navigation logic in it. In principle it should be possible to use a screen layout program to generate the code or parameter files. 
+
+The Navagation layer is responsible for running the application. It selects the screens to display, invoking the necessary concrete GUI classes to do so, and deals with the events that those classes report. It invokes classes from the Application layer to actually get any work done.
+
+The application layer contains the classes that actually perform the business processes that the application needs, while the domain layer contains the infrastructure for the domain.
+
+The persistance layer is not actually a layer in the same sense; it's a virtualization mechanism for persistant domain objects. 
+
+So let's put this in context of a banking application that needs to operate in three different environments: a teller application, an ATM application, and an internet home banking application. And let's focus in on the account transfer function.
+
+In the home banking application, the concrete GUI will be HTML pages that contain Javascript while the Navigation layer will exist on the application server. Likewise, in the ATM application, the concrete GUI will execute on the ATM, while the Navigation layer will execute on a server somewhere. It's only in the teller application that we even have the possibility of combining the functionality of these two layers.
+
+In all three cases, though, the application layer is identical. An application class that manages a funds transfer between accounts doesn't need to know anything about the source of the request. It can operate the same way no matter whether the request came from the home banking application, an ATM or a teller. An application that accepts cash and checks wouldn't work at all for the home banking application, and might have somewhat different modes of operation for the ATM and teller applications.
+
+So what does this mean for FIT tests? In essence, it means that we can test at the seam between layers. In the home banking application, we can test the flow of data back and forth using tools like HTTPUnit. To test the actual user interface, we might need a tool like HTMLUnit. There are enough options in this space that the issue is more selecting one and living with its limitations than going without and suffering.
+
+In the ATM application, we would most likely use a protocol simulator to substitute for the actual ATM.
+
+It's the teller application that tends to make people puzzled. The key is still the seam between the two layers. The fixtures in the FIT tests need to slide in and transparently replace the classes in the concrete GUI layer. 
+
+As long as the navigation layer goes through something that can be mocked when it wants to put up a screen, and it uses some reasonably loosely coupled mechanism for communicating to the screen classes (like the notifier pattern), everything will work smoothly.
+
+So, how do we actually do it from the test writer's viewpoint?
+
+At one time, I'd have automatically replied: ActionFixture. Today I'm not so sure. The reason is that I looked at the business forms example (chapter 11.1, page 81ff and chapter 29.1 on page 247ff) in the Fit book, and it's giving me ideas. Might it be possible to mock up the way a window looks and either stick the data to enter or the data to check into it? 
+
+The reason it's interesting is that that's probably a much better presentation device in a test, and the order of entry of most fields really doesn't matter that much. The major difficulty seems to be the check operation: there's a lot more to check on a screen than just text, and how to present it in a layout oriented fashion could be a bit of a challenge. 
+
+Continuing with the previous flow, this leads to an interesting reuse possibility. If the interface between the concrete UIs and the abstract UI is designed correctly, you can create a specialized version of ActionFixture that dispenses with other fixtures, and exercises the abstract UI directly. This saves the work of writing additional fixtures, and improves the guarantees that what is being executed is real application code.
+
+This, of course, leaves the concrete UIs dangling: FIT does not test on this level.
+
+That isn't precisely true. FIT can test a command line UI, or a browser based UI. What's currently difficult to impossible is testing at the level that capture and replay testers work at. Whether or not it can depends on the availibility of libraries for different operating systems or GUI toolkits. Java and Swing seem to be good at this, other toolkits are not so good. While this is a significant issue, it's not the major issue that it's sometimes made out to be. 
+
+The reason is that there is no One True Testing Technique. The problem with capture and replay type testing applications is that they are usually set up to test the entire application through the UI. This leads to horrendous fragility problems. The solution is to not try to test the entire application through the UI; that's FIT's job. If you stub out the abstract UI, then you can use a screen scraper type testing tool to check the actual GUI, while not having to worry about the remainder of the application. 
+

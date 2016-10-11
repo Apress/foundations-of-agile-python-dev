@@ -1,0 +1,91 @@
+<html><head>
+	<title>Wiki: Calculator Example</title>
+</head>
+<body bgcolor=#FFFFFF link=#d06040 vlink=#806040>
+
+<p>The HP-35 was HP's first pocket calculator. It was introduced at a time when most calculators had only the four basic functions. The HP-35 was the first pocket calculator with transcendental functions, and the first with RPN. 
+<p>The following specifications have been derived from the instructions printed on the back of the calculator. (Image from <a href="//www.hpmuseum.org/hp35.htm">http://www.hpmuseum.org/hp35.htm</a>.)
+<p><img src="files/hp35bk.jpg">
+<p><p>Low battery lights all decimal points. This function doesn't work - there is no battery.
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3>eg.Calculator</td></tr>
+<tr><td>volts</td><td>watts()</td><td>points()</td></tr>
+<tr><td>3.75</td><td>.500</td><td>false</td></tr>
+<tr><td>3.60</td><td>.500</td><td>false</td></tr>
+<tr><td>3.45</td><td>.500</td><td>false</td></tr>
+<tr><td>3.30</td><td>.500</td><td>false</td></tr>
+</table>
+<p>Improper operations flash display. Press <strong>clx</strong>.
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3>eg.Calculator</td></tr>
+<tr><td>key</td><td>x()</td><td>flash()</td></tr>
+<tr><td>100</td><td>100</td><td>false</td></tr>
+<tr><td>enter</td><td>100</td><td>false</td></tr>
+<tr><td>0</td><td>0</td><td>false</td></tr>
+<tr><td>/</td><td>error</td><td>true</td></tr>
+<tr><td>clx</td><td>0</td><td>false</td></tr>
+</table>
+<p><strong>clx</strong> clears the display.
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=5>eg.Calculator</td></tr>
+<tr><td>key</td><td>x()</td><td>y()</td><td>z()</td><td>t()</td></tr>
+<tr><td>100</td><td>100</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>enter</td><td>100</td><td>100</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>enter</td><td>100</td><td>100</td><td>100</td><td>&nbsp;</td></tr>
+<tr><td>enter</td><td>100</td><td>100</td><td>100</td><td>100</td></tr>
+<tr><td>clx</td><td>0</td><td>100</td><td>100</td><td>100</td></tr>
+</table>
+<p><strong>clr</strong> clears all registers.
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=5>eg.Calculator</td></tr>
+<tr><td>key</td><td>x()</td><td>y()</td><td>z()</td><td>t()</td></tr>
+<tr><td>100</td><td>100</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>enter</td><td>100</td><td>100</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>enter</td><td>100</td><td>100</td><td>100</td><td>&nbsp;</td></tr>
+<tr><td>enter</td><td>100</td><td>100</td><td>100</td><td>100</td></tr>
+<tr><td>clr</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+</table>
+<p><strong>chs</strong> changes sign of display. May be used as the first entry when entering negative numbers.
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3>eg.Calculator</td></tr>
+<tr><td>key</td><td>x()</td><td>y()</td></tr>
+<tr><td>100</td><td>100</td><td>0</td></tr>
+<tr><td>chs</td><td>-100</td><td>0</td></tr>
+<tr><td>chs</td><td>100</td><td>0</td></tr>
+<tr><td>enter</td><td>100</td><td>100</td></tr>
+<tr><td>chs</td><td>-100</td><td>100</td></tr>
+<tr><td>100</td><td>100</td><td>-100</td></tr>
+</table>
+<p><strong>eex</strong> causes next entries to become the exponent of x. For negative expoinents <strong>chs</strong> must precede digits.
+<p>The operational stack consistes of four registers (x, y, z and t). A fifth register (s) is used for constant storage.
+<p>The stack is automatically raised by an entry into x or by <strong>rcl</strong> unless the entry or <strong>rcl</strong> immediately follows <strong>clx</strong>, <strong>sto</strong> or <strong>enter</strong>.
+<p>Follwing any trig function z is duplicated into register t.
+<p>All angles are in degrees.
+<p>Example (2+3) * (4/5) / sin(30) * (4^-1.5) = 1.0000
+<p><table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td ColSpan=3> eg.Calculator </td></tr>
+<tr><td>key</td><td>x()</td><td>y()</td></tr>
+<tr><td>2</td><td>2</td><td>&nbsp;</td></tr>
+<tr><td>enter</td><td>2</td><td>2</td></tr>
+<tr><td>3</td><td>3</td><td>2</td></tr>
+<tr><td>+</td><td>5</td><td>&nbsp;</td></tr>
+<tr><td>4</td><td>4</td><td>5</td></tr>
+<tr><td>*</td><td>20</td><td>&nbsp;</td></tr>
+<tr><td>5</td><td>5</td><td>20</td></tr>
+<tr><td>/</td><td>4</td><td>&nbsp;</td></tr>
+<tr><td>30</td><td>30</td><td>4</td></tr>
+<tr><td>sin</td><td>.5</td><td>4</td></tr>
+<tr><td>/</td><td>8</td><td>&nbsp;</td></tr>
+<tr><td>-1.5</td><td>-1.5</td><td>8</td></tr>
+<tr><td>enter</td><td>-1.5</td><td>-1.5</td></tr>
+<tr><td>4</td><td>4</td><td>-1.5</td></tr>
+<tr><td>x^y</td><td>.125</td><td>-1.5</td></tr>
+<tr><td>*</td><td>-0.1875</td><td>&nbsp;</td></tr>
+</table>
+<p><hr>
+<p>You can run this document as it stands right now against a calculator implemented at c2.com. You will find that that the tests, the fixture and the calculator code are all not yet complete. Failing tests turn a cell red. There are two values in the cell. The top one is the expected result. The bottom is the actual result. 
+<p>
+
+</body>
+</html>
+

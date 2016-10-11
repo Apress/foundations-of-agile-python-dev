@@ -1,0 +1,26 @@
+<html><title>TestFiles</title><body>
+<h1><a href="TestFiles.html">TestFiles</a></h1>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fitLib.CompareFilesFixture</td></tr>
+</table>
+<h2>Two empty files are the same</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>file</i></td><td>testFiles/empty.txt</td><td><i>same as</i></td><td>testFiles/alsoEmpty.xls</td><td>OK</td></tr>
+</table>
+<h2>A file is equal to itself</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>file</i></td><td>testFiles/threeLines.txt</td><td><i>same as</i></td><td>testFiles/threeLines.txt</td><td>OK</td></tr>
+</table>
+<h2>The two files are equal</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>file</i></td><td>testFiles/threeLines.txt</td><td><i>same as</i></td><td>testFiles/alsoThreeLines.txt</td><td>OK</td></tr>
+</table>
+<h2>Differing file lengths</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>file</i></td><td>testFiles/threeLines.txt</td><td><i>same as</i></td><td>testFiles/empty.txt</td><td>threeLines.txt<ul><li><i>File longer by 19 bytes than:</i></li><li>empty.txt</li></ul></td></tr>
+</table>
+<h2>Differing file contents</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>file</i></td><td>testFiles/threeLines.txt</td><td><i>same as</i></td><td>testFiles/differingThreeLines.txt</td><td>threeLines.txt<ul><li><i>Files differ at byte position 9</i></li><li>differingThreeLines.txt</li></ul></td></tr>
+</table>
+</body></html>

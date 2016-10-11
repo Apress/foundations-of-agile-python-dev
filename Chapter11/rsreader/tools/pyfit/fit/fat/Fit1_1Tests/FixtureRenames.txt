@@ -1,0 +1,7 @@
+fat: fat.Fit1_1Tests
+#fat.ExampleFixture: fat.Fit1_1Tests.ExampleFixture
+fat.ReferenceFixture: fat.ReferenceFixture
+fat.Color: fat.Color
+fat.Table: fat.Table
+fat.Divide: fat.Divide
+fat.Equals: fat.Equals

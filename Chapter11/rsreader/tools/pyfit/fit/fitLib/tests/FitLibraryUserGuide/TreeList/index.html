@@ -1,0 +1,44 @@
+<html><title>TreeList</title><body>
+<h1>TreeList</h1>
+Table cells may contain HTML lists. Consider the following tests:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.specify.DoTree</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>tree</td><td><ul><li>a</li><li>BB</li></ul></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>tree</td><td>Top<ul><li>a</li><li>BB</li></ul></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>show</td><td>tree</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>show</td><td>tree</td><td><ul><li>A</li><li>B</li></ul></td></tr>
+</table>
+<br>
+The methods of <i>DoTree</i> are as follows:<br>
+<hr>
+<pre>public class DoTree extends fit.DoFixture {
+    public ListTree tree() {
+        ListTree tree = new ListTree("");
+        tree.addChild(new ListTree("a"));
+        tree.addChild(new ListTree("BB"));
+	return tree;
+    }
+    public ListTree tree(String s) {
+        return ListTree.parse(s);
+    }
+...
+</pre>
+<hr>
+<br>
+This works because class <i>ListTree</i> is a subtype of <i>Tree</i>. The fixture treats the HTML list as a tree structure. Here's ^AnotherTreeExample.<br>
+<br>
+It's easy to define new subtypes of <i>Tree</i>.  How to do this will be documented later.<br>
+</body></html>

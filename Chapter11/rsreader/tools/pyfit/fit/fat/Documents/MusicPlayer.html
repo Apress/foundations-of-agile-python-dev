@@ -1,0 +1,147 @@
+<html><head><title>PyFit version of Music Example</title></head>
+<body>
+<h1><center>PyFit version of Music Example</center></h1>
+<p>This rewrites the venerable Music Example using DoFixture to give a 
+head to head comparison between the styles using a fairly substantial
+example that's still small enough to get one's head around.</p>
+<p>Another part of the reason for doing this is to see how far
+I could get without having to do a fixture. I consider this only
+partially successful at that: it doesn't need anything from FIT
+(although one of the type adapters does use Parse) but it also
+does things that an application simply wouldn't do. In other words,
+it's not entirely oblivious to the FIT environment.</p>
+<p>The first thing we're going to do is invoke DoFixture, and
+then start our music player. This is a three line table that we
+slide to the right and grey out because it contains a bunch of
+"technology facing" stuff that the end user shouldn't have to deal
+with.</p>
+<p><table align=right BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td colspan=2>fitLib.DoFixture</td></tr>
+<tr><td>start</td><td>eg.MusicPlayer</td></tr>
+<tr><td>load</td><td>eg/Music/Music.txt</td></tr>
+</table></p>
+<p>The first line loads DoFixture, which is one of the standard
+fixtures that comes with the Fit Library. DoFixture will control
+the entire rest of the session.</p>
+<p>The second line loads the Software Under Test, which is our
+music player.</p>
+<p>The third line loads the file containing all of the music
+in the library. The load command is a method in the music
+player.</p>
+<p>Now we're going to check the total number of songs in the
+library.</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>show</td><td><i>total</i></td><td>songs</td><td><i>in</i></td><td>library</td></tr>
+<tr><td>check</td><td><i>total</i></td><td>songs</td><td><i>in</i></td><td>library</td><td>37
+</td></tr>
+</table>
+<p>This line invokes the totalIn method with parameters of
+"songs" and "library". This same method might be able to return,
+for example, the total number of artists in the latest selection.
+The italics are not something that DoFixture supplies: they are
+the recommended markup to distinguish the syntax from the 
+parameters that the user fills in.
+</p>
+<p>The next thing we want to do is display some of the
+fields for the entries in the library.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>select track</i></td><td>1</td></tr>
+<tr><td>show</td><td><i>fields</i></td><td>name and artist</td></tr>
+</table>
+<p>This shows what looks like an advanced feature: being able to take an English list. Well, it's not quite what it seems - we're going to write a type adapter to handle that list. It's going to be a fairly sophisticated little thing that can take the variations of standard English list syntax</p>
+<p>The alternative is that we'd need a fieldsIn method, and a fieldsAndIn method, and probably a fieldsAndAndIn and fieldsAndAndAndIn method. That isn't the world's most intelligent design, especially since we might find a use for such a type adapter somewhere else.</p>
+<p>It also shows that the result is displayed as a bulleted list. This isn't another DoFixture piece of magic; we're going to write a type adapter that takes a standard Python dictionary and displays it this way. It will also convert the other way: from a bulleted list with colon separated entries into a dictionary.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>fields</i></td><td>name and artist</td>
+<td><ul><li>Name: Akila</li><li>Artist: Toure Kunda</li></ul></td></tr>
+</table>
+<p>We can, of course, check the next one as well using the same command. Notice that the actual fields never appear in the method name; they're parameters to the command.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>select track</i></td><td>2</td></tr>
+<tr><td>check</td><td><i>fields</i></td><td>name, artist, album, year, time and track</td>
+<td><ul><li>Name: American Tango</li><li>Artist: Weather Report</li><li>Album: Mysterious Traveller</li><li>Year: 1974</li><li>Time: 3:42</li><li>Track: 2 of 7</li></ul></td></tr>
+</table>
+<p>This is pretty good, but it points out some things. One is that there are several data fields that aren't really character strings: the time and the track count are more complex quantities that need additional support. We're going to have to take that into account. We're also going to fix the time so it's in minutes and seconds rather than in minutes and fractions.</p>
+<p>The next thing we're going to do is actually play some music.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>select track</i></td><td colspan=2>2</td></tr>
+<tr><td colspan=3><i>play</i></td></tr>
+<tr><td>check</td><td><i>player status</i></td><td>loading</td></tr>
+<tr><td colspan=2><i>wait</i></td><td>2</td></tr>
+<tr><td>check</td><td><i>player status</i></td><td>loading</td></tr>
+</table>
+<p>The wait command advances simulated external time by the requested amount, and does all the rest of the bookkeeping. It takes, by the way, four seconds to load a CD.</p>
+<p>Another thing to notice is that the table doesn't look all that good. I fixed a small part of the problem with explicit colspan attributes in the HTML markup, but it's tedious to do that and it still doesn't look really good.</p>
+<p>Presentation is important. One thing to make presentation a bit better is to use one table per line; at least that provides decent horizontal spacing in most browsers. Another thing to do is suppress the internal lines within the tables. Up to now, I've been leaving the line around the table. It helps set them off from the text. Most tests aren't going to be this chatty; it's a better idea to leave the tables entirely unmarked and mark comments in another way. I'm going to drop the borders and let the italics carry the distinctions. You decide on which style looks better.</p>
+<table><tr><td><i>wait</i></td><td>2</td></tr></table>
+<table><tr><td>check</td><td><i>player status</i></td><td>playing</td></tr></table>
+<table>
+<tr><td>check</td><td><i>current track</i></td><td>name</td><td>American Tango</td></tr>
+<tr><td>check</td><td><i>current track</i></td><td>time</td><td>3:42</td></tr>
+</table>
+<table><tr><td><i>wait</i></td><td>3</td></tr></table>
+<table><tr><td>check</td><td><i>time remaining</i></td><td>3:39</td></tr></table>
+<table><tr><td><i>pause</i></td></tr></table>
+<p>Here we've just pushed the pause button on the player. This puts us into limbo: time isn't passing.</p>
+<table><tr><td>check</td><td><i>player status</i></td><td>paused</td></tr></table>
+<table><tr><td><i>wait</i></td><td>60</td></tr></table>
+<table>
+<tr><td>note</td><td>This advances us 60 seconds of simulated external time, but it doesn't change the time remaining on the track since it's paused.</td></tr>
+<tr><td>note</td><td>This is also an example of the note command: these two comments are table rows, not paragraphs interspersed between the tables</td></tr>
+<table><tr><td>check</td><td><i>time remaining</i></td><td>3:39</td></tr></table>
+</table>
+<table><tr><td>play</td></tr></table>
+<table><tr><td><i>wait</i></td><td>60</td></tr></table>
+<table><tr><td>check</td><td><i>player status</i></td><td>playing</td></tr></table>
+<table><tr><td>check</td><td><i>time remaining</i></td><td>2:39</td></tr></table>
+<table><tr><td><i>wait for</i></td><td>track complete</td></tr></table>
+<table><tr><td>check</td><td><i>player status</i></td><td>unloading</td></tr></table>
+<table><tr><td><i>wait</i></td><td>4</td></tr></table>
+<table>
+<tr><td><i>select track</i></td><td>4</td></tr>
+<tr><td colspan=2><i>play</i></td></tr>
+</table>
+<p>Now we're going to pop up a (virtual) dialog box</p>
+<table><tr><td>fail</td><td><i>load jam</i></td></tr></table>
+<table><tr><td>check</td><td><i>message</i></td><td>load jammed</td></tr></table>
+<table><tr><td><i>press</i></td><td>ok</td></tr></table>
+<p>That will return us to the regular player interface. Note the way it's coded in the program.</p>
+<table><tr><td>check</td><td><i>player status</i></td><td>loading</td></tr></table>
+<p>This ends the part that deals with the operation of the music player. Now let's look at the search and display facilities</p>
+<table><tr><td><i>select track</i></td><td>2</td></tr></table>
+<table><tr><td><i>find same</i></td><td>album</td></tr></table>
+<table><tr><td>check</td><td><i>search status</i></td><td>searching</td></tr></table>
+<table><tr><td><i>wait for</i></td><td>search complete</td></tr></table>
+<table><tr><td>check</td><td><i>search status</i></td><td>ready</td></tr></table>
+<table><tr><td>check</td><td><i>total</i></td><td>songs</td><td><i>in</i></td><td>selection</td><td>2</td></tr></table>
+<p>Now we're going to display the selected songs. It could definitely be formatted better, but that's simply a matter of Html touchup.</p>
+<table border cellspacing=0 cellpadding=3><tr><td><i>display</i></td><td colspan=5>Name, Artist, Album, Year, Time and Track</td></tr></table>
+<p>However, what we probably want to do is check the contents of the selection. We have a variety of fixtures to do that: the Array, Row, Set and Subset. The next command is going to invoke the Row fixture to do the checks. I'm also going to put a border around the tables to emphasize that they're tables.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=6><i>verify</i></td></tr>
+<tr><td>Name</td><td>Artist</td><td>Album</td><td>Year</td><td>Time</td><td>Track</td></tr>
+<tr><td>Scarlet Woman</td><td>Weather Report</td><td>Mysterious Traveller</td><td>1974</td><td>5:43</td><td>6 of 7</td></tr>
+<tr><td>American Tango</td><td>Weather Report</td><td>Mysterious Traveller</td><td>1974</td><td>3:42</td><td>2 of 7</td></tr>
+</table>
+<p>Now we want to do a different selection. The first thing is to select the contents.</p>
+<table><tr><td><i>select all</i></td></tr></table>
+<table><tr><td><i>wait for</i></td><td>search complete</td></tr></table>
+<table><tr><td>check</td><td><i>total</i></td><td>songs</td><td><i>in</i></td><td>selection</td><td>37</td></tr></table>
+<table><tr><td><i>select track</i></td><td>3</td></tr></table>
+<table><tr><td>check</td><td><i>fields</i></td><td>artist</td><td><ul><li>Artist: James Taylor</li></ul></td></tr></table>
+<table><tr><td><i>find same</i></td><td>artist</td></tr></table>
+<table><tr><td><i>wait for</i></td><td>search complete</td></tr></table>
+<table><tr><td>check</td><td><i>total</i></td><td>songs</td><td><i>in</i></td><td>selection</td><td>5</td></tr></table>
+<table border cellspacing=0 cellpadding=3><tr><td><i>display</i></td><td colspan=5>Name, Artist, Album, Year, Time and Track</td></tr></table>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5><i>verify</i></td></tr>
+<p>&nbsp;</p>
+<tr><td>Name</td><td>Album</td><td>Genre</td><td>Size</td><td>Date</td></tr>
+<tr><td>Another Grey Morning</td><td>JT</td><td>Pop</td><td>3284199</td><td>9/7/02 11:32 PM</td></tr>
+<tr><td>Ananas</td><td>Hourglass</td><td>Pop</td><td>6897450</td><td>9/7/02 11:47 PM</td></tr>
+<tr><td>Copperline</td><td>New Moon Shine</td><td>Pop</td><td>5248087</td><td>9/7/02 9:52 PM</td></tr>
+<tr><td>Handy Man</td><td>JT</td><td>Pop</td><td>3976956</td><td>9/7/02 11:36 PM</td></tr>
+<tr><td>Sailing To Philadelphia</td><td>October Rose</td><td>Pop</td><td> 6581911</td><td> 9/7/02 10:45 PM</td></tr>
+</table>
+<p>That's it for this example. I hope it's been instructive for the differences in style. One thing you'll notice is that this style doesn't lend itself to the time tracking that the ActionFixture version did, however it flows better in several respects.</p>
+</body></html>

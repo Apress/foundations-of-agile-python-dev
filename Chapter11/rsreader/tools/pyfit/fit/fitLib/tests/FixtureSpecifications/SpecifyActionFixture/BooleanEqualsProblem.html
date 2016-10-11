@@ -1,0 +1,13 @@
+<html><title>BooleanEqualsProblem</title><body>
+<h1><a href="BooleanEqualsProblem.html">BooleanEqualsProblem</a></h1>
+<h2>Boolean should reject anything other than <i>true</i> and <i>false</i></h2>
+<p>Changed last row to correctly show rejection</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=5>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td ColSpan=4>fit.ActionFixture</td></tr>
+<tr><td></td><td>start</td><td ColSpan=3>fitLib.specify.ActionFixtureUnderTest</td></tr>
+<tr><td>--w</td><td>check</td><td>booleanResultMethod</td><td ColSpan=2>true</td></tr>
+<tr><td>--r</td><td>check</td><td>booleanResultMethod</td><td ColSpan=2>false</td></tr>
+<tr><td>--w</td><td>check</td><td>booleanResultMethod</td><td>nonBoolean</td><td>Shouldn't be right</td></tr>
+</table>
+</body></html>

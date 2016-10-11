@@ -1,0 +1,11 @@
+<html><title>UseToStringForResult</title><body>
+<h1><a href="UseToStringForResult.html">UseToStringForResult</a></h1>
+Consider where there is no <i>TypeAdapter</i> for an object of some class, and no <i>parse()</i> method in the class either. If we only use it in a result, we simply use do a <i>String</i> comparison using its <i>toString()</i> method.<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td>show</td><td ColSpan=2>use toString</td></tr>
+<tr><td>--r</td><td>check</td><td>use toString</td><td>77</td></tr>
+</table>
+<br>
+Of course, this won't always do what we want, but then nothing is lost.<br>
+</body></html>

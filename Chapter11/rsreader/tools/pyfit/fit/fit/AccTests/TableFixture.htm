@@ -1,0 +1,74 @@
+<html><head><title>Table Fixture Example and Acceptance Test</title></head><body>
+<h1><center>Table Fixture Example and Acceptance Test</center></h1>
+<p>This is the example TableFixture from page 82 of the FIT book. The example table is used several times in succession. The first usage is to create the invoice object, the other examples show different ways of checking the invoice table against the invoice object.</p>
+<p>All of the examples should pass; they were created by cut and paste of the first table, with a different fixture name.</p>
+<h3><center>Create Test Data</center></h3>
+<p>This first table creates the invoice with two line items, and saves it in the symbol table under the name "invoice1", using the parameter facility. The other fixtures will get the symbol which references the invoice from the first parameter</p>
+
+<p>This first table also illustrates a significant issue with all of the creation fixtures: There is no guidance about how to annotate that edits were made and passed, and that the resulting data was successfully saved for later use. Each of the fixtures that does this does it differently. In this case, I've chosen to highlight each cell that was actually accessed and checked, even if the check was as simplistic as blindly accepting a character string.</p>
+<p>In addition, there is no standard way of indicating that the entire edit was successful and the result created and stored. I've chosen to indicate this by highlighting the symbol name which is the cell immediately after the fixture name. This could probably be enhanced by adding a comment, such as "invoice saved" or "invoice checked".</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.TableFixtureAT.StoreTable</td>
+    <td colspan=3>invoice1</td></tr>
+<tr><td>Uni of Auckland</td><td>Delivered To:</td><td>Number:</td><td colspan=3>216017-01</td></tr>
+<tr><td>Private Bag 92019</td><td>Attn: Sal Mayha</td><td>Date:</td><td colspan=3>05/01/04</td></tr>
+<tr><td>Auckland</td><td>Uni of Auckland</td><td>Order:</td><td colspan=3>TC000015473-REPL</td></tr>
+<tr><td colspan=2>&nbsp;</td><td>Cust:</td><td colspan=3>UNI34</td></tr>
+<tr><td><i>#</i></td><td><i>Part Number</i></td><td><i>Description</i></td>
+    <td><i>Dispatch</i></td><td><i>Price</i></td><td><i>Total</i></td></tr>
+<tr><td>1</td><td>CAT 98142-00-GH</td><td>L3 Switch 32x1000T</td>
+    <td>1</td><td>6804.00</td><td>6804.00</td></tr>
+<tr><td>2</td><td>CAT 99000-01-PH</td><td>Macronetic Switch</td>
+    <td>2</td><td>2317.00</td><td>2317.00</td></tr>
+<tr><td colspan=4>&nbsp;</td><td>Total:</td><td>9121.00</td></tr>
+<tr><td>Special Delivery:</td><td colspan=5>AS0555P</td></tr>
+</table>
+
+<h3><center>Verify table without using TypeAdapter</center></h3>
+
+<p>This is the more normal use of a TableFixture, to verify an object created by the actual processing part of the test.</p>
+
+<p>The essential distinction between this and the next one is in the fixture. This one does not use the TypeAdapter mechanism, which means that it cannot use the cell handlers, including either the asis[] cell handler or the error or exception[] handlers</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.TableFixtureAT.CheckTable1</td>
+    <td colspan=3>invoice1</td></tr>
+<tr><td>Uni of Auckland</td><td>Delivered To:</td><td>Number:</td><td colspan=3>216017-01</td></tr>
+<tr><td>Private Bag 92019</td><td>Attn: Sal Mayha</td><td>Date:</td><td colspan=3>05/01/04</td></tr>
+<tr><td>Auckland</td><td>Uni of Auckland</td><td>Order:</td><td colspan=3>TC000015473-REPL</td></tr>
+<tr><td colspan=2>&nbsp;</td><td>Cust:</td><td colspan=3>UNI34</td></tr>
+<tr><td><i>#</i></td><td><i>Part Number</i></td><td><i>Description</i></td>
+    <td><i>Dispatch</i></td><td><i>Price</i></td><td><i>Total</i></td></tr>
+<tr><td>1</td><td>CAT 98142-00-GH</td><td>L3 Switch 32x1000T</td>
+    <td>1</td><td>6804.00</td><td>6804.00</td></tr>
+<tr><td>2</td><td>CAT 99000-01-PH</td><td>Macronetic Switch</td>
+    <td>2</td><td>2317.00</td><td>2317.00</td></tr>
+<tr><td colspan=4>&nbsp;</td><td>Total:</td><td>9121.00</td></tr>
+<tr><td>Special Delivery:</td><td colspan=5>AS0555P</td></tr>
+</table>
+
+<h3><center>Check Table using Type Adapters</center></h3>
+
+<p>The only difference between this and the preceeding check is the fixture invoked. When you look at the two fixtures, you'll see that using the type adapter mechanism simplifies the checking logic, but doesn't do anything significant for the mainline.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.TableFixtureAT.CheckTableUsingTA</td>
+    <td colspan=3>invoice1</td></tr>
+<tr><td>Uni of Auckland</td><td>Delivered To:</td><td>Number:</td><td colspan=3>216017-01</td></tr>
+<tr><td>Private Bag 92019</td><td>Attn: Sal Mayha</td><td>Date:</td><td colspan=3>05/01/04</td></tr>
+<tr><td>Auckland</td><td>Uni of Auckland</td><td>Order:</td><td colspan=3>TC000015473-REPL</td></tr>
+<tr><td colspan=2>&nbsp;</td><td>Cust:</td><td colspan=3>UNI34</td></tr>
+<tr><td><i>#</i></td><td><i>Part Number</i></td><td><i>Description</i></td>
+    <td><i>Dispatch</i></td><td><i>Price</i></td><td><i>Total</i></td></tr>
+<tr><td>1</td><td>CAT 98142-00-GH</td><td>L3 Switch 32x1000T</td>
+    <td>1</td><td>6804.00</td><td>6804.00</td></tr>
+<tr><td>2</td><td>CAT 99000-01-PH</td><td>Macronetic Switch</td>
+    <td>2</td><td>2317.00</td><td>2317.00</td></tr>
+<tr><td colspan=4>&nbsp;</td><td>Total:</td><td>9121.00</td></tr>
+<tr><td>Special Delivery:</td><td colspan=5>AS0555P</td></tr>
+</table>
+
+<p>That's the TableFixture example. I've deliberately kept away from most of the advanced features in this example, other than the use of the parameter and symbol facility to pass data among fixtures.</p>
+
+</body></html>

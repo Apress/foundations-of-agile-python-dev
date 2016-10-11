@@ -1,0 +1,213 @@
+Python FIT Release 0.8 Changes
+==============================
+
+Release 0.8 is a major release which contains a number of new features and fixtures, as well as several bug fixes. It is looking forward to the 2.0 FIT specification.
+
+.. contents::
+
+Features
+--------
+
+Value Object and Whole Value
+++++++++++++++++++++++++++++
+
+This feature was actually in Release 0.7, however it has been significantly improved and extended.
+
+FIT works best when the translation between cells in a table and the object used by the application is handled by a class that is a normal part of the application, not by code specifically written for the test itself.
+
+The `Type Adapter`__ mechanism accepts simple Value Objects as their own type adapters. Ward Cunningham's `Checks`__ pattern language for input validation contains an excellent discussion of design philosophy.
+
+__ FIT_TypeAdapters.htm
+__ http://c2.com/ppr/checks.html
+
+Application Configuration
++++++++++++++++++++++++++
+
+There is a new mechanism for `application wide configuration`__. This mechanism supports, among other things, 
+
+__ FIT_ConfigurationExit.htm
+
+| enforcing a consistent label to identifier mapping
+| Providing a central repository of application modules useable as type adapters
+| Supporting a Ubiquitous Language
+| Centralized support of business facing fixture names
+| Transparently providing alternative fixtures in different testing environments
+| Internationalization and Localization, including error message translation
+| Improved integration with test and reporting tools.
+
+It will also be the vehicle for FIT Specification 2.0 compliance and will allow an application to enable and disable specific Python FIT extension features.
+
+Internationalization and Localization Support
++++++++++++++++++++++++++++++++++++++++++++++
+
+This release contains rudementary support for writing FIT tests in languages other than English, and in having the results in the native language. This support is not complete; in particular not all messages are available for translation, and several of the standard type adapters are not customizable.
+
+Most of the support is centralized in the new `Application Configuration`__ module, although there are pieces in several other places, including the `label to identifier translation`__ mechanism and the `fixture name`__ mechanism.
+
+__ FIT_ConfigurationExit.htm
+__ FIT_LabelToIdentifierMapping.htm
+__ FIT_FixtureNames.htm
+
+Business Facing Fixture Names
++++++++++++++++++++++++++++++
+
+The new `Application Configuration`__ exit now makes it possible to provide a central directory which maps business facing `fixture names`__ to the correct file, module and class that provides the fixture.
+
+__ FIT_ConfigurationExit.htm
+__ FIT_FixtureNames.htm
+
+This feature works for all fixture names, regardless of whether they are in a classic FIT context or a FitLibrary context.
+
+Label to Identifier Translation Improvements
+++++++++++++++++++++++++++++++++++++++++++++
+
+The process of `translating a label to a Python language identifier`__ has been improved. In particular, it is now possible to choose one of the three camel routines on an application-wide basis, it is possible to provide an application-wide vocabulary (an Ubiquitous Language), and it is possible to have this application-wide vocabulary in a language other than English.
+
+__ FIT_LabelToIdentifierMapping.htm
+
+Running a list of tests
++++++++++++++++++++++++
+
+It is now possible to create a `list of tests`__ to run. This list can contain runner parameters for the run as a whole as well as specific parameters for each test. It can also contain a fixture rename list, although the Application Configuration mechanism serves this purpose better.
+
+__ FIT_Runners.htm
+
+The tests in the list need not be in the same directory.
+
+This feature only applies to the batch runners in this release. Support in the FitNesse TestRunner is a future objective.
+
+Diagnostic Parameters
++++++++++++++++++++++
+
+The runners now support `diagnostic parameters`__, which will cause the FIT core to put out additional information at various points.
+
+__ FIT_Runners.htm
+
+Central Application Type Adapter Dictionary
++++++++++++++++++++++++++++++++++++++++++++
+
+It is now possible, using the `Application Configuration`__ module, to maintain a central directory of all `type adapters`__ for an application, and to refer to them by name in a fixture, rather than having to import them and refer to the class objects. This feature works identically in basic FIT and in the FIT Library.
+
+__ FIT_ConfigurationExit.htm
+__ FIT_TypeAdapters.htm
+
+`DotGraphics`__
++++++++++++++++
+
+This is a prototype application object which shows how to use a graphic visualization library in FIT. There's an example on p.84 of the Fit Book.
+
+__ FitLib_DotGraphic.htm
+
+Reduced Metadata Requirement
+++++++++++++++++++++++++++++
+
+It is now possible to leave out metadata in some circumstances, if authorized by the Application Configuration Exit. This facility is very rough in this release, it may be improved in subsequent releases if usage warrents. See the Type Adapter description for more information.
+
+Changed Fixtures
+----------------
+
+setUp and tearDown exits (0.8a2)
+++++++++++++++++++++++++++++++++
+
+All fixtures can now override the setUpFixture(firstRow) method at the beginning of processing, and the tearDownFixture() method at the end. This is still an experimental feature and may not be present in all contexts. It should work as expected for all classic fixtures, however it will not work the way one expects in the DoFixture environment.
+
+ColumnFixture and RowFixture without Markup
++++++++++++++++++++++++++++++++++++++++++++
+
+It's now possible to specify the column types in a `ColumnFixture`__ or `RowFixture`__ subclass without using markup on the labels. This is, of course, optional; the previous markup still works.
+
+__ FIT_ColumnFixture.htm
+__ FIT_RowFixture.htm 
+
+There are also several new column types in Column Fixtures and Row Fixtures.
+
+List Fixture usability enhancements
++++++++++++++++++++++++++++++++++++
+
+All of the list fixtures (`ArrayFixture`__, `RowFixture`__, `SetFixture`__ and `SubsetFixture`__) can now be used directly in a classic context without having to write a subclass. They all take the same input variations; RowFixture no longer needs ParamRowFixture as an adapter.
+
+__ FitLib_ArrayFixture.htm
+__ FIT_RowFixture.htm
+__ FitLib_ArrayFixture.htm
+__ FitLib_ArrayFixture.htm
+
+Comments in CalculateFixture
+++++++++++++++++++++++++++++
+
+It is now possible to put a comment column in a `CalculateFixture`__.
+
+__ FitLib_CalculateFixture.htm
+
+
+CommentFixture Enhancement
+++++++++++++++++++++++++++
+
+`CommentFixture`__ no longer marks the cells in the table as ignored.
+
+__ FIT_CommentFixture.htm
+
+New Fixtures
+------------
+
+`CombinationFixture`__
+++++++++++++++++++++++
+
+__ FitLib_CombinationFixture.htm
+
+This fixture, from the latest FitLibrary release, allows one to test combinations of two parameters in a tabular format.
+
+`ConstraintFixture`__
++++++++++++++++++++++
+
+__ FitLib_ConstraintFixture.htm
+
+This fixture, from the latest FitLibrary release, is a variation on CalculateFixture where the method being invoked returns a boolean True or False. Each table has either True or False as the expected result, which means that it does not have to specified on each row.
+
+`ImageFixture`__
+++++++++++++++++
+
+__ FitLib_ImageFixture.htm
+
+This fixture, described on pages 83 and 84 of the FIT Book, provides a two dimensional array of named images. It was part of the original Fit Library distribution which wasn't originally converted. 
+
+`TableFixture`__
+++++++++++++++++
+
+__ FitNesse_TableFixture.htm
+
+This fixture, from FitNesse, was documented on pages 81 and 82 of the `FIT Book`__. The implementation is somewhat different. The acceptance test includes three different fixtures, including one that uses it in a setup role, and two that show the difference between doing your own validation and using the type adapter mechanism.
+
+__ Fitbook_Intro.htm
+
+New and Changed Type Adapters
+-----------------------------
+
+Default Type Adapter
+++++++++++++++++++++
+
+The Default type adapter implements the type inference facility that allows leaving metadata out. See the Type Adapter writeup for more information. 
+
+TaggedString Type Adapter
++++++++++++++++++++++++++
+
+This type adapter provides the contents of the parse node's .body attribute without the editing of the .text() method. It's a new part of the FIT Library.
+
+As usual with type adapters, we strongly recommend writing an application specific adapter using the RawString protocol, which provides the same service to any adapter which requests it.
+
+Float TypeAdapter
++++++++++++++++++
+
+The float type adapter has been enhanced with a new explicit epsilon option, improvements to the range option, and the ability to selectively enable and disable the major check options.
+
+The epsilon option is: "float +/- float". The range option is "float op _ op float", where op can be any of <, <=, > or >=. The single character mathematical symbol for +/-, <= and >= are also accepted. The range option also allows open ranges, that is: "float op _" or "_ op float".
+
+Any of the three options for checking a floating point number can be turned off, either on an application wide basis or on an identifier by identifier basis. Turning off the range option in the float adapter does not turn off the numeric range cell handler; this has to be disabled independently. See the `float type adapter`__ documentation for details.
+
+__ FIT_TypeAdapters.htm
+
+`GraphicTypeAdapter`__
+++++++++++++++++++++++
+
+__ FitLib_ImageFixture.htm
+
+This type adapter handles the URL in an "<img src'...'>" tag. It's part of the Image Fixture, but can be used independently.

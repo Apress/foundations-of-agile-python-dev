@@ -1,0 +1,44 @@
+<html><title>SpecifyTables</title><body>
+<h1><a href="SpecifyTables.html">SpecifyTables</a></h1>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=2>fitLib.FlowFixtureFixture</td></tr>
+<tr><td></td><td>fitLib.specify.DoTable</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>--e</td><td>check</td><td>first cell value</td><td>3</td><td><table border><tr><td>embedded3</td></tr></table></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>--e</td><td>check</td><td>first cell value</td><td>3</td><td>4</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td>show</td><td>first cell value</td><td><table border><tr><td><table><tr><td>embedded3</td></tr></table border></td><td>embedded4</td></tr></table></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td>show</td><td>a table</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>---r</td><td>check</td><td>first cell string value</td><td><table border><tr><td>embedded1</td><td><table border><tr><td>embedded2</td></tr></table></td></tr></table></td><td>embedded1</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>---w</td><td>check</td><td>first cell string value</td><td><table border><tr><td>embedded1</td><td><table border><tr><td>embedded2</td></tr></table></td></tr></table></td><td>one</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>---r</td><td>check</td><td>first cell string value</td><td><table border><tr><td><ul><li>one</li></ul></td><td><table border><tr><td>embedded5</td></tr></table></td></tr></table></td><td><ul><li>one</li></ul></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>---r</td><td>check</td><td>first cell value</td><td><table border><tr><td><table border><tr><td>embedded3</td></tr></table></td><td>embedded4</td></tr></table></td><td><table border><tr><td>embedded3</td></tr></table></td></tr>
+</table>
+<p>Exception changed to wrong in following test. I don't see why
+it should be an exception</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>--w</td><td>check</td><td>null table</td><td>12</td></tr>
+</table>
+</body></html>

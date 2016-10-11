@@ -1,0 +1,4 @@
+digraph G {
+lotr->luke;
+lotr->anna;
+}

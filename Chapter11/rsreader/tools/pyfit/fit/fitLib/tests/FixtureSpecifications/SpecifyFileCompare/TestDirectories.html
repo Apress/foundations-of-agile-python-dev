@@ -1,0 +1,38 @@
+<html><title>TestDirectories</title><body>
+<h1><a href="TestDirectories.html">TestDirectories</a></h1>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fitLib.CompareFilesFixture</td></tr>
+</table>
+<h2>Two empty directories are the same</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/emptyDiry</td><td>same as</td><td>testFiles/alsoEmptyDiry</td><td>emptyDiry</td></tr>
+</table>
+<h2>A directory with files is equal to itself</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/selfDiry</td><td>same as</td><td>testFiles/selfDiry</td><td>selfDiry</td></tr>
+</table>
+<h2>The two directories are equal</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry1</td><td>same as</td><td>testFiles/diry2</td><td>diry1</td></tr>
+</table>
+<h2>Differing directories due to different files</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry3</td><td>same as</td><td>testFiles/diry4</td><td>diry3<ul><li>threeLines.txt<ul><li><i>Missing</i></li></ul> </li><li>empty.txt<ul><li><i>Surplus</i></li></ul></li></ul></td></tr>
+</table>
+<h2>Differing directories due to extra files</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry4</td><td>same as</td><td>testFiles/diry5</td><td>diry4<ul><li>empty.txt</li><li>alsoEmpty.xls <ul><li><i>Surplus</i></li></ul></li></ul></td></tr>
+</table>
+<h2>Differing directories due to different sub-directories</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry5</td><td>same as</td><td>testFiles/diry6</td><td>diry5<ul><li>alsoEmpty.xls</li><li>empty.txt</li><li>emptyFolder<ul><li><i>Surplus folder</i></li></ul></li></ul></td></tr>
+</table>
+<h2>Differing directories due to different file size</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry5</td><td>same as</td><td>testFiles/diry7</td><td>diry5<ul><li>alsoEmpty.xls</li><li>empty.txt<ul><li><i>File shorter by 3 bytes than:</i></li><li>empty.txt</li></ul></li></ul></td></tr>
+</table>
+<h2>Differing directories due to different file contents</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry7</td><td>same as</td><td>testFiles/diry8</td><td>diry7<ul><li>alsoEmpty.xls</li><li>empty.txt<ul><li><i>Files differ at byte position 2</i></li><li>empty.txt</li></ul></li></ul></td></tr>
+</table>
+</body></html>

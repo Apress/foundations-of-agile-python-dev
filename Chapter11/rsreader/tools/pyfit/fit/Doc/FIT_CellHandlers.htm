@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Cell Handlers</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="cell-handlers">
+<h1 class="title">Cell Handlers</h1>
+<p>Cell Handlers are modules that provide special effects when they detect certain patterns in a cell. There are a variety of cell handlers, many of which are active by default.</p>
+<p>Cell handlers work through the standard type adapter mechanism. Most of the standard fixtures use this mechanism, although a few do not. Implementation of the cell handler mechanism in the Fit Library is currently spotty.</p>
+<p>The cell handler mechanism is shared with the FitNesse C# Fit implementation, but is otherwise not supported by other Fit versions. It should not be used if portability of the Fit tests is an issue.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#handler-dictionary" id="id1" name="id1">Handler Dictionary.</a><ul>
+<li><a class="reference" href="#blank" id="id2" name="id2">Blank</a></li>
+<li><a class="reference" href="#null" id="id3" name="id3">Null</a></li>
+<li><a class="reference" href="#asis" id="id4" name="id4">asis[]</a></li>
+<li><a class="reference" href="#error" id="id5" name="id5">error</a></li>
+<li><a class="reference" href="#exception-name-message-value" id="id6" name="id6">exception[name, &quot;message&quot;, &quot;value&quot;]</a></li>
+<li><a class="reference" href="#fail" id="id7" name="id7">Fail[...]</a></li>
+<li><a class="reference" href="#range-checks" id="id8" name="id8">Range Checks</a></li>
+<li><a class="reference" href="#substring" id="id9" name="id9">Substring</a></li>
+<li><a class="reference" href="#save-and-restore" id="id10" name="id10">Save and Restore</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#using-handlers" id="id11" name="id11">Using Handlers</a></li>
+<li><a class="reference" href="#writing-handlers" id="id12" name="id12">Writing Handlers</a><ul>
+<li><a class="reference" href="#parsing" id="id13" name="id13">Parsing</a></li>
+<li><a class="reference" href="#checking" id="id14" name="id14">Checking</a></li>
+<li><a class="reference" href="#istypeadapterapplicable" id="id15" name="id15">isTypeAdapterApplicable</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="handler-dictionary">
+<h1><a class="toc-backref" href="#id1" name="handler-dictionary">Handler Dictionary.</a></h1>
+<p>These handlers are supplied with PyFit.</p>
+<div class="section" id="blank">
+<h2><a class="toc-backref" href="#id2" name="blank">Blank</a></h2>
+<p>The blank cell handler checks for the keyword 'blank' in the cell, and stores a zero length string on input, and compares equal to a zero length string on output. It is only availible for strings; it has no meaning for other data types.</p>
+</div>
+<div class="section" id="null">
+<h2><a class="toc-backref" href="#id3" name="null">Null</a></h2>
+<p>The null cell handler checks for the keyword 'null' in the cell, and stores a Python None object on input, and compares equal to a Python None object on output. It is universally availible although its use is discouraged: it is bad programming practice although it is sometimes needed.</p>
+</div>
+<div class="section" id="asis">
+<h2><a class="toc-backref" href="#id4" name="asis">asis[]</a></h2>
+<p>The asis[] handler allows the entry of leading and trailing white space. It can be nested inside of certain other handlers. It's also the recommended way of handling zero width strings.</p>
+</div>
+<div class="section" id="error">
+<h2><a class="toc-backref" href="#id5" name="error">error</a></h2>
+<p>This cell handler intercepts most exceptions. It reports right (green background) if any exception occured, and wrong (red background) if no exception occured. It is only applicable for result type fields.</p>
+</div>
+<div class="section" id="exception-name-message-value">
+<h2><a class="toc-backref" href="#id6" name="exception-name-message-value">exception[name, &quot;message&quot;, &quot;value&quot;]</a></h2>
+<p>This cell handler intercepts exceptions from the user's fixtures and application. It does not intercept exceptions caused by structural problems in the test, such as incorrect names and the wrong number of rows in a table or cells in a row.</p>
+<p>There are three possible formats:</p>
+<div class="line-block">
+<div class="line">exception[name, &quot;message&quot;, &quot;value&quot;]</div>
+<div class="line">exception[&quot;message&quot;]</div>
+<div class="line">exception[name: &quot;message&quot;]</div>
+</div>
+<p>The second and third formats are for compatability with prior versions of Python FIT, and also for compatability with the FitNesse version of the dotNet version of FIT. The first version is prefered.</p>
+<p>Each of the individual parts of the first, preferred, version is optional, but at least one must be present. The commas that indicate missing parts are required; trailing commas are not allowed. The message and value must be quoted; the name cannot be quoted. Handling backslashes within the quoted strings is somewhat erattic; they should be avoided.</p>
+<p>The value is required if it's used for a given; otherwise an error is raised.</p>
+<p>The value is optional for a calculated result, however if it's not present no comparison will be done.</p>
+<p>It can check that the correct exception was thrown, and can also check for the correct message. It reports right (green background) if the exception matches, wrong (red background) if there was no exception, and exception (yellow background with stack trace) if the wrong exception occured.</p>
+<p>It will check either the exception type, the exception message, both or neither.</p>
+</div>
+<div class="section" id="fail">
+<h2><a class="toc-backref" href="#id7" name="fail">Fail[...]</a></h2>
+<p>This cell handler reverses the right and wrong status of a cell. It's used mostly for acceptance testing within FIT itself, although it can be used for &quot;anything except&quot; types of tests. It can be nested, and it can contain any cell handler.</p>
+<p>For a given, it's only valid if used with the exception[] cell handler. Its presence is not checked for otherwise; it will be taken as part of the given value.</p>
+<p>It does not work for most operations in the FIT Library.</p>
+</div>
+<div class="section" id="range-checks">
+<h2><a class="toc-backref" href="#id8" name="range-checks">Range Checks</a></h2>
+<p>This handler allows one to specify a range, greater than or less than check. It's availible by default for integers and floats, and can be added to any type that supports the &lt;= (less than or equal) operation. The syntax is:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="57%" />
+<col width="43%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>operand ..</td>
+<td>Greater than</td>
+</tr>
+<tr><td>.. operand</td>
+<td>Less than</td>
+</tr>
+<tr><td>operand .. operand</td>
+<td>within</td>
+</tr>
+<tr><td>Fail[operand .. operand]</td>
+<td>outside of</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="substring">
+<h2><a class="toc-backref" href="#id9" name="substring">Substring</a></h2>
+<p>The three handlers in this package allow one to check the beginning, end or middle of a string. They are: startswith[], endswith[] and contains[]. It checks the string representation of any type, not just strings.</p>
+</div>
+<div class="section" id="save-and-restore">
+<h2><a class="toc-backref" href="#id10" name="save-and-restore">Save and Restore</a></h2>
+<p>This handler allows one to save the result of an output operation and then retrieve it for later use as an input operation.</p>
+<p>The syntax is &quot;&lt;&lt; name&quot; to save a value for later use, and &quot;name &lt;&lt;&quot; to retrieve it again. Name is used as the key to allow any number of values to be saved and restored.</p>
+<p>This is mostly useful for certain kinds of data base tests where the data base will generate a key that needs to be used later.</p>
+</div>
+</div>
+<div class="section" id="using-handlers">
+<h1><a class="toc-backref" href="#id11" name="using-handlers">Using Handlers</a></h1>
+<p>Handlers can be added or removed globally by using the handler fixture. They can be added or removed for single fields, methods or properties by using the metadata &quot;.addCellHandlers&quot; and &quot;.removeCellHandlers&quot; key suffixes. The operand of these keys is a list containing either the class names of handlers to be added or removed, or a reference to the classes to be added.</p>
+</div>
+<div class="section" id="writing-handlers">
+<h1><a class="toc-backref" href="#id12" name="writing-handlers">Writing Handlers</a></h1>
+<p>A cell handler is a class that supports the cell handler interface. This interface has several methods and fields, some of which are optional. CellHandlerBase provides a number of useful defaults.</p>
+<div class="section" id="parsing">
+<h2><a class="toc-backref" href="#id13" name="parsing">Parsing</a></h2>
+<p>The Parse(self, cell) method is called for an input field if the 'canParse' identifier has a value of True. Cell can contain either a parse cell or a string.</p>
+<p>This method returns a tuple containing a status value and a result object. There are three status values: &quot;ok&quot;, &quot;next&quot; and &quot;error&quot;. &quot;ok&quot; means that the cell handler has completely finished the parse, and the result object is the final result.</p>
+<p>&quot;next&quot; means that the scan of the list of cell handlers is to continue. Since cell handlers do not nest (except for the special cases of the Fail and exception cell handlers), the result object is meaningless.</p>
+<p>&quot;error&quot; means that there is something drastically wrong, and the cell handler scanner will throw an exception with the result object as the message.</p>
+<p>If no handler in the list returns &quot;ok&quot;, then the type adapter's parse method will be called with the original cell or string input.</p>
+</div>
+<div class="section" id="checking">
+<h2><a class="toc-backref" href="#id14" name="checking">Checking</a></h2>
+<p>The check(self, cell, object, callback) method is called to check a result field if the &quot;canCheck&quot; identifier has a value of True. This is the default inherited from CellHandlerBase.</p>
+<p>Object is the result returned from the called method, property or field.</p>
+<p>The return protocol is the same as for parse, however the only acceptable values for the result object for the &quot;ok&quot; return are True and False.</p>
+<p>If no cell handler returns &quot;ok&quot;, then the type adapter's equals method will be called, with the original object passed to the accessor's equals routine.</p>
+<p>Callback is the fixture that originally called the type adapter. Its only use at present is to allow access to the symbol table mechanism, which is in Fixture. This may be eliminated in the future.</p>
+</div>
+<div class="section" id="istypeadapterapplicable">
+<h2><a class="toc-backref" href="#id15" name="istypeadapterapplicable">isTypeAdapterApplicable</a></h2>
+<p>This method checks whether the cell handler can be used with the given type adapter. The default routine, in the CellHandlerBase class, checks for the existance of either an &quot;includeList&quot; or an &quot;excludeList&quot; and performs the expected processing. However, a cell handler can have this routine do anything it wants.</p>
+<p>The return values are True, False and None. True means it is applicable, False means it isn't. None means that it doesn't know, so the type adapter is asked next. If the type adapter also doesn't know, the cell handler will be used.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

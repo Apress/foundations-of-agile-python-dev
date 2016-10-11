@@ -1,0 +1,14 @@
+SetUpFixture
+============
+
+The SetUpFixture from the Fit Library, as its name suggests, can be used to populate collections or data base tables at the beginning of a FIT test. 
+
+The fixture calls one method for each row, passing it the contents of the columns as arguements. The method name is created by combining all of the column heads using the mapping routine in effect. Since this fixture is part of FitLibrary, the default mapping routine is ExtendedCamelCase, but it can be overridden by the Application Configuration module, or by using the ".useToMapLabel" metadata key.
+
+The fixture also calls the SetUp() method before the first row, and the TearDown() method after executing the last row.
+
+The fixture can load an applicaton class as Software Under Test (SUT). If it does, the SUT will be searched first for the invoked method and the SetUp() and TearDown() methods.
+
+This fixture cannot be used directly in a test using classic fixtures: only derived fixtures can be used. This is because there is no way of loading an application module (SUT), and hence no way of supplying either the method that will be called or a metadata dictionary. These must be supplied in a subclass.
+
+The normal way of using it from one of the flow fixtures (DoFixture or SequenceFixture) is to write a specific method as the head of the table. That method then instantiates SetUpFixture (specifying a SystemUnderTest) or instantiates a subclass and passes that back from the method. DoFixture and SequenceFixture then use that fixture to interpret the rest of the table.

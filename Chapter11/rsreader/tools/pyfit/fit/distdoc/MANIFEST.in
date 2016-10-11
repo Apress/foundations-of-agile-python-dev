@@ -1,0 +1,9 @@
+include fit/Doc/*.*
+include fit/DocSource/*.*
+include fit/eg/Music *.txt
+recursive-include fit/fat *.*
+recursive-include fit/fitLib *.*
+include fit *.txt
+include fit/AccTests *.*
+include fit/tests *.cmd *.txt
+include fit/tests/testout *.txt

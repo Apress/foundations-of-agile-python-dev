@@ -1,0 +1,84 @@
+There are a number of ideas I've got for future
+releases. 
+
+External files (that is, files referenced from
+the HTML in, for example, img tags) need a lot
+of work. Most of this will be cleaned up in
+the 0.9 release, but a full solution depends
+on the parse rewrite (see below). There is also
+one unfortunately major corner case that depends
+on a FitNesse change in order to work reliably.
+
+HTML parse will be rewritten so that it can
+deal with the head, meta, link, style,
+body, img, a, ul and li tags in addition to
+the current table, tr and td tags. It will
+also handle HTML comments. It will not be
+a complete HTML parser; it will be restricted
+to handling only those tags that Python FIT
+finds interesting, and then only when they
+are properly nested and closed.
+
+DotGraphics will be cleaned up so that it
+works properly. This depends on the external
+file changes succeeding.
+
+The functionality currently in the FitLibrary
+MethodTarget module will be moved into the
+core TypeAdpater mechanism.
+
+Clean up the standard type adapters so they
+have the same interface as user written type
+adapters.
+
+More fixtures from FitNesse will be converted.
+
+Additional features from the next version(s)
+of FitLibrary will be added.
+
+More unit and acceptance tests, including
+possibly finding/writing a more competent free
+coverage analyzer (the current one only does
+statement coverage), and possibly also using
+Pester to shake things up a bit.
+
+Investigate Eclipse integration with the
+Python Eclipse plugin, as well as whatever
+I can port from Fitster/Eclipse.
+
+Investigate support for Jython.
+
+Make the support base Python 2.3 instead of
+2.2. I also have a suggestion to
+add the log facility, but I'm pretty much against
+it. I don't see a use case for what is a rather
+heavyweight facility.
+
+Add the ability to use stdin and stdout to the
+runners.
+
+Rewrite the command line option parser. This
+may or may not use optparse; there are several
+backward compatability issues if I move to that
+package.
+
+Depreciate the current mechanism for adding
+runners. There is no really obvious reason
+to not use FileRunner or TestRunner at all
+times.
+
+Add some of the new features that Rick
+Mugridge is currently working on for FitLibrary.
+
+Add the ability to use setUp() and tearDown()
+methods in all fixtures. Also add a rowEnd()
+method for ColumnFixture and subclasses.
+(Done in 0.8a2).
+
+
+
+
+
+
+
+

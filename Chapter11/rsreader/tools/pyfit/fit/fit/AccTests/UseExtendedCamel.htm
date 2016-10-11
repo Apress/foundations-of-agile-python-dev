@@ -1,0 +1,26 @@
+<html><head><title>Use Extended Camel for All Fixtures</title></head>
+<body>
+<h1><center>Use Extended Camel for All Fixtures</center></h1>
+<p>This shows that all three mapping algorithms put out the same results when an Application Configuration Module tells them to.</p>
+<p>This test also uses the fixture mapping facility - notice that the fixture names are more or less understandable, rather than being file system paths.</p>
+<p>The first thing is to verify that the configuration is set up properly. Note that this test <i>will not run</i> correctly at the same time as Label Mapping if the runner tries to run the entire directory at one time. The configurations are incompatible.</p>
+<p>&nbsp;</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>check configuration</td></tr>
+<tr><td>Environment</td><td colspan=2>Batch</td></tr>
+<tr><td>Options</td><td>appConfigurationModule</td><td>fit.AccTestFixtures.ApplicationConfiguration1</td></tr>
+</table>
+<p>Now do the same check as in the Label Mapping test, but use the values for Extended Camel in all three columns. Notice that this is using the same fixture as Label Mapping.</p>
+<p>&nbsp;</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5>map label display</td></tr>
+<tr><td>label</td><td>camel</td><td>graceful names</td><td>extended camel</td><td>notes</td></tr>
+<tr><td>hi there!</td><td>hiThereBang</td><td>hiThereBang</td><td>hiThereBang</td><td>"Bang" is a developer term.</td></tr>
+<tr><td>123.45</td><td>one23Dot45</td><td>one23Dot45</td><td>one23Dot45</td><td>&nbsp;</td></tr>
+<tr><td>pass</td><td>pass_</td><td>pass_</td><td>pass_</td><td>"pass" is a Python reserved word</td></tr>
+<tr><td>try_this</td><td>try_this</td><td>try_this</td><td>try_this</td><td>Python regards _ as an alphabetic char, not a special character</td></tr>
+<tr><td>Leading caps</td><td>LeadingCaps</td><td>LeadingCaps</td><td>LeadingCaps</td><td>&nbsp;</td></tr>
+<tr><td>One2buckle My shoe</td><td>One2buckleMyShoe</td><td>One2buckleMyShoe</td><td>One2buckleMyShoe</td><td>&nbsp;</td></tr>
+</table>
+</body></html>

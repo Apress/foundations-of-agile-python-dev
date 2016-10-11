@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>Test Page line(m, x, b)</title>
+        <script language="JavaScript"
+                src="../../tools/jsunit/app/jsUnitCore.js">
+        </script>
+        <script language="JavaScript" src="../src/line.js"></script>
+        <script language="JavaScript">
+
+function setUp() {
+     errorMsg().innerHTML = "";
+}
+
+function testThatValidateSlopeIsDefinedAndIncluded() {
+    validateSlope();
+}
+
+function testValidationFailsWhenEmpty() {
+    document.lineForm.slope.value = '';
+    validateSlope();
+    assertEquals('You must define a slope', errorMsg().innerHTML);
+}
+
+function errorMsg() {
+    return document.getElementById('errorMsg');
+}
+
+        </script>
+    </head>
+    <body>
+        <div id="errorMsg"></div>
+        <form name="lineForm">
+            <input type="text" name="slope"/>
+           <input type="button" value="Calculate" onclick="validateSlope()"/>
+        </form>
+    </body>
+</html>
+

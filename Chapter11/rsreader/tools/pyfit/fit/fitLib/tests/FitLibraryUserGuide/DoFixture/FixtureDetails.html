@@ -1,0 +1,71 @@
+<html><title>FixtureDetails</title><body>
+<h1><a href="FixtureDetails.html">FixtureDetails</a></h1>
+<h3>Calling a method from an action</h3>
+The keywords of an action are concatentated together, with spaces between and converted into a valid Java identifier. This is done using <a href="../../FitLibraryUserGuide/ExtendedCamelCase.html"><i>extended camel casing</i></a>.<br>
+<h3>Rules for coloring</h3>
+<ul><li>If an action returns a boolean value, the 'keywords' of that action are colored green if the returns true. If it returns false or throws an exception, it colors it red.</li>
+<li>A 'check<i> special action colors the last cell, containing the expected value, just like </i>ActionFixture''</li>
+<li>A 'reject' or 'not' special action color the action green if the action returns false or throws an exception. Otherwise it colors it red.</li>
+<li>An 'ensure' special action colors the action red if the action returns false or throws an exception. Otherwise it colors it green.</li></ul>
+<h3>Auto-Wrapping</h3>
+The value returned by the method corresponding to an action may be auto-wrapped with a fixture, as follows:<br>
+<ul><li>A <i>Set</i> object is auto-wrapped with a <i>SetFixture</i>. </li>
+<li>An <i>Object[]</i>, <i>Collection</i> or <i>Iterator</i> is wrapped with an <i>ArrayFixture</i>.</li>
+<li>An 'Object' is wrapped with a <i>DoFixture</i>. But only if it's not one of the above, nor a <i>Fixture</i>, and doesn't have a <i>static Object parse(String)</i> method.</li></ul>
+This fixture object, or the one returned explicitly, is used to interpret the rest of the table.<br>
+<h3>Fixture as Adapter</h3>
+An object may be associated with a <i>DoFixture</i> (by calling the method <i>setSystemUnderTest(Object)</i> or through the <i>super()</i> constructor). If there is no method in the <i>DoFixture</i> corresponding to an action, <i>DoFixture</i> tries to call that method on the <i>SystemUnderTest</i> object instead (if it's been defined). (This approach is also used in <a href="../../FitLibraryUserGuide/CalculateFixture/index.html"><i>CalculateFixture</i></a> and <a href="../../FitLibraryUserGuide/SetUpFixture/index.html"><i>SetUpFixture</i></a>.)<br>
+<br>
+This means that a subclass of <i>DoFixture</i> is only needed as an adapter, when actions don't map directly onto methods of the <i>SystemUnderTest</i> object.<br>
+<h3>Domain Objects</h3>
+If an action corresponds to a property, the value of that property is returned. The value may be an <i>Object</i>.<br>
+<br>
+Because some <i>Object</i>s are auto-wrapped with <i>DoFixture</i>, it's possible to access and test domain objects directly, without the need to write fixtures.<br>
+<h3>Tests without Fixture</h3>
+Because of auto-wrapping and Domain objects, it's possible to use Fit for testing without the need to write any fixtures at all (inspired by <a href="http://www.nakedobjects.org"><i>Naked Objects</i></a>).My original aim in introducing these facilities was to enable the use of Fit in teaching beginner programmers, but I found them generally useful.<br>
+<br>
+This approach depends on two experimental special actions in <i>DoFixture</i>:<br>
+<ul><li>A <i>start</i> special action creates an object of the specified class as the <i>SystemUnderTest</i> object. This can be an object of any class that has a public nullary constructor.</li>
+<li>A <i>calculate</i> special action in <i>DoFixture</i> returns a <i>CalculateFixture</i> that refers to the <i>SystemUnderTest</i> object of the <i>DoFixture</i>. This means that the rest of the table is interpreted by that <i>CalculateFixture</i>, without needing a subclass of that fixture.</li></ul>
+<br>
+This may need more work to make it general enough...<br>
+<br>
+Here's a trivial example:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=2>fit.DoFixture</td></tr>
+<tr><td>start</td><td>java.awt.Rectangle</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>x</i></td><td>0</td></tr>
+<tr><td>check</td><td><i>y</i></td><td>0</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>set location</td><td>100</td><td></td><td>200</td></tr>
+<tr><td>check</td><td><i>x</i></td><td ColSpan=2>100</td></tr>
+<tr><td>check</td><td><i>y</i></td><td ColSpan=2>200</td></tr>
+</table>
+<ul><li><i>location</i> gives a copy of the <i>Point</i> of the (x,y) position of the Rectangle:</li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4>location</td></tr>
+<tr><td><i>move</i></td><td>12</td><td></td><td>14</td></tr>
+<tr><td>check</td><td><i>x</i></td><td ColSpan=2>12</td></tr>
+<tr><td>check</td><td><i>y</i></td><td ColSpan=2>14</td></tr>
+</table>
+<ul><li>The original location is unchanged</li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>x</i></td><td>100</td></tr>
+<tr><td>check</td><td><i>y</i></td><td>200</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>set size</i></td><td>20</td><td></td><td>30</td></tr>
+<tr><td>check</td><td><i>width</i></td><td ColSpan=2>20</td></tr>
+<tr><td>check</td><td><i>height</i></td><td ColSpan=2>30</td></tr>
+</table>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

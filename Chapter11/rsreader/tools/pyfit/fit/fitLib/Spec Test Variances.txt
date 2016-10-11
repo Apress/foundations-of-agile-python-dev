@@ -1,0 +1,61 @@
+The following specification tests don't work properly.
+
+FixtureSpecifications/SpecifyDoFixtureStart
+--- Test specifies a Java utility class
+--- Removed from the test suite, will not be back
+    in its present form.
+
+FixtureSpecifications/SpecifyGraphics
+--- very bad failure for some reason
+    Test was removed from 0.8 test suite
+
+SpecifyFitLibraryFixture - 3 tests, not implemented
+--- removed tests from test suite.
+
+The following specification tests were fixed to make them run
+properly. Many of the variances are caused because Python FIT
+takes care that errors and exceptions occur in the right fields.
+
+FixtureSpecifications/TestExtendedCamel
+--- removed test for case translating to case_
+--- removed tests for " hi " and "hi" because of fixture/type adapter problems
+    which don't affect normal operation. Should fix in 0.9
+
+FixtureSpecifications/SpecifyTables
+--- Exception should have been a wrong.
+
+FixtureSpecifications/SpecifyTrees
+--- Error in tests. A/A should have been A/B
+
+SpecifyActionFixture/ActionsExistWithRightType
+SpecifyActionFixture/ActionExceptions
+SpecifyActionFixture/BooleanEqualsProblem
+SpecifyActionFixture/StartNotFixture
+SpecifyActionFixture/SwitchActor
+--- Original message was against the first field, which is wrong.
+    Corrected to show exception against the correct field.
+
+SpecifyArrayFixture/TestUnknownField
+--- Original message was against the first field, which is wrong.
+    Corrected to show exception against the correct field.
+
+SpecifyCalculateFixture/CannotParse
+SpecifyColumnFixture/CannotParse
+--- Error message for invalid/unknown type in different place.
+
+SpecifyRowFixture/MissingCells
+--- Row too short is now a row level exception error - the row never matches
+--- Surplus rows are in a different order.
+
+SpecifySetFixture/TestUnknownField
+--- Moved exception to the correct field after fixing SetFixture.
+
+SpecifySequenceFixture/BadAction
+--- <cell>.text() is removing the <hr> tag without replacing it with a space.
+    The report rows were consequently wrong.
+
+SpecifyGridFixture/ImageGrid
+--- Path to images was incorrect
+
+SpecifyImageFixture
+--- Path to images was incorrect

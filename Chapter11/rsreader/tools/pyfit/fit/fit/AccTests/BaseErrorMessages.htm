@@ -1,0 +1,19 @@
+<html><head><title>Base Error Message Expansion</title></head>
+<body>
+<h1><center>Base Error Message Expansion</center></h1>
+<p>This demonstrates the error message facility.</p>
+<p>The first thing is to verify that the configuration is set up properly. Note that this test <i>will not run</i> correctly at the same time as Error Message Mapping if the runner tries to run the entire directory at one time. The configurations are incompatible.</p>
+<p>Also note that since we don't have a configuration module for this test, several other features, such as the application facing names, won't work either.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.CheckConfiguration</td></tr>
+<tr><td>Environment</td><td colspan=2>Batch</td></tr>
+<tr><td>Options</td><td>appConfigurationModule</td><td></td></tr>
+</table>
+<p>&nbsp;</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5>fit.AccTestFixtures.ExpandErrorMessage</td></tr>
+<tr><td>args</td><td>exception</td><td>Trace</td><td>Message</td><td>notes</td></tr>
+<tr><td>("NoTypeInfo", "foo", "bar")</td><td>EXC</td><td>NOTRACE</td><td>Metadata for 'foo' not found in class 'bar'</td><td>Standard error message</td></tr>
+</table>
+</body></html>

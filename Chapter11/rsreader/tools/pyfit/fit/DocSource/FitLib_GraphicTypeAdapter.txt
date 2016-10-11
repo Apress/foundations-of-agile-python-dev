@@ -1,0 +1,14 @@
+GraphicTypeAdapter and LocalFile
+++++++++++++++++++++++++++++++++
+
+The GraphicTypeAdapter and LocalFile classes are part of the Fit Library's mechanism for handling the "<img ...>" and "<a ...>" tags in a table cell.
+
+The GraphicTypeAdapter needs a ".class" qualifier in the metadata to tell it which class to adapt, since it is used for both the ImageNameGraphic and the DotGraphic, and can be used for any class that implements an HTML img tag. 
+
+The names are extracted from the src= property and encapsulated in subclasses of the LocalFile class. There are two subclasses, one for FitNesse and one for batch. They both assume that the actual images will be in subdirectories of a directory named "files". For FitNesse, this is the FitNesseRoot/files directory within the FitNesse installation, for batch it must be somewhere accessable to both the HTML and the FIT runner. The batch comparison is done by normalizing both file names; the component "files" is located, and it and everything above it is removed before doing the comparison.
+
+One problem is that the images need to be accessable to the output HTML. For FitNesse this means that the result of TestRunner may not be displayable. For batch it means that careful attention needs to be paid that the path in the result HTML either can access the same directory, or a copy of the image directory must be where the HTML expects it.
+
+You can see this problem with the current FitLibrary acceptance test script. Running the entire specification test suite results in tests which properly display the images. Running single tests or single directories results in broken image icons because the result HTML is in directories which don't have the right relationship to the HTML.
+
+Most of the file problems are scheduled to be cleaned up in release 0.9

@@ -1,0 +1,20 @@
+<html><title>FileCompareFixture</title><body>
+<h1><a href="FileCompareFixture.html">FileCompareFixture</a></h1>
+<a href="FileCompareFixture.html">FileCompareFixture</a> takes two files or two directories and compares them. The differences is presented as an HTML list, showing the structure (but only enough to show differences). This list includes links to the files concerned.<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.CompareFilesFixture</td></tr>
+</table>
+<h2>Differing file contents</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td><i>file</i></td><td>testFiles/threeLines.txt</td><td><i>same as</i></td><td>testFiles/differingThreeLines.txt</td><td>threeLines.txt<ul><li><i>Files differ at byte position 9</i></li><li>differingThreeLines.txt</li></ul></td></tr>
+</table>
+<h2>The two directories are equal</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry1</td><td>same as</td><td>testFiles/diry2</td><td>diry1</td></tr>
+</table>
+<h2>Differing directories due to different files</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>directory</td><td>testFiles/diry3</td><td>same as</td><td>testFiles/diry4</td><td>diry3<ul><li>threeLines.txt<ul><li><i>Missing</i></li></ul> </li><li>empty.txt<ul><li><i>Surplus</i></li></ul></li></ul></td></tr>
+</table>
+</body></html>

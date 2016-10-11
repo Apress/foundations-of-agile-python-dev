@@ -1,0 +1,33 @@
+<html><head><title>Column Fixture Extensions</title></head>
+<body>
+<h1><center>Column Fixture Extensions</center></h1>
+<p>This set of extensions is for both additional column types and no markup.</p>
+<p>This also sets the .display on switch, so the column types and mapping results are going to be displayed</p>
+<p>&nbsp;</p>
+<p>Add a couple of values, and save values and results</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=6>fit.AccTestFixtures.ColumnFixtureExtensions.NoMarkup</td></tr>
+<tr><td>a</td><td>b</td><td>c</td><td>save a</td><td>save b</td><td>save c</td></tr>
+<tr><td>1</td><td>2</td><td>3</td><td>one</td><td>two</td><td>three</td></tr>
+<tr><td>2</td><td>3</td><td>5</td><td>two</td><td>three</td><td>five</td></tr>
+</table>
+<p>At this point, we should have values for keys of one, two, three and five</p>
+<p>Let's retrieve them</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=2>fit.AccTestFixtures.ColumnFixtureExtensions.NoMarkup</td></tr>
+<tr><td>get saved value</td><td>it's a comment</td></tr>
+<tr><td>one</td><td>partridge in a pear tree</td></tr>
+<tr><td>two</td><td>turtle doves</td></tr>
+<tr><td>three</td><td>french hens</td></tr>
+<tr><td>five</td><td>golden rings</td></tr>
+</table>
+<p>three more column types: given from a saved value (FitNesse does this already), check result against a saved value, and display a given or a result</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5>fit.AccTestFixtures.ColumnFixtureExtensions.NoMarkup</td></tr>
+<tr><td>store Saved A</td><td>b</td><td>check from saved</td><td>display b</td><td>display c</td></tr>
+<tr><td>one</td><td>2</td><td>three</td><td> </td><td> </td></tr>
+</table>
+
+
+</body></html>
+

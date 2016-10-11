@@ -1,0 +1,43 @@
+﻿<html><head><title>Floating Point Extensions</title>
+</HEAD><body>
+
+<h1><center>Floating Point Extensions</center></h1>
+<p>Python FIT has a number of extensions to the comparison function of the basic floating point type adapter. These include a feature that uses the actual character representation to set the precision, a range comparison and an epsilon (+/-) comparison.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=2>fit.AccTestFixtures.FloatingPointFixture</td><td>eer</td></tr>
+<tr><td>given</td><td>result</td><td>notes</td></tr>
+<tr><td>3.14</td><td>3.14</td><td>Uses character form to set precision</td></tr>
+<tr><td>3.143</td><td>3.14</td><td>Should accept anything between 3.135 and 1.145</td></tr>
+<tr><td>3.136</td><td>3.14</td><td>&nbsp;</td></tr>
+<tr><td>3.13</td><td>Fail[3.14]</td><td>Outside of range</td></tr>
+<tr><td>3.14</td><td>3.13 <= _ <= 3.15</td><td>range expression</td></tr>
+<tr><td>3.14</td><td>3.13 ≤ _ ≤ 3.15</td><td>math symbol for <=</td></tr>
+<tr><td>3.14</td><td>3.13 ..</td><td>numeric range cell handler does this one</td></tr>
+<tr><td>3.14</td><td>3.13 ≤ _ </td><td>open range</td></tr>
+<tr><td>3.14</td><td>3.13 < _ </td><td>&nbsp;</td></tr>
+<tr><td>3.14</td><td>_ ≤ 3.15</td><td>&nbsp;</td></tr>
+<tr><td>3.14</td><td>_ < 3.15</td><td>&nbsp;</td></tr>
+<tr><td>3.14</td><td>3.15 >= _ >= 3.13</td><td>reversed range expression</td></tr>
+<tr><td>3.14</td><td>3.15 ≥ _ ≥ 3.13</td><td>math symbol for >=</td></tr>
+<tr><td>3.12</td><td>Fail[3.13 <= _ <= 3.15]</td><td>out of range</td></tr>
+<tr><td>3.14</td><td>3.13 +/- .02</td><td>explicit epsilon</td></tr>
+<tr><td>3.14</td><td>3.13 ± .02</td><td>math symbol for +/-</td></tr>
+<tr><td>3.14</td><td>Fail[3.12 +/- .01]</td><td>out of range</td></tr>
+<tr><td>3.14</td><td>Fail[3.12 ± .01]</td><td>&nbsp;</td></tr>
+<tr><td>exception[ValueError,,"fubar"]</td><td>3.14</td><td>invalid input</td></tr>
+</table>
+
+<p>It is also possible to completely disable the use of the standard floating point type adapter for a calculated result, which puts the responsibility on either the fixture or on an application value object. The latter approach is strongly recommended in any case.
+</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=2>fit.AccTestFixtures.FloatingPointFixture</td><td>fff</td></tr>
+<tr><td>given</td><td>result</td><td>notes</td></tr>
+<tr><td>3.14</td><td>exception[,"Check of single floating value prohibited by standards or application exit. See documentation for alternatives", "3.14"]</td><td>Implied epsilon</td></tr>
+<tr><td>3.12</td><td>exception[,"Check of float with range expression prohibited by standards or application exit. See documentation for alternatives", "3.13 <= _ <= 3.15"]</td><td>range expression</td></tr>
+<tr><td>3.14</td><td>exception[,"Check of float with epsilon expression prohibited by standards or application exit. See documentation for alternatives", "3.12 +/- .01"]</td><td>explicit epsilon</td></tr>
+<tr><td>3.14</td><td>3.13 ..</td><td>cell handler</td></tr>
+</table>
+
+</body></html>

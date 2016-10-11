@@ -1,0 +1,105 @@
+Label to Identifier Mapping
+===========================
+
+.. contents::
+
+Overview
+++++++++
+
+Labels are used in most fixtures to refer to fields and routines in the fixture or in the Software Under Test (SUT). Labels should be terms that the business naturally uses to refer to the concepts, while identifiers need to conform to the rules of the Python language. Good labels are usually not directly usable as Python identifiers, and good Python identifiers are frequently incomprehensible, or at least confusing, to the application people who help define the FIT tests.
+
+This means that the labels must somehow be translated to the associated Python identifier.
+
+There is a standard routine, called camel, in all versions of FIT to do this translation. The exact implementation of this routine is implementation dependent; different versions of FIT will not produce the same identifiers from the same input.
+
+In addition, this standard routine only works for the English language. That is unfortunate, but it is also inevitable since Python, like almost all computer languages, requires that identifiers contain only numerals and letters used by the English language. Any attempt to translate other languages to Python identifiers would produce unusable gibberish.
+
+Recommended Approaches
+++++++++++++++++++++++
+
+Most applications will take one of four approaches:
+
+1. Do nothing. This creates inconsistency between classic fixtures and Fit Library fixtures, and also creates portability problems between batch and FitNesse.
+
+2. Use a minimal mapLabel() routine to force use of the "camel" translation routine. This provides a consistent translation policy at the expense of ignoring what may be significant distinctions, i.e. diacritical marks and special characters, in the business side language.
+
+3. Use a minimal mapLabel() routine to force use of the "extended" translation routine, and add ".renameTo" metadata qualifiers whenever the result is not satisfactory as an identifier.
+
+4. Use the mapLabel() routine to standardize on an application specific vocabulary.
+
+The Pieces of the Puzzle
+++++++++++++++++++++++++
+
+In Python FIT, there are a number of facilities that work together to convert a label into a Python identifier.
+
+Automatic translation routines
+------------------------------
+
+There are three translation routines. By default, one of these routines is selected depending on the environment and the fixture, which can create a significant amount of confusion since the rules depend on who wrote the base fixture.
+
+These routines are generically named "camel routines" because they produce identifiers with internal capital letters, producing an effect somewhat like a camel's hump(s).
+
+The three routines are named "camel", "gracefulNames" and "extended". The extended routine is the only one that can be used for languages other than English; camel and gracefulNames both strip all characters that are not digits or English letters.
+
+The routine can be selected on a per-fixture basis with the ".useToMapLabel" metadata key. This key takes the name of one of the three versions of the camel routine as its value.
+
+The routine can be selected on a global basis in the `application configuration`__ module by using the mapLabel() routine.
+
+__ FIT_ConfigurationExit.htm
+
+Camel and gracefulNames
+>>>>>>>>>>>>>>>>>>>>>>>
+
+The camel and gracefulNames routines are almost identical. They process a label by:
+
+1. Replacing a leading digit with its spelled-out equivalent
+2. Making any letter that follows white space or a special character upper case
+3. Removing all special characters other than underscores
+4. Removing all white space within the identifier.
+5. Adds a trailing "_" character if the result is a Python keyword.
+
+In addition, gracefulNames makes any letter which follows a digit upper case.
+
+Extended Camel
+>>>>>>>>>>>>>>
+
+The extended routine does two things in addition to camel. First, it translates a number of special characters to their names, and second, it translates any unrecognizable characters to their hex equivalents.
+
+The latter feature has both a good side and a bad side. The good side is that this is the only routine that can handle languages other than English. The bad side is that the result is practically unreadable. This, in turn, means that it needs to be used in conjunction with the ".renameTo" metadata qualifier to turn it into a useable Python identifier.
+
+The list of special characters and their names is maintained in the Variations.py module. It includes all of the special characters in the ASCII character set (that is, the first Unicode block), four additional currency symbols that are likely to turn up in English language applications (the Pound, Euro, Yen and cent). There are no plans to extend this list since it would cause the translations to change from release to release.
+
+Displaying the translated result
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+You can display the translated result in the label cell in two different ways. 
+
+You can use the ".display" metadata key with an operand of "on" in any fixture that's derived from ColumnFixture (or possibly other fixtures - see the individual writeups.)
+
+You can also use the -z option with an operand of "displayLabelmapping" on the runner command. This option overrides the ".display" metadata entry.
+
+ColumnFixture and RowFixture exits
+----------------------------------
+
+ColumnFixture and RowFixture contain special exits that allow the fixture writer to handle the translation from label to identifier. While these exits are intended to replace the markup these fixtures use to specify column types, they can also be used to translate non-English languages.
+
+The downside of using these exits is that each fixture needs its own exit, and also that all of the root fixtures do not contain the exit mechanism. Some of the root fixtures, such as ActionFixture and DoFixture, are designed to work directly with application modules, so there is no place to put an exit.
+
+Application Configuration Module Exit
+-------------------------------------
+
+The first thing each of the camel routines does is call the `Application Configuration`__ module with a mapLabel() request. This routine can handle the request several different ways. It can select one of the three camel routines or handle the entire translation itself. It can also ignore the request, in which case the camel routine will do what it would have done anyway.
+
+__ FIT_ConfigurationExit.htm
+
+Using this routine to do the translation requires that the application create a standard vocabulary, frequently known as a Ubiquitous Language. This is highly recommended by most authorities in the software development field, but it's usually used only on large systems.
+
+".renameTo" metadata qualifier
+------------------------------
+
+The final, optional step of the process is the ".renameTo" metadata qualifier. This is a very generic mechanism that lets the developer change the result of any of the other routines to an identifier that works better with the program being developed. It allows pinpoint control, but doesn't deal with the initial translation. For more information on this, see the metadata section in the `Type Adapters`__ writeup.
+
+__ FIT_TypeAdapters.htm
+
+
+

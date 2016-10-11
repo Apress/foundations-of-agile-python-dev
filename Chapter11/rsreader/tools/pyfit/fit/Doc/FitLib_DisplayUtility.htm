@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>DisplayUtility</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="displayutility">
+<h1 class="title">DisplayUtility</h1>
+<p>The display utility is a PyFit enhancement to the Fit Library that allows you to display the current content of a collection within a DoFixture or a SequenceFixture. It's invoked by specifying $Display as the return type in the method metadata. The return value is a tuple with three values: the collection to display, the list of field names, and a dictionary containing the metadata for the requested fields.</p>
+<p>The collection is specified in the same way as for RowFixture, ArrayFixture, SetFixture or SubsetFixture: as a list, a tuple, an iterator or a dictionary. If it's a dictionary, the entries will be sorted by key and then the values will be used as the collection.</p>
+<p>The field list is a simple list of strings, one field name per string. The metadata dictionary is in the same format as the metadata dictionaries normally required for type adapters.</p>
+<p>If metadata is missing, DisplayUtility will use str() to attempt to display the values. Fields that are not in an object will be marked as ignored (grey background) with a &quot;[not found]&quot; message; values that cannot be displayed because they have neither metadata nor support for str() will be marked as &quot;[cannot display]&quot; with an error (red) background. In the latter case, the column head will also be marked with the message &quot;metadata missing&quot; with a red background. The &quot;metadata missing&quot; message will not be generated if all the values in the column can be displayed using str(), however.</p>
+<p>DisplayUtility cannot be invoked directly as a fixture. This may be changed in release 0.9.</p>
+<p>The MusicPlayer example shows how it can be used.</p>
+</div>
+</body>
+</html>

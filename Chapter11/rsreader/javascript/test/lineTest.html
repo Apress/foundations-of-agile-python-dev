@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Test Page line(m, x, b)</title>
+        <script language="JavaScript"
+                src="../../tools/jsunit/app/jsUnitCore.js">
+        </script>
+        <script language="JavaScript">
+
+function line(m, x, b) {
+    return m*x + b;
+}
+
+function testCalculationIsValid() {
+    assertEquals("zero intercept", 10, line(5, 2, 0));
+    assertEquals("zero slope", 5, line(0, 2, 5));
+    assertEquals("at x = 10", 25, line(2, 10, 5));
+}
+
+        </script>
+    </head>
+    <body>
+        This a page tests line(m, x, b).
+    </body>
+</html>
+

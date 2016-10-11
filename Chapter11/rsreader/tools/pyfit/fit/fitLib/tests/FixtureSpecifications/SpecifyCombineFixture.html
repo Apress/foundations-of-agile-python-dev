@@ -1,0 +1,45 @@
+<html><head><title>Specify Combine Fixture</title></head><body>
+<h1><center>Specify Combine Fixture</center></h1>
+<p>CombinationFixture is a specialised fixture for showing how pairs of values are expected to be combined. For example, here's a times table:</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=4>fitLib.specify.CombinationFixtureTests.TimesCombination</td></tr>
+<tr><td>&nbsp;</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>1</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>2</td><td>2</td><td>4</td><td>6</td></tr>
+<tr><td>3</td><td>3</td><td>6</td><td>9</td></tr>
+</table>
+
+<p>The fixture for this is as follows:</p>
+<code><pre>
+public class TimesCombination extends CombinationFixture {
+    public int combine(int x, int y) {
+        return x * y;
+    }
+}</pre></code>
+
+<p>The method 'combine()' is called for each pair of values, and the result checked. For example, for the cell in the last row above containing an expected value of 6, the method is called with the arguments 'combine(3,2)'.</p>
+
+<p>In general, as usual:
+<ul>
+ <li>The given and expected values can be of any types</li>
+ <li>A 'SystemUnderTest' object (of any type) can be supplied to the CombinationFixture , so that the method 'combine()' in that object is called instead. See the next example.</li></ul></p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=4>fitLib.specify.CombinationFixtureTests.DirectCombination</td></tr>
+<tr><td>&nbsp;</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>100</td><td>100</td><td>200</td><td>300</td></tr>
+<tr><td>220</td><td>220</td><td>440</td><td>660</td></tr>
+<tr><td>330</td><td>330</td><td>660</td><td>990</td></tr>
+</table>
+
+<p>The fixture for this class is as follows:</p>
+<code><pre>
+public class DirectCombination extends CombinationFixture {
+	public DirectCombination() {
+		super(new TimesCombination());
+	}
+}
+</pre></code>
+<p>It just happens to refer to an object that is also a fixture.</p>
+</body></html>

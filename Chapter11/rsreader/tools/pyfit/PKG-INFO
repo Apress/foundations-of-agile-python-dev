@@ -1,0 +1,29 @@
+Metadata-Version: 1.0
+Name: PyFIT
+Version: 0.8a2
+Summary: Python language port of FIT
+Home-page: http://fit.c2.com
+Author: John Roth
+Author-email: PyFit_maintainer@jhrothjr.com
+License: UNKNOWN
+Description: FIT is an acceptance test package originally written in Java
+        by Ward Cunningham and ported to Python by Simon Michael. This
+        release brings the code up to Java version 1.1 at
+        fit.c2.com, and also includes changes for and interfaces to
+        Object Mentor's Fitnesse package up to the 20050731 release.
+        It incudes most of Rick Mugridge's FitLib package as well.
+        It can be downloaded from the Python Cheese Shop.
+        0.8a2 is mostly a bug fix release, although it contains one
+        new feature; see the changelog for details.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Other Audience
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Testing

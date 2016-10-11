@@ -1,0 +1,15 @@
+<html><title>StartNotFixture</title><body>
+<h1><a href="StartNotFixture.html">StartNotFixture</a></h1>
+<h2>The actor (<i>start</i> class) has to be a <i>Fixture</i> subclass</h2>
+<p>There were two problems with this: first, java.awt.Point is not a
+Python class, and second the exceptions were in the wrong place. I
+changed java.awt.Point to fit.Counts.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=4>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td ColSpan=3>fit.ActionFixture</td></tr>
+<tr><td>-e</td><td>start</td><td ColSpan=2>fit.Counts</td></tr>
+<tr><td>-e</td><td>enter</td><td>x</td><td>12</td></tr>
+</table>
+Notice how subsequent rows of the table just above are interpreted even though the <i>start</i> failed. Similarly for the table below, where ActionFixture continues even though there is a problem (exception) with a row.<br>
+<p>What subsequent rows? The comment is right, however.</p>
+</body></html>

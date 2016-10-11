@@ -1,0 +1,205 @@
+<html><head>
+  <title>PyFit Specific Acceptance Tests For RowFixture</title>
+</head><body>
+<h1>RowFixture Acceptance Tests</h1>
+<p>These tests only cover PyFit specific behavior, they do not cover behavior which is, or should be, common to all versions of FIT. See the fat directory and the FitLibrary specification tests for common behavior.</p>
+<p>&nbsp;</p>
+<h2>Multiple Object Types in List Collection</h2>
+<p>&nbsp;</p>
+<p>All of the collection verification fixtures should take any object (including dictionaries) which has the requested attributes.</p>
+<p>First, we build a list</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.RowFixtureAT.ListBuilder</td></tr>
+<tr><td>new collection</td><td colspan=2>list</td></tr>
+<tr><td>new object</td><td colspan=2>object1</td></tr>
+<tr><td>attribute</td><td>a1</td><td>one</td></tr>
+<tr><td>attribute</td><td>a2</td><td>1</td></tr>
+<tr><td>new object</td><td colspan=2>object2</td></tr>
+<tr><td>attribute</td><td>a1</td><td>two</td></tr>
+<tr><td>attribute</td><td>a2</td><td>2</td></tr>
+<tr><td>new object</td><td colspan=2>dict</td></tr>
+<tr><td>attribute</td><td>a1</td><td>three</td></tr>
+<tr><td>attribute</td><td>a2</td><td>3</td></tr>
+<tr><td colspan=3>set symbol</td></tr>
+</table>
+<p>then we check that it contains what it is supposed to</p>
+
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td colspan=2>fit.AccTestFixtures.RowFixtureAT</td></tr>
+<tr><td>&nbsp;</td><td>a1</td><td>a2</td></tr>
+<tr><td>rr</td><td>one</td><td>1</td></tr>
+<tr><td>rr</td><td>two</td><td>2</td></tr>
+<tr><td>rr</td><td>three</td><td>3</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h2>Multiple Object Types in Tuple Collection</h2>
+<p>&nbsp;</p>
+<p>We do the same thing, but this time returning a tuple as the collection. We're also going to juggle the order of the elements, just to see if that does anything</p>
+<p>First, we build a list</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.RowFixtureAT.ListBuilder</td></tr>
+<tr><td>new collection</td><td colspan=2>tuple</td></tr>
+<tr><td>new object</td><td colspan=2>dict</td></tr>
+<tr><td>attribute</td><td>a1</td><td>one</td></tr>
+<tr><td>attribute</td><td>a2</td><td>1</td></tr>
+<tr><td>new object</td><td colspan=2>object1</td></tr>
+<tr><td>attribute</td><td>a1</td><td>three</td></tr>
+<tr><td>attribute</td><td>a2</td><td>3</td></tr>
+<tr><td>new object</td><td colspan=2>object2</td></tr>
+<tr><td>attribute</td><td>a1</td><td>two</td></tr>
+<tr><td>attribute</td><td>a2</td><td>2</td></tr>
+<tr><td colspan=3>set symbol</td></tr>
+</table>
+<p>then we check that it contains what it is supposed to</p>
+
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td colspan=2>fit.AccTestFixtures.RowFixtureAT</td></tr>
+<tr><td>&nbsp;</td><td>a1</td><td>a2</td></tr>
+<tr><td>rr</td><td>one</td><td>1</td></tr>
+<tr><td>rr</td><td>two</td><td>2</td></tr>
+<tr><td>rr</td><td>three</td><td>3</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h2>Multiple Object Types in a Dictionary</h2>
+<p>&nbsp;</p>
+<p>We do the same thing, but this time returning a dictionary as the collection. We're also going to juggle the order of the elements, just to see if that does anything.</p>
+<p>First, we build the collection</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.RowFixtureAT.ListBuilder</td></tr>
+<tr><td>new collection</td><td colspan=2>dict</td></tr>
+<tr><td>new object</td><td>dict</td><td>1</td></tr>
+<tr><td>attribute</td><td>a1</td><td>one</td></tr>
+<tr><td>attribute</td><td>a2</td><td>1</td></tr>
+<tr><td>new object</td><td>object1</td><td>2</td></tr>
+<tr><td>attribute</td><td>a1</td><td>three</td></tr>
+<tr><td>attribute</td><td>a2</td><td>3</td></tr>
+<tr><td>new object</td><td>object2</td><td>3</td></tr>
+<tr><td>attribute</td><td>a1</td><td>two</td></tr>
+<tr><td>attribute</td><td>a2</td><td>2</td></tr>
+<tr><td colspan=3>set symbol</td></tr>
+</table
+<p>then we check that it contains what it is supposed to</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td colspan=2>fit.AccTestFixtures.RowFixtureAT</td></tr>
+<tr><td>&nbsp;</td><td>a1</td><td>a2</td></tr>
+<tr><td>rr</td><td>one</td><td>1</td></tr>
+<tr><td>rr</td><td>two</td><td>2</td></tr>
+<tr><td>rr</td><td>three</td><td>3</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h2>Missing Metadata For Column</h2>
+<p>&nbsp;</p>
+<p>We remove the metadata for one of the columns.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.RowFixtureAT.ListBuilder</td></tr>
+<tr><td>new collection</td><td colspan=2>dict</td></tr>
+<tr><td>new object</td><td>dict</td><td>1</td></tr>
+<tr><td>attribute</td><td>a1</td><td>one</td></tr>
+<tr><td>attribute</td><td>a2</td><td>1</td></tr>
+<tr><td>attribute</td><td>German</td><td>ein</td></tr>
+<tr><td>new object</td><td>object1</td><td>2</td></tr>
+<tr><td>attribute</td><td>a1</td><td>three</td></tr>
+<tr><td>attribute</td><td>a2</td><td>3</td></tr>
+<tr><td>attribute</td><td>German</td><td>drei</td></tr>
+<tr><td>new object</td><td>object2</td><td>3</td></tr>
+<tr><td>attribute</td><td>a1</td><td>two</td></tr>
+<tr><td>attribute</td><td>a2</td><td>2</td></tr>
+<tr><td>attribute</td><td>German</td><td>zwei</td></tr>
+<tr><td>remove metadata</td><td colspan=2>German</td></tr>
+<tr><td colspan=3>set symbol</td></tr>
+</table
+<p>then we check that it contains what it is supposed to</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=4>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td colspan=3>fit.AccTestFixtures.RowFixtureAT</td></tr>
+<tr><td>-e</td><td>a1</td><td>German</td><td>a2</td></tr>
+<tr><td>rwr</td><td>one</td><td>fie</td><td>1</td></tr>
+<tr><td>rwr</td><td>two</td><td>fi</td><td>2</td></tr>
+<tr><td>rwr</td><td>three</td><td>fo</td><td>3</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h2>Column not in any object</h2>
+<p>&nbsp;</p>
+<p>We change the column name.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=4>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td colspan=3>fit.AccTestFixtures.RowFixtureAT</td></tr>
+<tr><td>-e</td><td>a1</td><td>german</td><td>a2</td></tr>
+<tr><td>&nbsp;</td><td>one</td><td>fie</td><td>1</td></tr>
+<tr><td>&nbsp;</td><td>two</td><td>fi</td><td>2</td></tr>
+<tr><td>&nbsp;</td><td>three</td><td>fo</td><td>3</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h2>Row Fixture With Parameter</h2>
+<p>&nbsp;</p>
+<p>We can invoke the fit.RowFixture without a subclass by specifying a symbol.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fit.AccTestFixtures.RowFixtureAT.ListBuilder</td></tr>
+<tr><td>new collection</td><td colspan=2>list</td></tr>
+<tr><td>new object</td><td colspan=2>object1</td></tr>
+<tr><td>attribute</td><td>a1</td><td>one</td></tr>
+<tr><td>attribute</td><td>a2</td><td>1</td></tr>
+<tr><td>new object</td><td colspan=2>object2</td></tr>
+<tr><td>attribute</td><td>a1</td><td>two</td></tr>
+<tr><td>attribute</td><td>a2</td><td>2</td></tr>
+<tr><td>new object</td><td colspan=2>dict</td></tr>
+<tr><td>attribute</td><td>a1</td><td>three</td></tr>
+<tr><td>attribute</td><td>a2</td><td>3</td></tr>
+<tr><td colspan=3>set symbol</td><td>aSymbol</td></tr>
+</table>
+<p>&nbsp;</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td>fit.RowFixture</td><td>aSymbol</td></tr>
+<tr><td>&nbsp;</td><td>a1</td><td>a2</td></tr>
+<tr><td>rr</td><td>one</td><td>1</td></tr>
+<tr><td>rr</td><td>two</td><td>2</td></tr>
+<tr><td>rr</td><td>three</td><td>3</td></tr>
+</table>
+
+<p>&nbsp;</p>
+<h2>Row Fixture With Undefined Parameter</h2>
+<p>&nbsp;</p>
+<p>The symbol doesn't exist in the table</p>
+<p>&nbsp;</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>fitLib.SpecifyFixture</td></tr>
+<tr><td><table border cellspacing=0 cellpadding=3 style="background-color: #ffffff">
+    <tr><td>fit.RowFixture</td><td>wrongSymbol</td></tr>
+    <tr><td>a1</td><td>a2</td></tr>
+    <tr><td>one</td><td>1</td></tr>
+    <tr><td>two</td><td>2</td></tr>
+    <tr><td>three</td><td>3</td></tr>
+  </table></td></tr>
+    <tr><td><table border cellspacing=0 cellpadding=3 style="background-color: #ffffff">
+    <tr><td>fit.RowFixture</td><td class="fit_error">wrongSymbol<hr>Parameter 'wrongSymbol' to Row Fixture was not defined by prior fixture.</td></tr>
+    <tr><td>a1</td><td>a2</td></tr>
+    <tr><td>one</td><td>1</td></tr>
+    <tr><td>two</td><td>2</td></tr>
+    <tr><td>three</td><td>3</td></tr>
+  </table></td></tr>
+</table>
+
+<p>&nbsp</p>
+
+</body></html>

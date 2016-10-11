@@ -1,0 +1,28 @@
+<html><title>ImageNameGraphic</title><body>
+<h1><a href="ImageNameGraphic.html">ImageNameGraphic</a></h1>
+Here we use images in a <a href="GridFixture.html">GridFixture</a>; they can be used as a value with any of the FitLibrary fixtures.<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.specify.GridFixtureUnderTest</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=5>images</td></tr>
+<tr><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\wall.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\space.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\box.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\space.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\wall.jpg"></td></tr>
+</table>
+The corresponding code:<br>
+<hr>
+<pre>public class GridFixtureUnderTest extends <a href="DoFixture/index.html">DoFixture</a> {
+    public Fixture images() {
+        return new <a href="GridFixture.html">GridFixture</a>(new <a href="ImageNameGraphic.html">ImageNameGraphic</a>[][] {
+        		{   new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/wall.jpg"),
+        			new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/space.jpg"),
+        			new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/box.jpg"),
+        			new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/space.jpg"),
+        			new <a href="ImageNameGraphic.html">ImageNameGraphic</a>("images/wall.jpg") }});
+    }
+
+</pre>
+<hr>
+<br>
+Because the type is <i><a href="ImageNameGraphic.html">ImageNameGraphic</a></i>, the values in the grid are treated specially.  The file name for the image is compared against the file name in the <i><a href="ImageNameGraphic.html">ImageNameGraphic</a></i>.<br>
+</body></html>

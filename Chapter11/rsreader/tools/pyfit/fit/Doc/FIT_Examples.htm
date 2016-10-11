@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Examples</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="examples">
+<h1 class="title">Examples</h1>
+<div class="section" id="general-issues">
+<h1><a name="general-issues">General Issues</a></h1>
+<p>There are a number of examples in the Fit distribution. The HTML source for the examples is in the fat/Documents directory, custom fixtures are in the eg directory. The results of running the samples should go into the fat/Reports directory. The 'a all' script in the tests directory will run all of the examples. This script only works on Windows XP; you'll have to write your own for any other system. See the writup on the various <a class="reference" href="FIT_Runners.htm">runners</a>.</p>
+<p>All examples run using FileRunner, however, some of them may require WikiRunner if you want to 
+run them with a different language version of FIT.</p>
+</div>
+<div class="section" id="specifics">
+<h1><a name="specifics">Specifics</a></h1>
+<div class="section" id="simpleexample-htm">
+<h2><a name="simpleexample-htm">SimpleExample.htm</a></h2>
+<p>This is a five line fixture that inherits from ColumnFixture and tests out a few division problems. Notice the comment column, and that since this extends ColumnFixture we get the standard TypeAdpater for floats for free.</p>
+</div>
+<div class="section" id="arithmetic-htm">
+<h2><a name="arithmetic-htm">Arithmetic.htm</a></h2>
+<p>This is a simple example that shows off two custom fixtures: Arithmetic Fixture is a subclass of Primitive Fixture, and Arithmetic Column Fixture is a subclass of ColumnFixture. There's not much to say about it except that the simplicity makes it a good first example to investigate. A number of the errors are deliberate to show off what error handling looks like. The rest of the errors are because I've never quite figured out how floating point exception handling should work, and Python doesn't have a consistent model. See PEP 754 for a discussion of the issues in floating point exception handling.</p>
+</div>
+<div class="section" id="binary-chop">
+<h2><a name="binary-chop">Binary Chop</a></h2>
+<p>Or more properly binary search. This is one of a series of practice problems that Dave Thomas (the Pragmatic Programmer) has been publishing. He calls them Katas, and suggests doing them several different ways. It's based on ColumnFixture and has a number of notes from when I converted it.</p>
+</div>
+<div class="section" id="calculatorexample">
+<h2><a name="calculatorexample">CalculatorExample</a></h2>
+<p>This is a simulation of an HP-35, Hewlett-Packard's first pocket calculator. The actual hardware had a reputation for durability. This example is based on ColumnFixture, and it isn't all there yet. There are several errors that I haven't corrected.</p>
+</div>
+<div class="section" id="exampletests">
+<h2><a name="exampletests">ExampleTests</a></h2>
+<p>This is a good example of a fixture that runs other tests. Besides the fixture, it's got another interesting wrinkle: the footnote mechanism for saving the failing tests. This footnote mechanism will be removed or revised in a future release.</p>
+<p>Several of the tests fail. I've put in a note column as a comment on the failures.</p>
+</div>
+<div class="section" id="allfiles-html">
+<h2><a name="allfiles-html">AllFiles.html</a></h2>
+<p>This runs a fixture that runs all of the tests in a directory. It lets you specify a different directory on each row, and it has the full power of the Python Glob module. (The Java version only allows an asterisk.) There are some strange results here that I haven't tracked down yet.</p>
+<p>It's no longer the best method of doing this: use the FolderRunner instead. That supports a large number of additional options.</p>
+<p>One interesting and possibly useful niche for this is in doing crosscuts: plucking tests that are related to different things from different directories.</p>
+</div>
+<div class="section" id="allcombinations-html">
+<h2><a name="allcombinations-html">AllCombinations.html</a></h2>
+<p>This is an example of how to set up a fixture that tests all possible combinations of several things. This kind of exhaustive check is sometimes necessary, but see the comments in the test case: it isn't as useful as you might think if you can't come up with an independent source of answers for each combination.</p>
+</div>
+<div class="section" id="allpairs-html">
+<h2><a name="allpairs-html">AllPairs.html</a></h2>
+<p>AllCombinations might be a bit much, so AllPairs gives an alternative. This one tries to generate one test that contains each possible pair of values. The original routine used a variant of the bin packing algorithm; this one uses a far simpler routine: generate all combinations and then winnow the list. For the test data, it generates fewer cases. (It might also be wrong - I need to get back to it and check it.)</p>
+</div>
+<div class="section" id="musicexample-html">
+<h2><a name="musicexample-html">MusicExample.html</a></h2>
+<p>This is a large simulation of a music system. It's a good example of putting everything together with ActionFixture to run things, and a RowFixture derivative to check that results are what they expect.</p>
+</div>
+<div class="section" id="musicplayer-html">
+<h2><a name="musicplayer-html">MusicPlayer.html</a></h2>
+<p>This is essentially the same as Music Example, except that it's written using DoFixture. It attempts to use the SUT (Software Under Test) facility to avoid writing a fixture, with some degree of success. It uses two custom type adapters and showcases the new DisplayUtility.</p>
+</div>
+<div class="section" id="parmtest-and-parseexit">
+<h2><a name="parmtest-and-parseexit">ParmTest and ParseExit</a></h2>
+<p>These are acceptance tests for a couple of the changes in the 0.4 release.</p>
+</div>
+<div class="section" id="recursiveallfiles">
+<h2><a name="recursiveallfiles">RecursiveAllFiles</a></h2>
+<p>This is an acceptance test for one of the fixtures in the old version of Fitnesse. It's not needed any longer.</p>
+</div>
+<div class="section" id="tablefixture">
+<h2><a name="tablefixture">TableFixture</a></h2>
+<p>This example, which is currently in fit.AccTests with the fixtures in fit.AccTestFixtures, is a fairly large example of how to use a table that looks like a business form. The form is taken verbatim from page 82 of the <a class="reference" href="Fitbook_Intro.htm">Fit Book</a>, the original version of <a class="reference" href="FitNesse_TableFixture.htm">TableFixture</a> comes from FitNesse and the root fixture itself is in fitnesse.fixtures.</p>
+<p>This shows how to use the same table to create an object (an invoice with two line items) and to verify the information in the object. It does the verification two ways: one with specific logic in the fixture, the other using the TypeAdapter mechanism. The latter provides less code with more functionality.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

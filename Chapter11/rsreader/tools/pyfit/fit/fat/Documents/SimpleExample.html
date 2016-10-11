@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//Dtd HTML 4.0 transitional//EN">
+<HTML><HEAD><TITLE>Simple Example</TITLE>
+</HEAD>
+<BODY vLink=#806040 link=#d06040 bgColor=#ffffff>
+    <p>Say we wanted to test division to see if it is acceptable. (We 
+      normally test more complicated things, things that we can control, but 
+      this is a simple example.) 
+      <P>We will make two things to complete our test. The first is a 
+      description of what we want including a tabular list of test cases that we 
+      believe will show that division is working acceptably. 
+      <P>
+      <HR>
+
+      <P><strong>Part 1 -- The Specification</strong> 
+      <P>We want division that works with positive and negative numbers. 
+      <P>
+      <table cellSpacing=0 cellPadding=3 border=1>
+        <TBODY>
+        <tr>
+          <td colSpan=4>eg.Division </td></tr>
+        <tr>
+          <td>numerator </td>
+          <td>denominator </td>
+          <td>quotient() </td>
+          <td>&nbsp;</td></tr>
+        <tr>
+          <td>1000 </td>
+          <td>10 </td>
+          <td>100.0000 </td>
+          <td>&nbsp;</td></tr>
+        <tr>
+          <td>-1000 </td>
+          <td>10 </td>
+          <td>-100.0000 </td>
+          <td>&nbsp;</td></tr>
+        <tr>
+          <td>1000 </td>
+          <td>7 </td>
+          <td>142.85715 </td>
+          <td>For this one to succeed, I had to add a 
+              charBounds attribute to the fixture. </td></tr>
+       <tr>
+          <td>1000 </td>
+          <td>7 </td>
+          <td>142.85714 </td>
+          <td>And this one succeeds - it's close enough.</td></tr>
+        <tr>
+          <td>1000 </td>
+          <td>.00001 </td>
+          <td>100000000 </td>
+          <td>&nbsp;</td></tr>
+        <tr>
+          <td>4195835 </td>
+          <td>3145729 </td>
+          <td>1.3338196 </td>
+          <td>This is the infamous Pentium bug.</td></tr>
+        </TBODY></table>
+      <P>This last case is the famous pentium bug. See <A 
+      href="http://www.cs.earlham.edu/~dusko/cs63/fdiv.html">http://www.cs.earlham.edu/~dusko/cs63/fdiv.html</A>. 
+
+      <P>
+      <HR>
+
+      <P>The second thing we make is a "fixture" that can take the data provided 
+      in the table and compute the expected results. The fixture is a java 
+      program that can perform the operations that we want to test. 
+      <P>
+      <HR>
+
+      <P><strong>Part 2 -- The Fixture</strong> 
+      <P><PRE>  public class Division extends Column<strong></strong>Fixture {
+    public float numerator;
+    public float denominator;
+    public float quotient() {
+      return numerator / denominator;
+    }
+  }
+<P></P></PRE>
+      <HR>
+
+      <P>Our two parts, the specification and the fixture, are connected by the 
+      fact that the table names the fixture (Division) in its first cell. The 
+      Division fixture knows how to make sense of the table because it extends a 
+      class that already does. A column fixture looks for variables and methods 
+      it might have that match the column headings in the table. 
+      <P>After we've prepared these two parts and put them into appropriate 
+      files, we run the test to produce results, a copy of our input with right 
+      and wrong answers noted. 
+      
+     
+</BODY></HTML>

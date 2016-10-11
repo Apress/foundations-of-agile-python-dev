@@ -1,0 +1,7 @@
+digraph G {
+lotr->luke;
+lotr->anna;
+shrek->luke;
+shrek->anna;
+shrek->madelin;
+}

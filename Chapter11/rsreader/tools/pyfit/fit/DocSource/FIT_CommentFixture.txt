@@ -1,0 +1,7 @@
+CommentFixture
+==============
+
+The Comment fixture, originally part of FitNesse, is a fixture that does nothing. You use it when you want to put a table in a FIT test without having the table evaluated as part of the test.
+
+Originally it marked all cells as ignored. This was changed in release 0.8 to not mark the cells of the table in any way.
+

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Python FIT Release 0.8 Changes</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="python-fit-release-0-8-changes">
+<h1 class="title">Python FIT Release 0.8 Changes</h1>
+<p>Release 0.8 is a major release which contains a number of new features and fixtures, as well as several bug fixes. It is looking forward to the 2.0 FIT specification.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#features" id="id30" name="id30">Features</a><ul>
+<li><a class="reference" href="#value-object-and-whole-value" id="id31" name="id31">Value Object and Whole Value</a></li>
+<li><a class="reference" href="#application-configuration" id="id32" name="id32">Application Configuration</a></li>
+<li><a class="reference" href="#internationalization-and-localization-support" id="id33" name="id33">Internationalization and Localization Support</a></li>
+<li><a class="reference" href="#business-facing-fixture-names" id="id34" name="id34">Business Facing Fixture Names</a></li>
+<li><a class="reference" href="#label-to-identifier-translation-improvements" id="id35" name="id35">Label to Identifier Translation Improvements</a></li>
+<li><a class="reference" href="#running-a-list-of-tests" id="id36" name="id36">Running a list of tests</a></li>
+<li><a class="reference" href="#diagnostic-parameters" id="id37" name="id37">Diagnostic Parameters</a></li>
+<li><a class="reference" href="#central-application-type-adapter-dictionary" id="id38" name="id38">Central Application Type Adapter Dictionary</a></li>
+<li><a class="reference" href="#dotgraphics" id="id39" name="id39">DotGraphics</a></li>
+<li><a class="reference" href="#reduced-metadata-requirement" id="id40" name="id40">Reduced Metadata Requirement</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#changed-fixtures" id="id41" name="id41">Changed Fixtures</a><ul>
+<li><a class="reference" href="#setup-and-teardown-exits-0-8a2" id="id42" name="id42">setUp and tearDown exits (0.8a2)</a></li>
+<li><a class="reference" href="#columnfixture-and-rowfixture-without-markup" id="id43" name="id43">ColumnFixture and RowFixture without Markup</a></li>
+<li><a class="reference" href="#list-fixture-usability-enhancements" id="id44" name="id44">List Fixture usability enhancements</a></li>
+<li><a class="reference" href="#comments-in-calculatefixture" id="id45" name="id45">Comments in CalculateFixture</a></li>
+<li><a class="reference" href="#commentfixture-enhancement" id="id46" name="id46">CommentFixture Enhancement</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#new-fixtures" id="id47" name="id47">New Fixtures</a><ul>
+<li><a class="reference" href="#combinationfixture" id="id48" name="id48">CombinationFixture</a></li>
+<li><a class="reference" href="#constraintfixture" id="id49" name="id49">ConstraintFixture</a></li>
+<li><a class="reference" href="#imagefixture" id="id50" name="id50">ImageFixture</a></li>
+<li><a class="reference" href="#tablefixture" id="id51" name="id51">TableFixture</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#new-and-changed-type-adapters" id="id52" name="id52">New and Changed Type Adapters</a><ul>
+<li><a class="reference" href="#default-type-adapter" id="id53" name="id53">Default Type Adapter</a></li>
+<li><a class="reference" href="#taggedstring-type-adapter" id="id54" name="id54">TaggedString Type Adapter</a></li>
+<li><a class="reference" href="#float-typeadapter" id="id55" name="id55">Float TypeAdapter</a></li>
+<li><a class="reference" href="#graphictypeadapter" id="id56" name="id56">GraphicTypeAdapter</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="features">
+<h1><a class="toc-backref" href="#id30" name="features">Features</a></h1>
+<div class="section" id="value-object-and-whole-value">
+<h2><a class="toc-backref" href="#id31" name="value-object-and-whole-value">Value Object and Whole Value</a></h2>
+<p>This feature was actually in Release 0.7, however it has been significantly improved and extended.</p>
+<p>FIT works best when the translation between cells in a table and the object used by the application is handled by a class that is a normal part of the application, not by code specifically written for the test itself.</p>
+<p>The <a class="reference" href="FIT_TypeAdapters.htm">Type Adapter</a> mechanism accepts simple Value Objects as their own type adapters. Ward Cunningham's <a class="reference" href="http://c2.com/ppr/checks.html">Checks</a> pattern language for input validation contains an excellent discussion of design philosophy.</p>
+</div>
+<div class="section" id="application-configuration">
+<h2><a class="toc-backref" href="#id32" name="application-configuration">Application Configuration</a></h2>
+<p>There is a new mechanism for <a class="reference" href="FIT_ConfigurationExit.htm">application wide configuration</a>. This mechanism supports, among other things,</p>
+<div class="line-block">
+<div class="line">enforcing a consistent label to identifier mapping</div>
+<div class="line">Providing a central repository of application modules useable as type adapters</div>
+<div class="line">Supporting a Ubiquitous Language</div>
+<div class="line">Centralized support of business facing fixture names</div>
+<div class="line">Transparently providing alternative fixtures in different testing environments</div>
+<div class="line">Internationalization and Localization, including error message translation</div>
+<div class="line">Improved integration with test and reporting tools.</div>
+</div>
+<p>It will also be the vehicle for FIT Specification 2.0 compliance and will allow an application to enable and disable specific Python FIT extension features.</p>
+</div>
+<div class="section" id="internationalization-and-localization-support">
+<h2><a class="toc-backref" href="#id33" name="internationalization-and-localization-support">Internationalization and Localization Support</a></h2>
+<p>This release contains rudementary support for writing FIT tests in languages other than English, and in having the results in the native language. This support is not complete; in particular not all messages are available for translation, and several of the standard type adapters are not customizable.</p>
+<p>Most of the support is centralized in the new <a class="reference" href="FIT_ConfigurationExit.htm">Application Configuration</a> module, although there are pieces in several other places, including the <a class="reference" href="FIT_LabelToIdentifierMapping.htm">label to identifier translation</a> mechanism and the <a class="reference" href="FIT_FixtureNames.htm">fixture name</a> mechanism.</p>
+</div>
+<div class="section" id="business-facing-fixture-names">
+<h2><a class="toc-backref" href="#id34" name="business-facing-fixture-names">Business Facing Fixture Names</a></h2>
+<p>The new <a class="reference" href="FIT_ConfigurationExit.htm">Application Configuration</a> exit now makes it possible to provide a central directory which maps business facing <a class="reference" href="FIT_FixtureNames.htm">fixture names</a> to the correct file, module and class that provides the fixture.</p>
+<p>This feature works for all fixture names, regardless of whether they are in a classic FIT context or a FitLibrary context.</p>
+</div>
+<div class="section" id="label-to-identifier-translation-improvements">
+<h2><a class="toc-backref" href="#id35" name="label-to-identifier-translation-improvements">Label to Identifier Translation Improvements</a></h2>
+<p>The process of <a class="reference" href="FIT_LabelToIdentifierMapping.htm">translating a label to a Python language identifier</a> has been improved. In particular, it is now possible to choose one of the three camel routines on an application-wide basis, it is possible to provide an application-wide vocabulary (an Ubiquitous Language), and it is possible to have this application-wide vocabulary in a language other than English.</p>
+</div>
+<div class="section" id="running-a-list-of-tests">
+<h2><a class="toc-backref" href="#id36" name="running-a-list-of-tests">Running a list of tests</a></h2>
+<p>It is now possible to create a <a class="reference" href="FIT_Runners.htm">list of tests</a> to run. This list can contain runner parameters for the run as a whole as well as specific parameters for each test. It can also contain a fixture rename list, although the Application Configuration mechanism serves this purpose better.</p>
+<p>The tests in the list need not be in the same directory.</p>
+<p>This feature only applies to the batch runners in this release. Support in the FitNesse TestRunner is a future objective.</p>
+</div>
+<div class="section" id="diagnostic-parameters">
+<h2><a class="toc-backref" href="#id37" name="diagnostic-parameters">Diagnostic Parameters</a></h2>
+<p>The runners now support <a class="reference" href="FIT_Runners.htm">diagnostic parameters</a>, which will cause the FIT core to put out additional information at various points.</p>
+</div>
+<div class="section" id="central-application-type-adapter-dictionary">
+<h2><a class="toc-backref" href="#id38" name="central-application-type-adapter-dictionary">Central Application Type Adapter Dictionary</a></h2>
+<p>It is now possible, using the <a class="reference" href="FIT_ConfigurationExit.htm">Application Configuration</a> module, to maintain a central directory of all <a class="reference" href="FIT_TypeAdapters.htm">type adapters</a> for an application, and to refer to them by name in a fixture, rather than having to import them and refer to the class objects. This feature works identically in basic FIT and in the FIT Library.</p>
+</div>
+<div class="section" id="dotgraphics">
+<h2><a class="toc-backref" href="#id39" name="dotgraphics"><a class="reference" href="FitLib_DotGraphic.htm">DotGraphics</a></a></h2>
+<p>This is a prototype application object which shows how to use a graphic visualization library in FIT. There's an example on p.84 of the Fit Book.</p>
+</div>
+<div class="section" id="reduced-metadata-requirement">
+<h2><a class="toc-backref" href="#id40" name="reduced-metadata-requirement">Reduced Metadata Requirement</a></h2>
+<p>It is now possible to leave out metadata in some circumstances, if authorized by the Application Configuration Exit. This facility is very rough in this release, it may be improved in subsequent releases if usage warrents. See the Type Adapter description for more information.</p>
+</div>
+</div>
+<div class="section" id="changed-fixtures">
+<h1><a class="toc-backref" href="#id41" name="changed-fixtures">Changed Fixtures</a></h1>
+<div class="section" id="setup-and-teardown-exits-0-8a2">
+<h2><a class="toc-backref" href="#id42" name="setup-and-teardown-exits-0-8a2">setUp and tearDown exits (0.8a2)</a></h2>
+<p>All fixtures can now override the setUpFixture(firstRow) method at the beginning of processing, and the tearDownFixture() method at the end. This is still an experimental feature and may not be present in all contexts. It should work as expected for all classic fixtures, however it will not work the way one expects in the DoFixture environment.</p>
+</div>
+<div class="section" id="columnfixture-and-rowfixture-without-markup">
+<h2><a class="toc-backref" href="#id43" name="columnfixture-and-rowfixture-without-markup">ColumnFixture and RowFixture without Markup</a></h2>
+<p>It's now possible to specify the column types in a <a class="reference" href="FIT_ColumnFixture.htm">ColumnFixture</a> or <a class="reference" href="FIT_RowFixture.htm">RowFixture</a> subclass without using markup on the labels. This is, of course, optional; the previous markup still works.</p>
+<p>There are also several new column types in Column Fixtures and Row Fixtures.</p>
+</div>
+<div class="section" id="list-fixture-usability-enhancements">
+<h2><a class="toc-backref" href="#id44" name="list-fixture-usability-enhancements">List Fixture usability enhancements</a></h2>
+<p>All of the list fixtures (<a class="reference" href="FitLib_ArrayFixture.htm">ArrayFixture</a>, <a class="reference" href="FIT_RowFixture.htm">RowFixture</a>, <a class="reference" href="FitLib_ArrayFixture.htm">SetFixture</a> and <a class="reference" href="FitLib_ArrayFixture.htm">SubsetFixture</a>) can now be used directly in a classic context without having to write a subclass. They all take the same input variations; RowFixture no longer needs ParamRowFixture as an adapter.</p>
+</div>
+<div class="section" id="comments-in-calculatefixture">
+<h2><a class="toc-backref" href="#id45" name="comments-in-calculatefixture">Comments in CalculateFixture</a></h2>
+<p>It is now possible to put a comment column in a <a class="reference" href="FitLib_CalculateFixture.htm">CalculateFixture</a>.</p>
+</div>
+<div class="section" id="commentfixture-enhancement">
+<h2><a class="toc-backref" href="#id46" name="commentfixture-enhancement">CommentFixture Enhancement</a></h2>
+<p><a class="reference" href="FIT_CommentFixture.htm">CommentFixture</a> no longer marks the cells in the table as ignored.</p>
+</div>
+</div>
+<div class="section" id="new-fixtures">
+<h1><a class="toc-backref" href="#id47" name="new-fixtures">New Fixtures</a></h1>
+<div class="section" id="combinationfixture">
+<h2><a class="toc-backref" href="#id48" name="combinationfixture"><a class="reference" href="FitLib_CombinationFixture.htm">CombinationFixture</a></a></h2>
+<p>This fixture, from the latest FitLibrary release, allows one to test combinations of two parameters in a tabular format.</p>
+</div>
+<div class="section" id="constraintfixture">
+<h2><a class="toc-backref" href="#id49" name="constraintfixture"><a class="reference" href="FitLib_ConstraintFixture.htm">ConstraintFixture</a></a></h2>
+<p>This fixture, from the latest FitLibrary release, is a variation on CalculateFixture where the method being invoked returns a boolean True or False. Each table has either True or False as the expected result, which means that it does not have to specified on each row.</p>
+</div>
+<div class="section" id="imagefixture">
+<h2><a class="toc-backref" href="#id50" name="imagefixture"><a class="reference" href="FitLib_ImageFixture.htm">ImageFixture</a></a></h2>
+<p>This fixture, described on pages 83 and 84 of the FIT Book, provides a two dimensional array of named images. It was part of the original Fit Library distribution which wasn't originally converted.</p>
+</div>
+<div class="section" id="tablefixture">
+<h2><a class="toc-backref" href="#id51" name="tablefixture"><a class="reference" href="FitNesse_TableFixture.htm">TableFixture</a></a></h2>
+<p>This fixture, from FitNesse, was documented on pages 81 and 82 of the <a class="reference" href="Fitbook_Intro.htm">FIT Book</a>. The implementation is somewhat different. The acceptance test includes three different fixtures, including one that uses it in a setup role, and two that show the difference between doing your own validation and using the type adapter mechanism.</p>
+</div>
+</div>
+<div class="section" id="new-and-changed-type-adapters">
+<h1><a class="toc-backref" href="#id52" name="new-and-changed-type-adapters">New and Changed Type Adapters</a></h1>
+<div class="section" id="default-type-adapter">
+<h2><a class="toc-backref" href="#id53" name="default-type-adapter">Default Type Adapter</a></h2>
+<p>The Default type adapter implements the type inference facility that allows leaving metadata out. See the Type Adapter writeup for more information.</p>
+</div>
+<div class="section" id="taggedstring-type-adapter">
+<h2><a class="toc-backref" href="#id54" name="taggedstring-type-adapter">TaggedString Type Adapter</a></h2>
+<p>This type adapter provides the contents of the parse node's .body attribute without the editing of the .text() method. It's a new part of the FIT Library.</p>
+<p>As usual with type adapters, we strongly recommend writing an application specific adapter using the RawString protocol, which provides the same service to any adapter which requests it.</p>
+</div>
+<div class="section" id="float-typeadapter">
+<h2><a class="toc-backref" href="#id55" name="float-typeadapter">Float TypeAdapter</a></h2>
+<p>The float type adapter has been enhanced with a new explicit epsilon option, improvements to the range option, and the ability to selectively enable and disable the major check options.</p>
+<p>The epsilon option is: &quot;float +/- float&quot;. The range option is &quot;float op _ op float&quot;, where op can be any of &lt;, &lt;=, &gt; or &gt;=. The single character mathematical symbol for +/-, &lt;= and &gt;= are also accepted. The range option also allows open ranges, that is: &quot;float op _&quot; or &quot;_ op float&quot;.</p>
+<p>Any of the three options for checking a floating point number can be turned off, either on an application wide basis or on an identifier by identifier basis. Turning off the range option in the float adapter does not turn off the numeric range cell handler; this has to be disabled independently. See the <a class="reference" href="FIT_TypeAdapters.htm">float type adapter</a> documentation for details.</p>
+</div>
+<div class="section" id="graphictypeadapter">
+<h2><a class="toc-backref" href="#id56" name="graphictypeadapter"><a class="reference" href="FitLib_ImageFixture.htm">GraphicTypeAdapter</a></a></h2>
+<p>This type adapter handles the URL in an &quot;&lt;img src'...'&gt;&quot; tag. It's part of the Image Fixture, but can be used independently.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

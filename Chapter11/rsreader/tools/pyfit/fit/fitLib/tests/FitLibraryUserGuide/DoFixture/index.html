@@ -1,0 +1,64 @@
+<html><title>DoFixture</title><body>
+<h1>DoFixture</h1>
+<h3>Contents</h3>
+<ul><li>Introduction</li>
+<li><a href="WhenActionsFail.html"><a href="WhenActionsFail.html">WhenActionsFail</a></a></li>
+<li><a href="DoFixtureSummary.html"><a href="DoFixtureSummary.html">DoFixtureSummary</a></a></li>
+<li><a href="WritingFixtures.html"><a href="WritingFixtures.html">WritingFixtures</a></a></li>
+<li><a href="FixtureDetails.html"><a href="FixtureDetails.html">FixtureDetails</a></a></li></ul>
+<h3>Introduction</h3>
+DoFixture tables are used to define/test workflow, a sequence of actions. The aim is to make the tests easily readable.<br>
+<br>
+Let's look at a simple example test (which you can run).<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td> ChatStart </td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>connect user</i></td><td>sarah</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>user</i></td><td>sarah</td><td><i>creates</i></td><td>fit</td><td><i>room</i></td></tr>
+<tr><td><i>user</i></td><td>sarah</td><td><i>enters</i></td><td>fit</td><td><i>room</i></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>users in room</i></td><td>fit</td></tr>
+<tr><td ColSpan=2><i>name</i></td></tr>
+<tr><td ColSpan=2>sarah</td></tr>
+</table>
+<br>
+The tables define/test the following sequence:<br>
+<ul><li>Start the System Under Test, a chat server</li>
+<li>Anna connects to the chat server</li>
+<li>Anna creates a new room and enters it</li>
+<li>Check that Sara is the only occupant of that room</li></ul>
+Unlike with the core fixtures, the first row of each table (other than the first) doesn't usually name a fixture.<br>
+<br>
+Each row of the second and third tables define actions. Eg consider the following table:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>user</i></td><td>sarah</td><td><i>enters</i></td><td>fit</td><td><i>room</i></td></tr>
+</table>
+<br>
+The first, third and fifth cells contain <i>keywords</i>, which give information about the role of the data that's in the second and fourth cells ("anna" and "lotr"). The <i>keywords</i> are shown in <i>italics</i> and are often colored when the tst is run (try it now). The keywords all joined together give the name of the action, <i>user enters room</i>. <br>
+<br>
+The fourth table is a little different, as it's checking the list of users in the given room:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>users in room</i></td><td>fit</td></tr>
+<tr><td ColSpan=2><i>name</i></td></tr>
+<tr><td ColSpan=2>sarah</td></tr>
+</table>
+<br>
+The first row is an action, as before, with <i>keywords</i> and data alternating. This serves a similar purpose to a fixture name, but is an action which provides an appropriate fixture.<br>
+<br>
+The rest of the table is like a RowFixture table. The second row gives the <i>header labels</i> and there is a single element expected in the list.<br>
+<br>
+Let's look at what happens <i><a href="WhenActionsFail.html"><a href="WhenActionsFail.html">WhenActionsFail</a></a></i>.<br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

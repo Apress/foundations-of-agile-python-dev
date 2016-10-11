@@ -1,0 +1,10 @@
+fit.ff: fitLib
+fit.specify: fitLib.specify
+fit.ArrayFixture: fitLib.ArrayFixture
+fit.CalculateFixture: fitLib.CalculateFixture
+fit.CompareFilesFixture: fitLib.CompareFilesFixture
+fit.DoFixture: fitLib.DoFixture
+fit.SequenceFixgture: fitLib.SequenceFixture
+fit.SetUpFixture: fitLib.SetUpFixture
+fit.SetFixture: fitLib.SetFixture
+fit.SubsetFixture: fitLib.SubsetFixture

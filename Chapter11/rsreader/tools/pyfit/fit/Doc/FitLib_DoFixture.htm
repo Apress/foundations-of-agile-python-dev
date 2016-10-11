@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>DoFixture and SequenceFixture</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="dofixture-and-sequencefixture">
+<h1 class="title">DoFixture and SequenceFixture</h1>
+<p>The DoFixture and SequenceFixture are the basic flow type fixtures in the Fit Library. Before reading this description, you should read the Java Fit Library documentation on the DoFixture. It would also be useful to read the material in the Fit Book. The writeup only covers the basics and the things which are specific to Python Fit that you need to know.</p>
+<p>Everything in here applies to both DoFixture and SequenceFixture: they differ only in one minor detail of presentation.</p>
+<p>To do anything useful, these fixtures either need to be subclassed, or the test needs to execute a start command to load a SUT module which contains the necessary commands and metadata for the remainder of the test.</p>
+<div class="section" id="table-format">
+<h1><a name="table-format">Table Format</a></h1>
+<p>Each row is a separate method call. The first cell of the row is an optional special action; the last cell of the row contains the expected result for the check special action. If there is no special action, the cell for the special action does not exist: the command name or fixture name starts in the first cell.</p>
+<p>Special actions are identified in the fixture code with a method attribute of &quot;fitLibSpecialAction&quot; which must be set to True. See the DoFixture.py module for examples.</p>
+<p>For SequenceFixture, the entire command name occupies one cell; subsequent cells contain the parameters.</p>
+<p>For DoFixture, the command name and parameters occupy alternate cells. That is, if the command takes three parameters, the command name occupys three cells. It can extend into an extra cell after the last parameter if desired. This leads to a very pleasant writing style that is similar to normal English.</p>
+<p>This release searches for a special action and then a fixture before checking for the existance of a command. This behavior will change in release 0.9: if a command can be interpreted as more than one of the three possibilities it will raise an exception.</p>
+</div>
+<div class="section" id="software-under-test">
+<h1><a name="software-under-test">Software Under Test</a></h1>
+<p>These fixtures normally use an application object called the Software Under Test (SUT). This can be any application object; it does not have to be a subclass of anything in particular, although it must be a new style class.</p>
+<p>DoFixture and SequenceFixture will search the SUT for a method before searching the fixture; this means that you can avoid writing proxy methods in a great many cases.</p>
+</div>
+<div class="section" id="metadata">
+<h1><a name="metadata">Metadata</a></h1>
+<p>Most methods that are invoked follow the multiple parameter format explained in the Fit Library overview. Each of those methods must be described with the '.types' suffix in the _typeDict metadata dictionary in the fixture's class object.</p>
+<p>The return type, which is the first entry in the value list, has a number of special entries that cannot appear in the parameter entries.</p>
+<div class="section" id="none">
+<h2><a name="none">None</a></h2>
+<p>None as the return metadata means that no return value is to be expected.</p>
+</div>
+<div class="section" id="subfixtures">
+<h2><a name="subfixtures">Subfixtures</a></h2>
+<p>DoFixture tests the returned value to find out if it is a subclass of Fixture. If it is, it instantiates it as a subfixture, and uses it for the rest of the current table. Conventionally, the return metadata field should be None.</p>
+</div>
+<div class="section" id="sut">
+<h2><a name="sut">&quot;$SUT&quot;</a></h2>
+<p>&quot;$SUT&quot; means the return is a new Software Under Test class or instance. The method returning this must insure that the class object for the SUT has a _typeDict entry, if necessary by inserting it directly. This will replace the existing SUT.</p>
+<p>This mechanism will likely change in future releases. In particular, it will probably grow a stack mechanism.</p>
+</div>
+<div class="section" id="array-fixtures">
+<h2><a name="array-fixtures">Array Fixtures</a></h2>
+<p>&quot;$Array&quot;, &quot;$Row&quot;, &quot;$Set&quot; and &quot;$Subset&quot; invoke the ArrayFixture, RowFixture, SetFixture or SubsetFixture directly. This set of special functions avoids the need to write additional fixtures.</p>
+<p>The return value is a tuple with two entries: an iterator containing the objects from the collection, and a dictionary containing the metadata required for the comparison.</p>
+<p>The iterator must be a list, tuple, dictionary or iterator function that yields the required list of objects in the collection.</p>
+<p>The objects in the list may be of any type that has the requested attributes, including dictionaries. This does not currently apply to RowFixture: it cannot handle dictionaries.</p>
+<p>&quot;$Display&quot; invokes the <a class="reference" href="FitLib_DisplayUtility.htm">display utility</a>, which is a Python FIT enhancement.</p>
+</div>
+</div>
+<div class="section" id="type-adapters">
+<h1><a name="type-adapters">Type Adapters</a></h1>
+<p>The facility in the original FIT Library distribution for creating a pool of <a class="reference" href="FIT_TypeAdapters.htm">type adapters</a> does not exist. User type adapters can either be invoked by putting a reference to their class object in the metadata entry, or can be invoked using the &quot;&#64;&quot; syntax supported by the <a class="reference" href="FIT_ConfigurationExit.htm">Application Configuration</a> module.</p>
+</div>
+<div class="section" id="special-actions">
+<h1><a name="special-actions">Special Actions</a></h1>
+<p>DoFixture and SequenceFixture provide a number of special actions. These are always in the first cell of the row. The actions are:</p>
+<div class="section" id="check">
+<h2><a name="check">check</a></h2>
+<p>This checks that the return value of the requested method matches the value in the last cell of the row.</p>
+</div>
+<div class="section" id="show">
+<h2><a name="show">show</a></h2>
+<p>This displays the return value in a new cell at the end of the row.</p>
+</div>
+<div class="section" id="ensure">
+<h2><a name="ensure">ensure</a></h2>
+<p>This checks that the method call succeeded. If the result is defined as a boolean, it must be True. If it is defined as anything else, it must not throw an exception.</p>
+</div>
+<div class="section" id="reject-or-not">
+<h2><a name="reject-or-not">reject or not</a></h2>
+<p>This checks that the method call failed. If the result is defined as a boolean, it must be False, otherwise it must raise an exception.</p>
+</div>
+<div class="section" id="note">
+<h2><a name="note">note</a></h2>
+<p>note ignores the rest of the row,</p>
+</div>
+<div class="section" id="start">
+<h2><a name="start">start</a></h2>
+<p>Start loads a different module as a new Software Under Test. The intent is to allow DoFixture to be used without writing any fixtures, similarly to ActionFixture. However, it does not provide any method of setting up metadata, so the metadata must already be in the SUT, which limits its usefulness. In general, the $SUT return value is more useful. However, see the MusicPlayer example for an attempt to write an application in this style.</p>
+</div>
+<div class="section" id="calculate">
+<h2><a name="calculate">calculate</a></h2>
+<p>This loads the CalculateFixture for the remainder of the table. It is intended to be used in a classroom situation where the students don't write fixtures, however it suffers from the same problem as start: there is no place for the required metadata to come from.</p>
+</div>
+<div class="section" id="name-and-use">
+<h2><a name="name-and-use">name and use</a></h2>
+<p>This pair of commands gives a method result a name, and then uses it later. It is an experimental command, which is not committed to remain in future releases. It also doesn't work at the moment.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

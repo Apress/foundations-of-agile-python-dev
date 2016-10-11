@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Action Fixture</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="action-fixture">
+<h1 class="title">Action Fixture</h1>
+<p>The FIT ActionFixture, and the closely related TimedActionFixture, allow you to test workflow procedures, that is, components where actions have to be done in a sequential order. ActionFixture uses a machine metaphor: there is a widget where buttons are pressed, data entered in small pieces and results presented and checked. For an alternative way of handling workflow, see the FitLibrary's <a class="reference" href="FitLib_DoFixture.htm">DoFixture</a>.</p>
+<p>The most common such component is, of course, the ubiquitous GUI. There are a number of very good discusions of issues involved in using FIT to test GUIs, including chapter 32 of the <a class="reference" href="Fitbook_Intro.htm">Fit book</a> . Alistair Cockburn also includes FIT in his excellent <a class="reference" href="http://alistair.cockburn.us/crystal/articles/hpaaa/hexagonalportsandadaptersarchitecture.htm">Hexagonal (Ports and Adapters) Architecture</a> article. It's well worth reading, if only for the alternative perspective on the more traditional layered architecture.</p>
+<p>As in all fixtures, the first row contains one cell that specifies fit.ActionFixture. The rest of the table consists of rows which each have three columns. The first column contains one of four operations; the second and third columns contain data for the operation. For most of the operations, the second column contains the name of a field, method or property, and the third field contains data to be set or checked. An additional column can be used for comments.</p>
+<p>There are four commands: start, enter, press and check. The start command loads the external fixture; the second cell in the row is the fixture name in the same form as if it headed a table. This command instantiates the named class. There is no data in the third cell.</p>
+<p>The first ActionFixture must start with a start command. Subsequent ActionFixtures do not need a start command; they will inherit the actor from the previous ActionFixture invocation. The class named on the start command must contain the type information in its _typeDict dictionary. See the <a class="reference" href="FIT_TypeAdapters.htm">TypeAdapter</a> writeup for how to create and populate this dictionary. This class also contains all of the fields, methods or properties named in the other commands.</p>
+<p>The enter command is used to enter data. The second cell is the field, method or property name, the third cell is the data. This command uses a TypeAdapter to convert the input data to whatever form the method expects. This command is expected to return None.</p>
+<p>The press command is used to press a button, invert the state of a checkbox or activate a menu command. It normally has no data. Radio button selections should be handled by the enter command. This command requires a method with no operands; it will not work with either a field or a property.</p>
+<p>The check command is used to get information and check it.</p>
+<p>Comments can be added to any row in a fourth column.</p>
+<p>There is an interesting issue in designing actors to go with ActionFixture. Saving and restoring the previous actor has to be done by saving and restoring the actor attribute of the ActionFixture class. This can occasionally lead to an import loop, especially if one is using an ActionFixture subclass. Modules ActionFixtureUnderTest and AnotherActor in the fitLib.specify directory show how to use a callback mechanism so that the actors do not have to import the ActionFixture module. This is tied to the SwitchActor specification test in the fitLib.tests.FixtureSpecification.ActionFixture directory.</p>
+<p>Tests expressed via ActionFixture tend to be quite tedious; the style sometimes obscures the fundamental issues being tested. One alternative to be considered is <a class="reference" href="FitLib_DoFixture.htm">DoFixture</a>. Another alternative is the <a class="reference" href="FitNesse_TableFixture.htm">table style</a> shown in Section 11.1 of the Fit book.</p>
+</div>
+</body>
+</html>

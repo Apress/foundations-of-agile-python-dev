@@ -1,0 +1,59 @@
+CalculateFixture
+================
+
+.. contents::
+
+The CalculateFixture is part of the Fit Library. The parameters (givens) for the calculations are on the left, and the expected results are on the right, separated by a blank column.
+
+CalculateFixture locates the first result column by finding the first column with a label that follows a column that has no label. What this means in practice is that you can leave the label cells blank for all of the given columns. 
+
+All columns with labels immediately following the first result column are also result columns. A column with no label ends the block of result columns: that column and anything to the right are comments. The ability to put comments in a CalcualateFixture is a new facility in Python FIT release 0.8
+
+The effective label for a result column is created by combining all of the labels from the given (parameter) columns with the label on the result column. That is then `transformed`__ into the Python identifier of the method using the selected mechanism. Extended Camel Case is the default for this fixture, as it is for all fixtures in the FIT Library.
+
+__ FIT_LabelToIdentifierMapping.htm
+
+The parameter columns do not store data into the fixture instance; this is why the column headers can be left blank if desired. Instead, each of the calculate methods takes all of the values on that row as parameters, in the order specified.
+
+Repeat and Exception Strings
+----------------------------
+
+CalculateFixture allows you to supply special strings that represent a repeated value in a given column and an expected exception in a calculated result column. The default for these facilities is None: that is, an empty cell represents a zero length string, not the value from the prior row, and an exception will be handled as an exception; it won't be intercepted.
+
+These have to be supplied either by the fixture subclass or by the DoFixture method after it instantiates CalculateFixture; there is no way to specify them in the table.
+
+The methods are:
+
+| setRepeatString(string)
+| setExceptionString(string)
+
+They set instance variables self.repeatString and self.exceptionString respectively.
+
+Usage in Classic FIT
+--------------------
+
+CalculateFixture must be subclassed to be used in classic FIT. There is currently no facility to supply either a SUT (Software Under Test) module or the necessary metadata.
+
+Usage in DoFixture
+------------------
+
+A DoFixture method may instantiate CalculateFixture directly, passing it a SUT and a metadata dictionary, and then return the instantiated fixture to process the remainder of the current table. It can also set a repeat or exception string by either calling the appropriate method on the instance, or it can set the instance attribute directly.
+
+It is also possible, of course, to write a subclass and invoke it directly.
+
+Differences with ColumnFixture
+------------------------------
+
+While columnFixture and CalculateFixture serve somewhat the same function, they take two very different approaches.
+
+ColumnFixture takes a spreadsheet approach: each value is processed in order. While there is an expectation that values on the left represent inputs to the computation, and values on the right represent results of the computation, nothing enforces this view. It's perfectly legitimate, and occasionally useful, to write a ColumnFixture subclass that stores a couple of values, does a calculation, stores another value, does another calculation and so forth.
+
+Calculated results use the values that have been stored. They don't need to use all of them, though.
+
+Since it's possible to have ColumnFixture subclasses where some of the calculated results do not need all of the stored values, several tables can use the same fixture with different columns in different orders. There are examples of this in the FIT Specification Tests.
+
+CalculateFixture, on the other hand, does not store values at all. The method invoked by a result column takes all of the values on the left hand side as parameters. If there is more than one result column, each of the methods takes exactly the same parameters, in the same order.
+
+CalculateFixture also takes a different approach to topics such as repeating values, blank cells and exceptions. 
+
+ 

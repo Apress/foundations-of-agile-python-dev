@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Architectural Motifs</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="architectural-motifs">
+<h1 class="title">Architectural Motifs</h1>
+<p>It should come as no surprise that there are some ways of designing a program that will make it easier to test using FIT. Here are some architectural motifs that I find useful to keep in mind.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#basic-fit-tests" id="id2" name="id2">Basic FIT tests</a><ul>
+<li><a class="reference" href="#business-rule-tests" id="id3" name="id3">Business Rule Tests</a></li>
+<li><a class="reference" href="#workflow-tests" id="id4" name="id4">Workflow Tests</a></li>
+<li><a class="reference" href="#integration-tests" id="id5" name="id5">Integration Tests</a><ul>
+<li><a class="reference" href="#background-architectural-motifs" id="id6" name="id6">Background: Architectural Motifs</a></li>
+<li><a class="reference" href="#business-rule-in-workflow-tests" id="id7" name="id7">Business Rule in Workflow Tests</a></li>
+<li><a class="reference" href="#testing-at-the-naviation-layer" id="id8" name="id8">Testing at the Naviation Layer.</a></li>
+<li><a class="reference" href="#testing-at-the-external-interface" id="id9" name="id9">Testing at the external interface.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#one-test-many-contexts" id="id10" name="id10">One Test, Many Contexts</a><ul>
+<li><a class="reference" href="#alternative-fixtures" id="id11" name="id11">Alternative Fixtures</a></li>
+<li><a class="reference" href="#test-generation" id="id12" name="id12">Test Generation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="basic-fit-tests">
+<h1><a class="toc-backref" href="#id2" name="basic-fit-tests">Basic FIT tests</a></h1>
+<p>The FIT book defines two types of FIT test: the business rule test and the workflow test. It also spends a good deal of time on patterns that tease business rules out of workflows.</p>
+<p>There is a third type of test which is mentioned in chapters 32 and 35 but not otherwise highlighted: the integration test. The first two kinds of tests are the concern of all three parties: the customer, the developer and the tester. Integration tests usually only involve the developer and the tester. This is because they don't actually create any new business rules or workflow; they are concerned that already existing business rules and workflow are properly integrated at different points in the system.</p>
+<div class="section" id="business-rule-tests">
+<h2><a class="toc-backref" href="#id3" name="business-rule-tests">Business Rule Tests</a></h2>
+<p>Business rules are usually tested using a ColumnFixture subclass or CalculateFixture subclass. Rick Mugridge has also been experimenting with having separate tables for rules that succeed and rules that fail, thus eliminating the need for an explicit column to test for success or failure.</p>
+<p>Business rule tests usually have two parts: configure the SUT (Software Under Test) and execute. The ColumnFixture or CalculateFixture subclass embeds any state setting and state verification needed as part of processing each rule.</p>
+<p>Business rules can occur in any layer of the software. In general, it's good software practice to  encapsulate the business rule into a specialized class that can be extracted and tested in isolation.</p>
+</div>
+<div class="section" id="workflow-tests">
+<h2><a class="toc-backref" href="#id4" name="workflow-tests">Workflow Tests</a></h2>
+<p>Workflow tests are the other major type of tests. These tests are usually done using ActionFixture or DoFixture.</p>
+<p>Workflow tests usually have four parts: configure, create state, do something, verify state.</p>
+<p>As a general rule, if you find yourself writing multiple passes through essentially the same workflow, each time with slight variations, you've found a business rule. It's best to abstract that rule and write one workflow test with just one of the variations.</p>
+</div>
+<div class="section" id="integration-tests">
+<h2><a class="toc-backref" href="#id5" name="integration-tests">Integration Tests</a></h2>
+<p>The term Integration Test refers to tests that verify that the parts of a system work properly together. There are two forms of integration test: tests that check that all variations of a business rule are properly integrated in the workflow, and tests that check that the business rules and workflows are properly integrated at other points in the architecture.</p>
+<p>Both types of integration test use the same FIT tests; they adapt by using different fixtures.</p>
+<div class="section" id="background-architectural-motifs">
+<h3><a class="toc-backref" href="#id6" name="background-architectural-motifs">Background: Architectural Motifs</a></h3>
+<p>All large systems are built with separate, relatively independent components. Traditionally this is called a layered architecture. See Alistair Cockburn's paper on the <a class="reference" href="http://alistair.cockburn.us/crystal/articles/hpaaa/hexagonalportsandadaptersarchitecture.htm">Hexagonal (Ports and Adapters) Architecture</a> for an alternative viewpoint that also shows where FIT slides naturally into the picture.</p>
+<p>Regardless of whether we regard the architecture as a stack or as a cluster of cooperating components, we can usefully draw a line between where we want to test, and where the business rules exist that we want to verify. In most systems if we draw this line from the person using the system into the application domain, we will normally encounter three or four layers. The deepest layer, of course, is the domain layer. On top of that is the Application Layer, which is concerned with using domain layer resources to get something useful done. On top of the application layer is the user interface layer. This can be either one or two layers. If it's two layers, the topmost layer is concerned strictly with handling the GUI toolkit, and the lower layer is concerned with everything else, including screen to screen navigation.</p>
+<p>The deepest Business Rule tests reside in the domain layer, while the deepest Workflow tests reside at the application layer.</p>
+</div>
+<div class="section" id="business-rule-in-workflow-tests">
+<h3><a class="toc-backref" href="#id7" name="business-rule-in-workflow-tests">Business Rule in Workflow Tests</a></h3>
+<p>One of the two kinds of integration test is to run all the variations of a business rule through the workflow(s) that use it.</p>
+<p>This level of test is run at the same level as the basic workflow test, but it can also be run at higher levels. Unlike the workflow test that it's based on, it uses the business rule tables. This piece of magic is discussed, with examples, in chapter 35 of the FIT book.</p>
+<p>The essence of this integration level fixture is that it does the same thing as a business rules fixture; that is it sets state, operates and checks state for every row. However, it sets the state, operates and checks the state using the routines in the workflow fixture.</p>
+<p>To do this, the workflow test's methods have to be available in a form that can be integrated. This implies that the fixtures involved are written as a coherent system, not as simple one-off programs for each separate test.</p>
+</div>
+<div class="section" id="testing-at-the-naviation-layer">
+<h3><a class="toc-backref" href="#id8" name="testing-at-the-naviation-layer">Testing at the Naviation Layer.</a></h3>
+<p>When the UI is broken into two layers, I call the outer layer the GUI layer and the inner layer the navigation layer. This is my terminology; different authors use different terminology, including presentation layer, controller layer (from the MVC architecture) and others. I use the term navigation to emphasize that this layer concerns itself with screen to screen navigation while the upper GUI layer treats each screen in isolation.</p>
+<p>For the  most part, there is a one to one correspondence between controls (or widgets depending on your terminology) at the GUI layer and routines at the navigation layer. The difference is that a control at the GUI layer knows things like its position in the window and its color, while the handler routine in the navigation layer does not care about these details: it knows whether the control is enabled or disabled, and whether it is showing whatever visual effect is appropriate for a particular state, without caring about the actual details of the visual effect.</p>
+<p>Tests that are specifically for the navigation layer tend to be written using ActionFixture, and they tend to be long lists of actions. They're usually written by the developers and testers, without much input from the business people. Frankly, they're boring.</p>
+<p>Integration tests at this level, however, don't do this. Since they use the same tests that they used at deeper layers, the fixtures need to take up the slack. They do this by effectively using an abstraction layer; a robot if you will.</p>
+</div>
+<div class="section" id="testing-at-the-external-interface">
+<h3><a class="toc-backref" href="#id9" name="testing-at-the-external-interface">Testing at the external interface.</a></h3>
+<p>Testing at the external interface has gotten a bad name, and for good reason. Classically, tests at this level tend to use very expensive tools, require specialized expertise, take a long time to run and are very fragile with respect to even minor changes to the screens they are testing.</p>
+<p>Today, many of the commercial tools have dealt with the expertise and fragility issues to a greater or lesser degree. They are still expensive.</p>
+<p>In the free software arena, you can usually get tools that deal with some combination of language, operating system and GUI toolkit. Java, for example, comes with a set of Robot classes. X-Windows and many versions of TCL come with automation tools that can be used for testing. There are even free libraries available for Microsoft Windows.</p>
+<p>Regardless of the testing toolkit, external tests still take a long time to run, but there is no reason why they have to be run so frequently that they impact the rest of the development process.</p>
+<p>That leaves fragility as the major issue. The solution is the same as the solution for deeper layers: abstraction. Developing an abstraction layer for each screen means that when the screen changes, the only thing that has to change is the abstraction class; all the tests that use it will continue to run without changes.</p>
+</div>
+</div>
+</div>
+<div class="section" id="one-test-many-contexts">
+<h1><a class="toc-backref" href="#id10" name="one-test-many-contexts">One Test, Many Contexts</a></h1>
+<p>I've mentioned running a single test in several contexts, using different fixtures for each context. Before I talk about how to do this neat trick, I need to say a few words about why you want to do this.</p>
+<p>In an acronym: DRY, or Don't Repeat Yourself. This is sometimes said as OAOO, or Once And Only Once. They mean the same thing: there should be one and only one authoritative source for any piece of information in the system. Andy Hunt and Dave Thomas (The Pragmatic Programmers) expound on this in the book of the same name, together with a number of strategies for making it happen.</p>
+<p>Another way of putting it is that there should be one and only one place you need to change. If you need to change ten tests to reflect a change in a business rule, that's nine tests too many. That's not only extra work, but a distressingly large part of the time some of the changes will be wrong, adding even more work finding the problems and fixing them (or not finding them in time!)</p>
+<p>Andy and Dave's solution is code generators, which are a perfectly fine solution when one has to generate code - something that software developers do all the time. It'll even work when the issue is to generate additional tests from a prototype. There are commercial products whose entire reason for being is to generate lots of tests from a prototype, and they can be very valuable for stress testing, among other tasks.</p>
+<p>Regardless of how you do it, it's going to require some thought and planning.</p>
+<div class="section" id="alternative-fixtures">
+<h2><a class="toc-backref" href="#id11" name="alternative-fixtures">Alternative Fixtures</a></h2>
+<p>As long as the test target is inside the applicaton boundary, the same test can be run with different fixtures. Doing this requires some thought and planning.</p>
+<p>The easiest version of this approach runs business rule tests at the same level as the workflow tests that it is exercising. This scenario very naturally reuses the fixture methods created for the workflow tests. There are examples of this in chapter 32 of the Fit Book.</p>
+<p>The farther away we get from the natural level of the workflow tests, the more detail the fixtures are going to have to absorb. Chapter 35 of the FIT book describes a scenario using the Robot classes in Java to simulate the actual user interface.</p>
+<p>There are a number of ways to run with different fixtures. One very simple one is to use different search paths for the fixture libraries. This is a standard developer technique.</p>
+<p>Another one is to have the main fixture (which must be a DoFixture for this to work) take a parameter which tells it what support to load for the testing scenario. This can be done using the +t parameter on the runner to set a run level symbol that the fixture can then test.</p>
+</div>
+<div class="section" id="test-generation">
+<h2><a class="toc-backref" href="#id12" name="test-generation">Test Generation</a></h2>
+<p>A second method is to generate the required tests, either in advance or at run time. Generating the tests in advance effectively produces a number of workflow tests, one for each business rule, with the values from the business rules plugged into the appropriate places. It could also produce a list of files suitable for the batch runner.</p>
+<p>Generating the tests at run time is the same, but it is done inside of a custom runner.</p>
+<p>One major advantage to this approach is that the generated tests are available for inspection, which can be a significant issue in regulated environments.</p>
+<p>The other advantage is that the output of the generation process need not be FIT tests: they can be test scripts for other test automation tools, such as scripted commercial capture and replay GUI testing tools.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

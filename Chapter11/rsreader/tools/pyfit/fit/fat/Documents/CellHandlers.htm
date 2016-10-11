@@ -1,0 +1,71 @@
+<html><head><title>Cell Handlers Acceptance Test</title></head>
+<body>
+<center><h1>Cell Handler Acceptance Test</h1></center>
+<p>The first thing we're going to do is use the cell handler inspector to retrieve the current list of cell handlers.</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>fit.CellHandlerInspector</td></tr>
+</table>
+
+<p>Next, let's clear the list.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.CellHandlerLoader</td></tr>
+<tr><td>clear</td></tr>
+</table>
+
+<p>And look at it again</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>fit.CellHandlerInspector</td></tr>
+</table>
+
+<p>Now, we'll put the defaults back</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.CellHandlerLoader</td></tr>
+<tr><td>load defaults</td></tr>
+</table>
+
+<p>And, presto! They've reappeared!</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>fit.CellHandlerInspector</td></tr>
+</table>
+
+<p>Let's load an optional module</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=2>fit.CellHandlerLoader</td></tr>
+<tr><td>load</td><td>SubstringCellHandler</td></tr>
+</table>
+
+<p>And it appears in the list</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>fit.CellHandlerInspector</td></tr>
+</table>
+
+<p>Let's get rid of one</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=2>fit.CellHandlerLoader</td></tr>
+<tr><td>remove</td><td>NumericRangeCellHandler</td></tr>
+</table>
+
+<p>And it's gone</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>fit.CellHandlerInspector</td></tr>
+</table>
+
+<p>Now let's try loading something that doesn't exist.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=2>fit.CellHandlerLoader</td></tr>
+<tr><td>load</td><td>NotACellHandler</td></tr>
+</table>
+
+<p>And it wasn't loaded</p>
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr><td>fit.CellHandlerInspector</td></tr>
+</table>
+
+
+</body></html>
+

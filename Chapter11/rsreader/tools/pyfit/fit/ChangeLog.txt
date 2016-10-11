@@ -1,0 +1,370 @@
+Changes in 0.8a2 over 0.8a1.
+
+A new experimental feature was added.
+Fixture will now call the setUpFixture() and
+tearDownFixture() methods before and after
+calling doTable(). This feature is still
+experimental and has not been tested in 
+all contexts.
+
+The entire source was run through pychecker,
+and most warnings fixed. This caught around
+a dozen minor bugs. It also found a major
+bug in pychecker as well as several pychecker
+options that don't seem to work when specified
+on a module, class or method level. Thanks to
+Jens Engle for suggesting running pychecker.
+
+Seven unit tests which failed on the Macintosh
+have been corrected. These all involved
+non-portable path expressions in the unit tests;
+there was no problem in the actual production
+code. Some of them would also fail under Unixoid
+systems. I've added a card for 0.9 to manually 
+inspect all of the file code to insure that it 
+is portable. Thanks to Keith Ray for the unit
+test output for the failing tests.
+
+The float type adapter's checks for special 
+values was fixed for big-endian systems (that
+is, the Macintosh). Thanks to Keith Ray for
+the bug report. This still needs checking on
+a Macintosh.
+
+A bug in RowFixture was fixed where all labels 
+would be marked as errors if there were no objects
+in the collection. Thanks to Syver Enstad for
+the bug report.
+
+The mechanism for detecting special actions in
+DoFixture and SequenceFixture has been improved.
+Detecting ambiguities remains an 0.9 objective.
+Thanks to Syver Enstad for this report.
+
+The ReadMe and other documentation has been
+updated to specify that FitNesse 20050301 is
+the earliest version that supports TestRunner.
+Most 2004 versions will work for tests started
+from FitNesse back to around March; versions prior 
+to that will not work at all. All support for
+FitFilter has been removed. I've also added a
+card for 0.9 to support stdin and stdout. Thanks to
+Grig Gheorghiu for this report.
+
+The camel routines were inadvertently changed to
+drop the underscore character. This change has been
+backed out; they now function (mostly) as in the
+0.7 release series. Thanks to Grig Gheorghiu for
+this notificaion.
+
+Changes in 0.8a1 over 0.7a3.
+
+Please see the documentation file for 
+release 0.8 for the complete list of changes:
+there are too many to list here!
+
+Major items include:
+
+-- A new Application Configuration mechanism,
+   which provides centralized support on an
+   application-wide (NOT Python installation-wide)
+   basis. Functions that can be controlled include:
+
+| enforcing a consistent label to identifier mapping
+| Providing a central repository of application modules useable as type adapters
+| Supporting a Ubiquitous Language
+| Centralized support of business facing fixture names
+| Transparently providing alternative fixtures in different testing environments
+| Internationalization and Localization, including error message translation
+| Improved integration with test and reporting tools.
+
+-- Business facing fixture names in all situations
+-- Label to identifier translation improvements.
+-- Support in the batch runner for a list of tests
+   which can pick tests from different directories.
+-- Support for a centralized directory of application
+   modules that can be used as type adapters.
+-- Reduced metadata requirement
+-- ColumnFixture and RowFixture without markup
+-- Usability enancements in the list fixtures
+-- Comment columns in CalculateFixture
+-- CombinationFixture, ConstraintFixture and ImageFixgture
+   from FitLibrary
+-- TableFixture from FitNesse
+-- CommentFixture no longer marks cells as ignored
+-- Default type adapter uses reflection to find types.
+-- TaggedString type adapter from FitLibrary
+-- Major improvements to the Float type adapter
+-- Graphic type adapter supports ImageFixture and
+   Dot Graphics from FitLibrary
+-- Improvements in messages, including reporting errors
+   in more appropriate cells.
+
+In addition, core FIT now has unit tests which have
+approximately 98% statement coverage.
+
+The original FitLibrary specification test suite now
+passes at 100%, although several tests had to be 
+removed and several more changed. Most of the changes
+are due to message improvements.
+
+-------------------------------------------
+
+The following changes to 0.7a3 over 0.7a2.
+(0.7a3 was never released, but the changes are
+in 0.8a1)
+
+Two additional Fit Library modules have been
+converted: GridFixture and Tables. The number
+of passing Fit Library specification tests is
+now 196 of 210.
+
+A number of changes in the distribution mechanism
+to address reported problems installing under 
+Linux. I don't have a Linux system to test with;
+please notify me if there are install problems on
+non-windows systems. Specific issues include fixing
+the line endings on the scripts, insuring that
+the scripts in the fit root directory have the correct
+#! line, and a number of cleanups in the actual
+setup.py program. Thanks to Martin Fuzzey for this
+trouble report.
+
+An errant except clause in ColumnFixture has
+been changed to use Exception instead of 
+TypeAdapter.ParseError (which no longer exists).
+Thanks to Jens Engle for catching this one.
+
+RowFixture has been substantially revised; it 
+now has a number of new capabilities, including
+the ability to use different types of sequences,
+heterogenous objects in the collection including
+dictionaries, and also the ability to be used 
+without a subclass. See the writeup for details.
+
+-------------------------------------------
+
+The following changes to 0.7a2 over 0.7a1.
+
+Bug in handling non-ascii values from FitNesse
+(specifically Korean, but all non-ascii is
+affected).
+Missing decode from utf-8.
+
+Bug in handling class in module syntax for
+a non-package.
+
+Thanks to June Kim for reporting both of these.
+
+Bug in the numeric range cell handler.
+
+Thanks to Jens Engle for reporting this one.
+
+--------------------------------------------
+
+The following changes in 0.7a1 over 0.6a1.
+
+The big change was the integration of Rick Mugridge's Fit Library.
+All of Fit Library except tables, grids, dot Graphics
+and .xls file parsing have been added. Tables and
+grids will probably be done next release, dot Graphics
+possibly. .xls file support will not be done
+unless someone else supplies a patch: I don't have the
+packages installed and I'm not aware of a Python language
+interface that doesn't depend on COM automation. 
+
+All of the specification tests for Fit 1.1 now run
+in a new standards mode. See the runner documentation
+for how to invoke it.
+
+It is now possible to use many application objects
+as their own type adapters, eliminating the need to
+write a type adapter for these objects.
+
+Other changes include:
+
+A complete rewrite of the batch runners, adding the
+ability to specify SetUp and TearDown files, process
+complete directories and directory trees, produce
+an XML statistics file and process inputs in different
+encodings. If someone wants to supply a patch to process
+.doc, .xls and .xsw files directly, it should go into the
+runners to be invoked by file name suffix. I may do
+.xsw files myself if someone can point me to readable
+documentation on OpenOffice.org xml file format
+specifications.
+
+A complete rewrite of the FitNesse runners, now
+including the TestRunner and XML statistics files. 
+See the documentation for details.
+
+It's now possible to specify new runners by adding
+a small stub and a subclass to the SiteOptions module.
+
+FixtureLoader was split from Fixture, resulting in a major
+slimming of the module. It also includes a complete redesign
+of the loader, which should stabalize things. As part of this
+change, the ability to specify packages to look at was dropped.
+This has been replaced by the FixtureRenames file.
+
+In ColumnFixture and derived fixtures a blank cell 
+will be filled in with the current value greyed out.
+This seems to have been part of the original
+specification that got missed.
+
+Both camel and GracefulNames have been updated to
+insure that a name does not start with a number, and
+does not duplicate a reserved word. The reserved word
+dictionary includes True, False and as.
+
+Lots of changes in the TypeAdapter structure, including
+implementation of the Cell Handler concept from the FitNesse
+C# port. This implementation probably won't survive in
+its present form into the next release although certain
+of the capabilities definitely will, including the
+exception[] keyword.
+
+Four of the FitNesse acceptance tests now run; the others
+depend on programs that haven't been converted. The rest
+are planned for the next release now that I've finally
+figured out how to handle them. All FitNesse changes up 
+through April 2005 have been applied.
+
+There's a new writeup on how to use FIT for testing.
+Read it and see if it makes sense.
+
+The Distutils installation has been cleaned up.
+
+------------------------------------------------
+
+Changes for 0.6a1
+
+- First cut at floating point exceptional values.
+
+- UTF-8 support for acceptance tests.
+
+- Fixes to the FitServer program.
+
+- A number of bug fixes throughout the program.
+
+- Now using the Distutils installer
+
+- One of the FitNesse fixture acceptance tests now
+  runs from FitNesse!
+
+Changes for 0.5a1
+
+- Most of the changes from the Fitnesse 20040530 release have
+  been added. One was already there in a different form, and
+  the implementation differs on some of them.
+
+- All output now uses one of two CSS stylesheets rather than
+  the inline markup that previous versions used. This means
+  that batch users MUST include the FIT.css stylesheet in any
+  directories that receive output HTML. FileRunner and WikiRunner
+  will write a default FIT.css file there if one does not already
+  exist.
+
+- Many exception conditions have been changed to provide a more
+  meaningful message instead of a stack trace. Many of these now
+  print as wrong rather than exceptions, and they display in the
+  standard font size, not the smaller size used for stack traces.
+
+- A Comment fixture has been added as an example of how to create
+  a fixture that bypasses a table which contains something other
+  than test data.
+
+- Fixture names can be specified in a more easy to use form.
+
+- an ! can be used in ColumnFixture, RowFixture and fixtures
+  derived from either one instead of () or ?.
+
+- The Generic type adapter now checks for the existance of a parse()
+  method in the domain value object, and uses that instead of the
+  normal constructor if it's present.
+
+- The bug in FitServer has been fixed.
+
+- A residual bug in MusicExample has been squashed. It now
+  gives the same results as the Java version.
+
+- The equals checks in ScientificDouble have been fixed. In doing
+  this, two errors in the test suite were also identified and fixed.
+  ScientificDouble now tests for equality the same way the float
+  type adapter does (which is not the same way any other version of
+  FIT does it!).
+
+Changes for 0.4a2
+
+- Added a "charBounds" to the float type adapter meta-data.
+
+- Added the floating range check. This always does low < value < high, regardless
+  of what comparisons are specified.
+
+- strings can be specified using Python's string syntax, using regular strings,
+  unicode strings or raw strings.
+
+- Arbitrarily complex lists, tuples and dicts can be built. They may contain
+  only fundamental objects including ints, floats, complex numbers, strings and
+  the built-in constants True, False and None. The add and subtract operators
+  can be used to build a complex number.
+
+- added a precision to the complex equals routine, and also fixed the parse
+  routine so it accepts spaces.
+
+- added a way to extend the list of words that the boolean type adapter will
+  accept as either true or false.
+
+
+Changes for release 0.4a1
+
+Brought up to date for the April 4, 2004 release of Fitnesse. This includes the following
+items from the Fitnesse release notes that affect FIT.
+
+- Fitserver implementation. This is required to run FIT with Fitnesse
+
+- Range syntax is *NOT* implemented. It was only for floats, and I've integrated the Scientific Double logic into the float mainline. I will eventually add range syntax to the float type adapter. ***TODO***
+
+- Exception font size ***TODO***
+
+- Boolean type adapter takes additional codes.
+
+- ? can be used in ColumnFixture and derivatives instead of () to indicate a getter
+
+- Symbols setter= and =getter
+
+- The terms null and blank will be interpreted when checking results. *TODO*
+
+- additional cells on the first row of a table are now availible via the getArgs() method of Fixture.
+
+Other changes:
+
+- the parse exit logic has been completely redesigned.
+
+- Some documentation is included. It still needs quite a bit of improvement.
+
+- Redesign of the TypeAdapter hierarchy to split the responsibilities for type conversion and accessing into separate class hierarchies. The standard factories for creating a type adapter remain the same, though.
+
+- Some additional unit tests are now included. This includes a fairly thorough set of unit tests for TypeAdapter.
+
+- It is now possible to use fields, methods and properties as either getters or setters. The distinctions that exist in the Java version do not affect this one.
+
+- FileRunner now handles input with the <wiki> tag transparently, eliminating the need for WikiRunner.
+
+
+Changes for release 0.3
+
+This is the first public release of this version of Python FIT.
+
+- Complete redesign of the mechanism for finding type information for fields and methods. See the documentation before writing fixtures!
+
+- brought up to date for the September 15, 2003 release of the Java version of FIT.
+
+- most of the samples shipped with FIT now work. The Net example hasn't been converted,
+and there are still a couple of bugs elsewhere.
+
+
+
+
+
+

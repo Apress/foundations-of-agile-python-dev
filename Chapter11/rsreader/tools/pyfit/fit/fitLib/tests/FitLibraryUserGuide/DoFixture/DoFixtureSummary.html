@@ -1,0 +1,29 @@
+<html><title>DoFixtureSummary</title><body>
+<h1><a href="DoFixtureSummary.html">DoFixtureSummary</a></h1>
+<h2>DoFixture:</h2>
+<h3><i>keywords</i></h3>
+<ul><li>Actions start with a <i>keyword</i> and appear in every second cell.</li>
+<li>A <i>keyword</i> cell can be empty.</li>
+<li>The last <i>keyword</i> is optional.</li>
+<li>A <i>keyword</i> can contain any characters, such as "+"</li></ul>
+<h3>Special actions</h3>
+DoFixture has several special actions, which apply to the rest of their row:<br>
+<ul><li><i>check</i> checks whether the result of the action in the rest of the row matches the value in the last cell of the row. That last cell is colored green, red, etc accordingly.</li>
+<li><i>reject</i> checks that the action fails, as expected.</li>
+<li><i>not</i> acts the same as <i>reject</i>.</li>
+<li><i>ensure</i> checks that the action succeeds.</li>
+<li><i>show</i> displays the result of the action in the rest of the row by adding an extra cell in the report.</li>
+<li><i>show dot</i> displays the result of the action in the rest of the row by adding an extra cell in the report. This is shown as a Dot graph.</li>
+<li><i>note</i> ignores the rest of the row, allowing notes to be included in tables</li></ul>
+<h3>Flow Style</h3>
+To be in "flow", the first table must be a <i>DoFixture</i> (or <i>SequenceFixture</i>). The actions in all following tables are carried out with that fixture. However, as we saw before, an action may provide a different fixture, such as a <i>RowFixture</i>, which will be used with the rest of the table.<br>
+<h3>More Examples</h3>
+Lots more examples of using DoFixture and the other flow fixtures are provided in <i>Fit for Developing Software</i> by Rick Mugridge and Ward Cunningham, Prentice-Hall, 2005. The tables and fixture code for these examples will be made available on the <a href="http://fit.w2.com">Fit website</a>.<br>
+<h3>Fixture Code</h3>
+Let's now look at <a href="WritingFixtures.html">WritingFixtures</a> for DoFixture tables.<br>
+<h3>More Technical Issues</h3>
+<a href="SpecialisedIssues.html">SpecialisedIssues</a><br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

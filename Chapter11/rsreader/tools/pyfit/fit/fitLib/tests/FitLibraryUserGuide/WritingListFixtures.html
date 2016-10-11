@@ -1,0 +1,75 @@
+<html><title>WritingListFixtures</title><body>
+<h1><a href="WritingListFixtures.html">WritingListFixtures</a></h1>
+Here's the fixture code for all of the examples given for the various list-based fixtures. You'll need to understand about fixture code for <i><a href="DoFixture/index.html">DoFixture</a></i> in <i>flow</i> first.<br>
+<br>
+Notice that <i><a href="ParamRowFixture.html">ParamRowFixture</a></i> avoids the need to write a subclass for <i>RowFixture</i> when it's used with <i><a href="DoFixture/index.html">DoFixture</a></i>.<br>
+<br>
+<i><a href="ArrayFixture.html">ArrayFixture</a></i>, <i><a href="SetFixture.html">SetFixture</a></i> and <i><a href="SubsetFixture.html">SubsetFixture</a></i> can all take the following collections as arguments to their constructors:<br>
+<ul><li><i>Object[]</i></li>
+<li><i>java.util.Collection</i></li>
+<li><i>java.util.Iterator</i></li>
+<li><i>java.util.Map[]</i>, in which case each element of the collection is a <i>Map</i> instead of an <i>Object</i>. This is handy with dynamic collections, such as provided by <i>javax.swing.TableModel</i>.</li></ul>
+These three fixtures also treat a header label as referring to either an instance variable or a property (through a getter method) when an element is an <i>Object</i> (ie, not a <i>Map</i>). All header labels are converted to a Java identifier using <a href="../FitLibraryUserGuide/ExtendedCamelCase.html"><i>extended camel casing</i></a>.<br>
+<br>
+These fixtures can also be used "stand-alone" (ie, not in <i>flow</i>, where the first table is interpreted by a <i><a href="DoFixture/index.html">DoFixture</a></i>). In that case it's necessary to subclass them, as with <i>RowFixture</i>.<br>
+<hr>
+<pre>public class StartListing extends fit.DoFixture {
+    private int[] ints;
+
+    public void listIs(int[] ints) { 
+        this.ints = ints;
+    }
+    public Fixture orderedList() {
+        return new <a href="ArrayFixture.html">ArrayFixture</a>(itemList());
+    }
+    public Fixture rowList() {
+        return new ItemRowFixture();
+    }
+    public Fixture set() {
+        return new <a href="SetFixture.html">SetFixture</a>(itemList());
+    }
+    public Fixture subset() {
+        return new <a href="SubsetFixture.html">SubsetFixture</a>(itemList());
+    }
+    public Fixture paramRowList() {
+        return new <a href="ParamRowFixture.html">ParamRowFixture</a>(itemArray(),Item.class);
+    }
+    private List itemList() {
+        return Arrays.asList(itemArray());
+    }
+    private Object[] itemArray() {
+        Object[] result = new Object[ints.length];
+        for (int i = 0; i < ints.length; i++)
+            result[i] = new Item(ints[i]);
+        return result;
+    }
+    public static class Item {
+        public int item;
+        public Item(int item) {
+            this.item = item;
+        }
+    }
+    public class ItemRowFixture extends fit.RowFixture {
+        public Object[] query() throws Exception {
+            return itemArray();
+        }
+        public Class getTargetClass() {
+            return Item.class;
+        }
+    }
+}
+</pre>
+<hr>
+<br>
+With <a href="../FitLibraryUserGuide/DoFixture/FixtureDetails.html"><i>auto-wrapping</i></a> in <a href="DoFixture/index.html">DoFixture</a>, the method <i>orderedList()</i> could be written as:<br>
+<hr>
+<pre>    public List orderedList() {
+        return itemList();
+    }
+</pre>
+<hr>
+<br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

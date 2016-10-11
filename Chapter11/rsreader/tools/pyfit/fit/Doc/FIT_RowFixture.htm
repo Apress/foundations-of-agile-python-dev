@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Row Fixture</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="row-fixture">
+<h1 class="title">Row Fixture</h1>
+<p>The Row Fixture is one of four fixtures that are intended to check whether the contents of a collection are as expected. The other three are the ArrayFixture, SetFixture and SubsetFixture from the Fit Library. A variation on this fixture can, of course, also be used to check whether the content of a data base table is correct.</p>
+<p>The row fixture uses a sophisticated clustering algorithm to match the rows in the table against the objects in the collection, and is suitable for unordered collections. The other three fixtures use less sophisticated algorithms; in particular the ArrayFixture is useful for ordered collections, while the SubsetFixture is useful to test whether specific entries are in a collection while ignoring extra entries.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#using-rowfixture" id="id2" name="id2">Using RowFixture</a><ul>
+<li><a class="reference" href="#using-a-rowfixture-subclass-with-classic-fit" id="id3" name="id3">Using a RowFixture subclass with classic FIT</a></li>
+<li><a class="reference" href="#using-rowfixture-directly-with-classic-fit" id="id4" name="id4">Using RowFixture directly with classic FIT</a></li>
+<li><a class="reference" href="#using-rowfixture-from-a-fit-library-dofixture" id="id5" name="id5">Using RowFixture from a FIT Library DoFixture</a></li>
+<li><a class="reference" href="#using-the-setupfixture-and-teardownfixture-overridable-methods" id="id6" name="id6">Using the setUpFixture and tearDownFixture overridable methods.</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#general-usage-in-all-environments" id="id7" name="id7">General Usage in all environments</a><ul>
+<li><a class="reference" href="#symbolic-reference-column" id="id8" name="id8">Symbolic Reference Column</a></li>
+<li><a class="reference" href="#do-it-yourself-label-to-identifier-mapping" id="id9" name="id9">Do It Yourself Label to Identifier mapping.</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#matching-algorithm" id="id10" name="id10">Matching Algorithm</a></li>
+</ul>
+</div>
+<div class="section" id="using-rowfixture">
+<h1><a class="toc-backref" href="#id2" name="using-rowfixture">Using RowFixture</a></h1>
+<p>RowFixture can be used in several different environments; what you can do with it depends on the environment.</p>
+<div class="section" id="using-a-rowfixture-subclass-with-classic-fit">
+<h2><a class="toc-backref" href="#id3" name="using-a-rowfixture-subclass-with-classic-fit">Using a RowFixture subclass with classic FIT</a></h2>
+<p>The first cell in the first row is the name of a RowFixture subclass.</p>
+<p>Cells following the fixture name can contain parameters to your RowFixture subclass. You can use the inherited getArgs() method or process the first row specially in doTable().</p>
+<p>Your subclass must implement the query() method may implement the getTargetClass() method. The query() method returns the contents of the collection. The getTargetClass() method returns a class object which contains the metadata dictionary bound to the _typeDict attribute. If you don't implement it, RowFixture will expect the metadata dictionary in your subclass.</p>
+</div>
+<div class="section" id="using-rowfixture-directly-with-classic-fit">
+<h2><a class="toc-backref" href="#id4" name="using-rowfixture-directly-with-classic-fit">Using RowFixture directly with classic FIT</a></h2>
+<p>This is a Python FIT extension; you cannot do this in most versions of FIT.</p>
+<p>To use RowFixture directly in classic FIT, a previous fixture must have stored an object with attributes named collection and metaData in the symbol table using self.setSymbol(key, value). The object containing the elements of the collection must be bound to the collection attribute, and the dictionary containing the metadata entries needed by the table must be bound to the metaData attribute. The object may be of any class which has the two required instance attributes. PyFit does not supply a class for this purpose.</p>
+<p>The name of the symbol must be in the second cell of the first row of the table, immediately following the cell containing fit.RowFixture which invokes RowFixture. This behavior will not be inherited by RowFixture subclasses; it is only available if RowFixture is invoked directly.</p>
+</div>
+<div class="section" id="using-rowfixture-from-a-fit-library-dofixture">
+<h2><a class="toc-backref" href="#id5" name="using-rowfixture-from-a-fit-library-dofixture">Using RowFixture from a FIT Library DoFixture</a></h2>
+<p>The recommended way is to create a domain specific method that internally instantiates the RowFixture, passing it the collection and the metadata table, and returns the fixture instance. This must be the first row of the table; the remainder of the table is the same as other usages of RowFixture. The returned value type for the method is irrelevant; DoFixture checks for the return value being a subclass of Fixture.</p>
+<p>Alternatively, the invoking method may return a tuple of two items: the first is the sequence which contains the elements of the collection, and the second is a dictionary containing the metadata describing the attributes of the elements. In this scenario, the metadata entry for the command must specify $Row as the returned value type.</p>
+</div>
+<div class="section" id="using-the-setupfixture-and-teardownfixture-overridable-methods">
+<h2><a class="toc-backref" href="#id6" name="using-the-setupfixture-and-teardownfixture-overridable-methods">Using the setUpFixture and tearDownFixture overridable methods.</a></h2>
+<p>The setUpFixture(firstRow) and tearDownFixture() overridable methods are new in release 0.8a2, and are still somewhat experimental. They are called by Fixture before and after the doTable() method. They can be used to acquire and release resources. One use is to process the label row (the second row in the parameters) to tailor a collection before the query() method acquires it.</p>
+</div>
+</div>
+<div class="section" id="general-usage-in-all-environments">
+<h1><a class="toc-backref" href="#id7" name="general-usage-in-all-environments">General Usage in all environments</a></h1>
+<p>The collection can be a dictionary or any object that implements either the sequence or iterator protocol other than a string. Most of the time it will be a Python list, although it's possible to use application collection objects directly as long as they behave like either sequences or iterators. If it's a dictionary, the values will be used as the collection; the keys will be ignored.</p>
+<p>Each member of the resulting sequence is an object whose attributes represent one row to be matched. Objects need not all be of the same type and may be dictionaries.</p>
+<p>The second row contains the names of the columns. Each name corresponds to a field, method or property in the data objects in the collection, or to a key if the data object is a dictionary. Methods are distinguished from fields and properties by reflection; the decorators ( (), ! and ? )used in ColumnFixture are not needed, and are not accepted.</p>
+<p>All attributes named in the table must have metadata in the metadata dictionary. See the <a class="reference" href="FIT_TypeAdapters.htm">Type Adapters</a> writeup for details.</p>
+<p>This setup is flexible enough that one can use a file object which is open for 'rt' as the collection, and then use the __str__ attribute and all zero parameter methods of the returned string. The __str__ attribute must, of course, be the result of aliasing some other name with the &quot;.renameTo&quot; metadata qualifier. I'm not at all sure why anyone would want to use RowFixture for this, but it should work. The DisplayUtility fixture would be a better choice if one simply wanted to list a file, and the ArrayFixture would be a better choice if one wanted to verify the file's contents.</p>
+<div class="section" id="symbolic-reference-column">
+<h2><a class="toc-backref" href="#id8" name="symbolic-reference-column">Symbolic Reference Column</a></h2>
+<p>It's possible to mark a column so that all of the values come from the symbol table. There are two ways of doing this: either use markup, or put a special tag in the metadata.</p>
+<p>The markup is an equal sign (=) after the label in the label row. If you don't want to do this you need to put a &quot;.markup&quot; key in the metadata with a value of &quot;off&quot;, and mark each column that gets its value from the symbol table with an &quot;&lt;identifier&gt;.columnType&quot; key and a value of &quot;checkSaved&quot;. For example, if the identifier is &quot;foo&quot;, then the metadata key is &quot;foo.columnType&quot;.</p>
+<p>Note that the &quot;.columnType&quot; metadata qualifier is always active regardless of whether there is markup in use. However, it will only change a &quot;result&quot; type column to a &quot;checkSaved&quot; type column.</p>
+<p>You can also use the Symbol cell handler on a cell by cell basis.</p>
+<p>The symbolic Reference column is a FitNesse extension; it is not in most FIT versions. The Symbol cell handler is also a FitNesse extension that is only in the FitNesse C# version; it is not in most other versions of FIT.</p>
+</div>
+<div class="section" id="do-it-yourself-label-to-identifier-mapping">
+<h2><a class="toc-backref" href="#id9" name="do-it-yourself-label-to-identifier-mapping">Do It Yourself Label to Identifier mapping.</a></h2>
+<p>The default label process, possibly augmented by an Application Configuration module, is usually sufficient; however there are times when more flexability is needed. When this occurs, an extended overrideable method can be enabled so that the fixture can process the labels in other ways than the default.</p>
+<p>Extended label processing is enabled by using the &quot;.extendedLabelProcess&quot; key with a value of &quot;on&quot;. When you use this key, the bind routine will call the processLabel(label, columnNumber) method before doing any other processing.</p>
+<p>ProcessLabel(label, columnNumber) takes two parameters: the label and the column number, and it returns a tuple with two elements. It can also return None, which means to use the regular process for that label.</p>
+<p>The first element in the returned tuple is either &quot;result&quot; or &quot;checkSaved&quot;. The second element must be the Python identifier. Conventionally, it will be the result of processing the original label with the markup (if any) stripped, however it doesn't have to have any relationship to the original label.</p>
+<p>RowFixture will always check the metadata for an &quot;&lt;identifier&gt;.columnType&quot; key; that key can change a &quot;result&quot; type column to a &quot;checkSaved&quot; type column. It cannot change the column type the other way.</p>
+</div>
+</div>
+<div class="section" id="matching-algorithm">
+<h1><a class="toc-backref" href="#id10" name="matching-algorithm">Matching Algorithm</a></h1>
+<p>The comparison is made using a recursive partitioning strategy. That is, on the first pass both the rows from the table and the objects from the collection are partitioned based on the first column. The values from the table are converted to object format before the partitioning; this avoids problems with aliasing (such as Booleans accepting T,t, True, true and 1 as True values).</p>
+<p>If a partition contains exactly one row and one object, all fields are compared and the results displayed and tabulated. Fields which do not compare are marked wrong, fields which do compare are not marked.</p>
+<p>If either side is empty, all members of the other are marked as containing either extra or missing rows.</p>
+<p>If either side contains more than one row or object (and the other is not empty) then that partition is recursively partitioned on the next column. The process continues until either a match, extra or missing row is found, or we run out of columns. In the latter case we obviously have duplicates, so the top entries are matched, and the excess on either side is either extra or missing.</p>
+<p>The match process ends when both sides contain exactly one object (a match), one side or the other contains no objects (missing or surplus) or there are no more columns to partition. This last case is only possible if there are duplicate rows or objects; as many rows and objects as possible are matched, the remainder are either missing or surplus.</p>
+<p>The results appear in the same order they occured in the table; extra rows are inserted immediately after the cluster they belong to.</p>
+<p>Columns which are missing metadata are ignored in the match. Columns which do not match an attribute in any object are an error; the table is aborted immediately. Objects which have missing attributes during the match are otherwise marked as excess; missing attributes after the partitioning process completes are considered mismatches and are marked wrong.</p>
+</div>
+</div>
+</body>
+</html>

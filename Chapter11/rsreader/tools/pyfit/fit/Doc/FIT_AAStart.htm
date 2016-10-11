@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>FIT Overview</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="fit-overview">
+<h1 class="title">FIT Overview</h1>
+<p>FIT (the Framework for Integrated Testing) is an outgrowth of <a class="reference" href="http://www.c2.com/">Ward Cunningham's</a> experience in writing acceptance test frameworks in a number of different projects over the years. The original version is in Java, and can be found at <a class="reference" href="http://fit.c2.com/">fit.c2.com</a>. This version is an extension of <a class="reference" href="http://zwiki.org/SimonMichael">Simon Michael's</a> <a class="reference" href="http://fit.c2.com/files/PythonDownloads/fit-b021014py.tgz">port</a> to Python.</p>
+<p>This version also contains most of Rick Mugridge's <a class="reference" href="FitLib_Basic.htm">Fit Library</a> in a fully integrated form. The Fit Library is documented in a series of specification tests in the fitLib.tests folder as well as several pages in this documentation set.</p>
+<p>There is an excellent book, &quot;Fit for Software Development&quot; (Prentice-Hall July 2005, ISBN 0-321-26934-9), by Rick Mugridge and Ward Cunningham, which may be acquired through your usual bookseller channels. Some differences between the version of Fit and FitLibrary documented in the book and PyFit can be found <a class="reference" href="Fitbook_Intro.htm">here</a>. It's written for both the non-technical customer and the developer. Highly recommended.</p>
+<p>FIT takes the approach that the acceptance tests are part of the requirements, and as such they should be readable and understandable by the customers who are having the software constructed. Ideally, Fit style acceptance tests are written by a team consisting of customers, developers and testers, since each has different perspectives and expertise to bring to the job.</p>
+<p>This philosophy meshes very naturally with Extreme Programming. XP attempts to minimize the use of documents which can get out of date. Accordingly, XP strongly suggests that requirement documents be executable; this insures that they have to be kept up to date, or the tests will not pass.</p>
+<p>One of the objectives of the FIT system is that FIT tests can serve as business documentation, and can outlive a particular implementation of a system.</p>
+<p>FIT tests are HTML tables embedded in an HTML document. This can be produced by any tool that can create an HTML document with tables, including the usual run of word processors and spreadsheets. One increasingly popular option is to use the <a class="reference" href="http://www.fitnesse.org/">FitNesse</a> tool from <a class="reference" href="http://www.objectmentor.com/home">ObjectMentor</a>.</p>
+<p>Besides FitNesse, there is also an experimental GUI front end called Fitster, and a Fitster port which is being developed for the Eclipse IDE.</p>
+<p>Tables are processed by fixtures, which are small programs that connect the table with the software under test. The first row of a table contains the fixture name in the first cell, and any parameters needed by that fixture in succeeding cells. The remaining rows are interpreted by the fixture itself. The fixture name is simply the module name and class name, separated with dots as in the Python import statement. If the module and class have the same name, then it is not necessary to repeat them. For example, the name &quot;fit.ColumnFixture&quot; loads the class named ColumnFixture in the module named ColumnFixture in the package named fit.</p>
+<p>Rick Mugridge's <a class="reference" href="FitLib_Basic.htm">FitLibrary</a>, included with this release, takes a different approach. He prefers that there be as little &quot;technology facing&quot; data in the acceptance tests as possible, so his DoFixture can be used with exactly one invocation of a fixture name right at the beginning. The fixture then handles the rest of the interaction. See the FitLibrary documentation for examples.</p>
+<p>Alistair Cockburn, in his excellent <a class="reference" href="http://alistair.cockburn.us/crystal/articles/hpaaa/hexagonalportsandadaptersarchitecture.htm">Hexagonal (Ports and Adapters) architecture</a> papers gives one of the best rationales for where FIT connects with a system. There's a diagram in the middle that I've attempted to write several times; he's not only done a much better job, the surrounding paragraphs are a much better explanation than I've ever been able to give.</p>
+<p>The documentation set contains:</p>
+<ol class="upperalpha simple">
+<li><a class="reference" href="FIT_Distribution.htm">A guide to the distribution</a></li>
+<li><a class="reference" href="FIT_UsingFit.htm">Using FIT</a></li>
+<li><a class="reference" href="FIT_Examples.htm">A guide to the samples and tests</a></li>
+<li><a class="reference" href="FIT_WritingFixtures.htm">Guide to Writing Fixtures</a></li>
+<li><a class="reference" href="FIT_New0-8.htm">Release 0.8 changes</a></li>
+</ol>
+</div>
+</body>
+</html>

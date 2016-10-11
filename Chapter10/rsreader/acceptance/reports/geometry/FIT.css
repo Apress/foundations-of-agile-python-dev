@@ -1,0 +1,12 @@
+
+/**********
+ Used in FIT
+**********/
+.fit_pass {background-color: #cfffcf;}
+.fit_fail {background-color: #ffcfcf;}
+.fit_error {background-color: #ffffcf;}
+.fit_ignore {background-color: #efefef;}
+.fit_stacktrace {font-size: 0.7em;}
+.fit_label {font-style: italic; color: #c08080;}
+.fit_grey {color: #808080;}
+.fit_green {color: #80c080;}

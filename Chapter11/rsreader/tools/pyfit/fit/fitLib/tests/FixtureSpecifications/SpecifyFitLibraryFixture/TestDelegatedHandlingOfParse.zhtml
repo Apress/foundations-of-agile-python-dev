@@ -1,0 +1,19 @@
+<html><title>TestDelegatedHandlingOfParse</title><body>
+<h1><a href="TestDelegatedHandlingOfParse.html">TestDelegatedHandlingOfParse</a></h1>
+The first fixture can register once a Parser for a particular type, rather than having to include the parse() method in every fixture.<br>
+<br>
+Here we directly access a <i>Date(2004-1900,2,3)</i>:<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td>show</td><td ColSpan=2>date</td></tr>
+<tr><td>--r</td><td>check</td><td>date</td><td>2004/03/03 00:00</td></tr>
+<tr><td>--w</td><td>check</td><td>date</td><td>2004/03/03 00:01</td></tr>
+</table>
+<br>
+This may be specific to <i>Date</i>, but it shows two problems:<br>
+<ul><li>We'd like to display the <i>Date</i> in the same form that we expect it to be entered. This occurs in <i>show</i> and when the value is not as expected (as in the last row above).</li>
+<li>The Date display is locale-dependent, so we can't test that the correct date is shown (ie, |report|show|date|Wed Mar 03 00:00:00 NZDT 2004|)</li></ul>
+For the first problem, there are several possible solutions:<br>
+<ul><li>Use a subclass or wrapper of <i>Date</i> in the SUT and provide an different <i>toString()</i> method, which is what is used by default by Fit. This means wrapping (output) Dates in the fixture. And changing the SUT itself to use such wrappers, which will be needed when RowFixture, etc access Date values.</li>
+<li>Have a method <i>toString()</i>, like <i>parse()</i>, but for displaying an object. </li>
+<li>Allow for new <i>TypeAdapter</i>s to be registered.</li></ul>
+</body></html>

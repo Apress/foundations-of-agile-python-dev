@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Import Fixture</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="import-fixture">
+<h1 class="title">Import Fixture</h1>
+<p>The Import fixture lets you control where FIT looks for fixture renames and remembered packages. Entries with a name in the first column only are remembered packages; entires with two names are fixture renames. A version of the table with only one column is acceptable.</p>
+<p>The single entry version is for compatability with FitNesse.</p>
+<p>It should be placed in the acceptance test before any fixtures that need it. The fit
+package itself is always predeclared.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="53%" />
+<col width="48%" />
+</colgroup>
+<tbody valign="top">
+<tr><td colspan="2">fit.Import</td>
+</tr>
+<tr><td>spam.eggs.toast</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>spaghetti.meatballs</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>fat</td>
+<td>fat.Spec1_1Tests</td>
+</tr>
+</tbody>
+</table>
+<p>It also declares that any names which begin with fat. will be changed to begin with fat.Spec1_1Tests. This is one of the entries that is used to map the Fit 1.1 specification tests to a more specific location.</p>
+<p>NOTE - use of this fixture is strongly discouraged. It's here because it's heavily used in tests created by FitNesse. Future versions of PyFit may make this fixture a comment. Either the <a class="reference" href="FIT_ConfigurationExit.htm">application configuration</a> facility or the <a class="reference" href="FIT_FixtureNames.htm">fixture renames</a> facility is a significantly better replacement.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<html><title>ImageFixture</title><body>
+<h1><a href="ImageFixture.html">ImageFixture</a></h1>
+<a href="ImageFixture.html">ImageFixture</a> just needs the names of the image files:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.specify.GridFixtureUnderTest</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=5>images for image fixture</td></tr>
+<tr><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\wall.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\space.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\box.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\space.jpg"></td><td><img src="file:///C:\Documents and Settings\wmug001\My Documents\work\FitLibraryForFit\files\images\wall.jpg"></td></tr>
+</table>
+<br>
+The method <i>imagesForImageFixture()</i> in class <i>GridFixtureUnderTest</i> is as follows:<br>
+<br>
+<hr>
+<pre>...
+    public Fixture imagesForImageFixture() {
+        return new <a href="ImageFixture.html">ImageFixture</a>(new String[][] {
+            {   "images/wall.jpg",
+                "images/space.jpg",
+                "images/box.jpg",
+                "images/space.jpg",
+                "images/wall.jpg" }});
+    }
+</pre>
+<hr>
+<br>
+</body></html>

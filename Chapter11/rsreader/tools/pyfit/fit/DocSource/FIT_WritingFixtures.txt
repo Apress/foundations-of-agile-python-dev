@@ -1,0 +1,135 @@
+
+Writing Fixtures
+================
+
+Fixtures are the glue that connects the HTML tables with the Software Under Test (SUT). Fixtures always inherit from Fixture or a subclass of Fixture. Fixtures tend to be quite easy to write. If they contain complex logic, it usually means there is an architectural problem somewhere, possibly a feature envy type of code smell.
+
+Writing fixtures, even trivial fixtures, is unfortunately labor intensive. Some attention to cleanly layered architecture can minimize the work substantially. In the best case, one can design generic fixtures that operate with many different application modules without modification.
+
+.. contents::
+
+Inheriting from (a subclass of) Fixture
+---------------------------------------
+
+The Fixture module has one main class and a number of supporting classes. You will normally only subclass the main Fixture class, so I'll deal with Fixture first, and the supporting classes at the end of the document.
+
+Fixture has a number of utility methods that fall into a few categories: navigation, annotation, and general utility.
+
+Navigation Methods
+++++++++++++++++++
+
+There are seven traversal methods: doTables, interpretTables, doTable, doRows, doRow, doCells and doCell. You should probably look at the data structure that `Parse`__ leaves behind before proceeding though the rest of this section.
+
+__ FIT_Parse.htm
+
+doTables is the main driver for Fixture. It loops through the tables in the HTML document, loads the requested fixture, initializes it by injecting dependencies, and then invokes the doTable(table) method of the newly loaded fixture, passing it the <table> node. It's not possible to override it since subfixtures never execute it. The only way of overriding it is to add a different method and invoke it from your runner (see `FileRunner`__ for an example of how Fixture is normally invoked.)
+
+__ FIT_Runners.htm
+
+There is, however, a way of hooking doTables, and that is to override interpretTables. This method is called for the first table only. It allows DoFixture to bypass the rest of the doTables loop and do the table to table traversal itself. See DoFixture and FlowFixture if you want to replace the normal table to table traversal routine.
+
+doTable is invoked for each table. It is passed the node that represents the <table> tag. The default routine invokes setUpFixture(firstRow), doRows(secondRow) and tearDownFixture() in that order. SetUpFixture(firstRow) can do any initialization processing needed, including handling parameters on the same row as the fixture name and handling column headers (if they exist) on the second row. It can also initialize any resources that are needed for the life of the fixture. doRow(secondRow) invokes doRows(rows). TearDownFixture() can be used to release any persistant resources that the setUpFixture() method created.
+
+SetUpFixture() and tearDownFixture() are new in 0.8a2, so fixtures written earlier will override doTable to provide special processing at the table level. These two exits can be enabled or disabled on a per fixture basis by the .takeSetupExit metadata key. This key takes a value of True or False. They can also be authorized or suppressed on an application basis by the fixtureSetupExit method of the application configuration routine. This also returns True or False. The metadata key takes precedence over the application configuration routine.
+
+doRows is invoked once for all the rows in the table. Its responsibility is to navigate down the chain of rows, invoking doRow() for each one. The usual reason for overriding it is to provide special processing for the first row (or rows) following the fixture name. ColumnFixture, for example, uses the first row to hold the field names. ActionFixture is an example of a fixture that doesn't do any special processing.
+
+doRow is invoked for each row: its responsbility is to navigate to the first cell in the row and invoke the doCells method. It can also do any per row initialization.
+
+doCells is invoked once for each cell. Its responsibility is normally to invoke doCell for each cell in the row, although some fixtures, like ActionFixture, will process out of this method and never invoke doCell.
+
+doCell is the main workhorse for most fixtures. Its responsibility is to do whatever is needed.
+
+Which methods you override depends on what the fixture needs. ColumnFixture, for example, overrides doRows in order to initialize field accessors and type adapters for each column, doRow() to take row level exits, and doCell to process each cell.
+
+RowFixture overrides doRows and then processes the entire table itself without using Fixture's lower level navigation methods.
+
+ActionFixture overrides doCells and processes the three cells in each row out of this method.
+
+Annotation Methods
+++++++++++++++++++
+
+Annotation methods are the means of reporting the results back to the table. They are responsible for adding the necessary HTML to color the background and add error and exception data.
+
+There are four annotation methods: right(cell), wrong(cell, actual = None), ignore(cell) and exception(cell, exceptionObject). Your fixture calls the appropriate method to annotate the results. To avoid confusion, you should follow the standard definitions.
+
+The annotation methods in Fixture are all proxies for identical annotation methods on the parse cell. In addition, they add the appropriate count to the count object that is displayed by the Summary fixture and the runners.
+
+The annotation methods add a class= attribute to either the td tag or the span tag. They can be switched to add bgcolor= or color= tags instead.
+
+Utility Methods
++++++++++++++++
+
+Some of these seem to be utilities that are needed by one or another of the standard fixtures, and were put here to avoid duplication. This class of utility includes _counts, label, gray, greenlabel, and escape. The latter escapes the & and < symbols for HTML. 
+
+The camel() routine converts a column label in human readable form to a form that can be used as a method name in Python. Camel is discussed in depth in the `Label to Identifier Mapping`__ document.
+
+__ FIT_LabelToIdentifierMapping.htm
+
+parse(s, type) was a hook to allow the fixture to do custom parsing. The original version was heavily dependent on Java's reflection mechanism to provide type information; this doesn't work in Python. See the `TypeAdapter`__ writeup for the new parse hook.
+
+__ FIT_TypeAdapters.htm
+
+loadFixture(fixtureName) is the general mechanism for loading a fixture. While it's mostly called directly from Fixture.doTables, it's also called from other places, including ActionFixture.
+
+loadClass(fixtureName) is an alias for loadFixture that is depreciated.
+
+loadFixtureRenamesFromFile(path) is used to load renames into the alias table.
+
+Symbols and Parameters
+++++++++++++++++++++++
+
+The symbol facility supports the symbol columns of the ColumnFixture and RowFixture, and also the symbol cell handler. The symbol table is cleared at the end of every test.
+
+setSymbol() adds a symbol to the symbol table.
+
+getSymbol() gets the value for a symbol from the symbol table.
+
+getArgs() returns a (possibly empty) list of the text in all cells on the first row of the table following the fixture name.
+
+getArgCells() returns a list of all of the cells on the first row, including the cell containing the fixture name. This call is useful if you need to annotate an arguement, or if you want to find out the name of the fixture. You need to be a bit cautious with this: on one side the fixture name may already contain annotations, on the other it may be a business facing name that is not related to the actual fixture on the file system.
+
+This mechanism does not currently support symbols in the arguement cells; if you want to have arguements that reference symbols, you need to code it yourself.
+
+The arguements are not available in the "__init__" method; the earliest you can access them is in the doTables method.
+
+Type Adapter Methods
+++++++++++++++++++++
+
+check(cell, typeAdapter) handles all the check logic, including annotating the cell and tabulating the result. It delegates the check logic to the type adapter's check(cell) routine. It returns a checkResult object.
+
+parseAndSet(cell, typeAdapter) handles the logic required to parse a cell's contents and store the result in a field, method or property. It returns a CheckResult object; the actual result from the parse is bound to the CheckResult object's parseResult attribute.
+
+It differs from the parse routine in TypeAdapter in that it requires a cell; it does not accept a string, and it also supports the exception[] cell handler. The exception[] cell handler, if used, requires the third, value, parameter. Parse cells with this cell handler are annotated and tabulated.
+
+Defining Type Adapters
+++++++++++++++++++++++
+
+While it's not strictly necessary to use the type adapter mechanism in your own fixtures, it does allow you to abstract type conversions out of your fixtures. The standard fixtures require it. `This`__ describes the way you set up the type information for the type adapters. Look at the three standard fixtures to see the interface with the TypeAdapter mechanism.
+
+__ FIT_TypeAdapters.htm
+
+Support classes
++++++++++++++++
+
+These are three utility classes that are used by Fixture. Counts encapsulates the standard counts put out by the summary fixture, and also provides a good way of managing them. An instance of the class is plugged into the Fixture subclass that's created for each table, and then the result is rolled up to the version of Counts that's in the main Fixture class. The Counts class is a good example of a class that can be used from the Generic type adapter. It wasn't intended that way; it just grew.
+
+RunTime is a utility class that captures the time it was instantiated, and then pretty prints an elapsed time. It's useful for the summary, if nothing else.
+
+NullFixtureListener is a null object that is replaced by FitServer and TestRunner. See FitServer and FitServerTest to understand what it does.
+
+There are also two classes that support the CSS style sheets needed by the annotation method. One class provides the data needed for FitNesse, the other provides the data needed for Fit.
+
+Communicating between fixtures
+------------------------------
+
+There are a number of ways of communicating between fixtures.
+
+The cleanest, in the sense of being the most obvious to the reader, is to put a reference to whatever object you're passing into a symbol using the setSymbol(key, value) and getSymbol(key) methods of Fixture. This has the advantage that it will work in a number of different language versions of Fit, and it will also let you use several fixtures (ArrayFixture, RowFixture, SetFixture and SubsetFixture) without having to write a subclass.
+
+The other major method is to use some form of static reference. In Java, this is usually a static variable of a class that you know will always be loaded. In Python, it's usually an identifier in a module, although it can be an identifier in a class object.
+
+Another good strategy is to use the DoFixture from the Fit Library and avoid the problem altogether.
+
+
+

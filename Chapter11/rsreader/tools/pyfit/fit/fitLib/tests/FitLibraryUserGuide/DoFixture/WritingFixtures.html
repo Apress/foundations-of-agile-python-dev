@@ -1,0 +1,73 @@
+<html><title>WritingFixtures</title><body>
+<h1><a href="WritingFixtures.html">WritingFixtures</a></h1>
+<h3>Actions and Methods</h3>
+Each action in a <i>DoFixture</i> table is mapped directly to a method in the fixture (we'll expand this model in <a href="FixtureDetails.html">FixtureDetails</a>).<br>
+<br>
+Eg, consider the first few tables:<br>
+<ul><li>The fixture of the first table is a <i>DoFixture</i>, so the created <i>flow fixture object</i> handles the rest of the tables:</li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td> ChatStart </td></tr>
+</table>
+<ul><li>The second table contains an action, which is mapped into the method <i>connectUser()</i> of the (initial) <i>flow fixture object</i>, as shown below. </li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>connect user</i></td><td>sarah</td></tr>
+</table>
+<ul><li>The third table contains two actions which are also applied to the <i>flow fixture object</i>.</li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>user</i></td><td>sarah</td><td><i>creates</i></td><td>fit</td><td><i>room</i></td></tr>
+<tr><td><i>user</i></td><td>sarah</td><td><i>enters</i></td><td>fit</td><td><i>room</i></td></tr>
+</table>
+<br>
+<h3>Some Example Code</h3>
+<hr>
+<pre>public class ChatStart extends fit.DoFixture {
+	private ChatRoom chat = new ChatRoom();
+	
+	public ChatStart() {
+	    setSystemUnderTest(chat);
+	}
+	public boolean connectUser(String userName) {
+		return chat.connectUser(userName);
+	}
+	public boolean userCreatesRoom(String userName, String roomName) {
+		return chat.userCreatesRoom(userName,roomName);
+	}
+	public boolean userEntersRoom(String userName, String roomName) {
+		return chat.userEntersRoom(userName,roomName);
+	}
+	...
+</pre>
+<hr>
+<br>
+The next table checks a list.<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>users in room</i></td><td>fit</td></tr>
+<tr><td ColSpan=2><i>name</i></td></tr>
+<tr><td ColSpan=2>sarah</td></tr>
+</table>
+<br>
+The first row is an action, which corresponds to the method <i>usersInRoom()</i> which returns a <a href="../../FitLibraryUserGuide/ParamRowFixture.html"><i>ParamRowFixture</i></a>. This fixture object interprets the rest of the table.<br>
+<hr>
+<pre>	...
+	public Fixture usersInRoom(String roomName) {
+		return new ParamRowFixture(chat.usersInRoom(roomName).toArray(),User.class);
+	}
+	...
+</pre>
+<hr>
+<br>
+Each following table is handled by the initial <i>DoFixture</i>:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td><i>connect user</i></td><td>rick</td></tr>
+</table>
+<br>
+This means that each table doesn't need an explicit fixture, so actions can be split up easily. Because actions may return a fixture object for the rest of the table, that object can be created with all the appropriate information. This avoids the needs for global variables for communication between fixtures.<br>
+<br>
+<a href="FixtureDetails.html">FixtureDetails</a><br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+<br>
+</body></html>

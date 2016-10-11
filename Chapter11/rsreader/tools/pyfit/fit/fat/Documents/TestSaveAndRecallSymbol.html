@@ -1,0 +1,28 @@
+<html><head><title>Test Save and Recall Symbols</title></head>
+<body>
+<h1><center>Test Save and Recall Symbol</center></h1>
+<p>This test includes the Fitnesse save and recall symbol features,
+as well as the ? for getters.</p>
+<p>Also notice that the path name for the fixture is not the
+same as the path name for the fixture in Fitnesse. The
+rename needs to be included in the FixtureRenames.txt file</p>
+<table cellSpacing=0 cellPadding=3 border=1>
+<tr><td colspan=2>fitnesse.fixtures.ColumnFixtureTestFixture</td></tr>
+<tr><td>input</td><td>=output?</td></tr>
+<tr><td>1</td><td>one</td></tr>
+<tr><td>2</td><td>two</td></tr>
+</table>
+<p>At this point, the internal symbol table should have
+an integer 1 bound to "one" and an integer 2 bound to "two". Now
+we're going to retrieve them and check the results.</p>
+<table cellSpacing=0 cellPadding=3 border=1>
+<tr><td colspan=2>fitnesse.fixtures.ColumnFixtureTestFixture</td></tr>
+<tr><td>input=</td><td>output?</td></tr>
+<tr><td>one</td><td>1</td></tr>
+<tr><td>two</td><td>2</td></tr>
+</table>
+<p>&nbsp;</p>
+<table cellSpacing=0 cellPadding=3 border=1>
+<tr><td>fit.Summary</td></tr>
+</table>
+</body></html>

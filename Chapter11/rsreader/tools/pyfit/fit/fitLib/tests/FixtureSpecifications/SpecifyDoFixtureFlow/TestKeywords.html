@@ -1,0 +1,42 @@
+<html><title>TestKeywords</title><body>
+<h1><a href="TestKeywords.html">TestKeywords</a></h1>
+<h2>Keywords separate several parameters:</h2>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>add</i></td><td>1</td><td><i>and append</i></td><td>x</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>add</i></td><td>2</td><td><i>and append</i></td><td>y</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>--r</td><td>check</td><td><i>sum</i></td><td>3</td></tr>
+<tr><td>--r</td><td>check</td><td><i>appends</i></td><td>xy</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>--w</td><td>check</td><td><i>appends</i></td><td>XY</td></tr>
+</table>
+<br>
+<h2>The keywords can be spread across every second cell as you like, as long as the words are split to get the right extended camel case result:</h2>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>add</i></td><td>1</td><td><i>and</i></td><td>x</td><td><i>append</i></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>add and append</i></td><td>1</td><td></td><td>x</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td><i>addAndAppend</i></td><td>1</td><td></td><td>x</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td></td><td>1</td><td><i>add and append</i></td><td>x</td><td></td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td></td><td>1</td><td></td><td>x</td><td><i>add and append</i></td></tr>
+</table>
+</body></html>

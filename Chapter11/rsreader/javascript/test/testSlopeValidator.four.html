@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <title>Test Page line(m, x, b)</title>
+        <script language="JavaScript"
+                src="../../tools/jsunit/app/jsUnitCore.js">
+        </script>
+        <script language="JavaScript" src="../src/line.js"></script>
+        <script language="JavaScript">
+
+function setUp() {
+    // clear out any previous message
+    errorMsg().innerHTML = '';
+}
+
+function testFieldIsBlankAfterSuccessfulValidation() {
+    document.lineForm.slope.value = '0';
+    errorMsg().innerHTML = 'an arbitrary message';
+    pressCalculate();
+    assertEquals('', errorMsg().innerHTML);
+}
+
+function testValidationFailsWhenEmpty() {
+    document.lineForm.slope.value = '';
+    pressCalculate();
+    assertEquals('You must define a slope', errorMsg().innerHTML);
+}
+
+function testValidationFailsWhenNotANumber() {
+    document.lineForm.slope.value = 'this is not a number';
+    pressCalculate();
+    expected = 'The slope must be a number';
+    assertEquals(expected, errorMsg().innerHTML);
+}
+
+// separate tests from validation mechanism details
+function pressCalculate() {
+    validateSlope();
+}
+
+// make tests more concise
+function errorMsg() {
+    return document.getElementById('errorMsg');
+}
+
+        </script>
+    </head>
+    <body>
+       <form name="lineForm">
+           <input type="text" name="slope" value="0"/>
+           <input type="button" value="Calculate" onclick="validateSlope()"/>
+           <div id="errorMsg"></div>
+       </form>
+    </body>
+</html>
+

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>Using FIT</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="using-fit">
+<h1 class="title">Using FIT</h1>
+<p>Over time, this section will expand to include a large number of tips and tricks. At the moment, though, it's simply got notes from new releases.</p>
+<p>FIT is best used as a tool that is shared between the customers, the developers and the testers. As such, the acceptance tests should be made as customer-friendly as possible. There are a number of facilities buried under the hood that let the developers tune the package so that it presents the minimum amount of technicalese to business people and testers.</p>
+<p>On the other side, the executable documents that constitute the actual acceptance tests can be put under whatever level of source control that the project organization feels is appropriate.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#error-reporting-and-whole-values" id="id2" name="id2">Error Reporting and Whole Values</a></li>
+<li><a class="reference" href="#interface-with-fitnesse" id="id3" name="id3">Interface with FitNesse</a></li>
+<li><a class="reference" href="#css-cascading-style-sheets" id="id4" name="id4">CSS (Cascading Style Sheets)</a></li>
+<li><a class="reference" href="#unicode-and-multiple-character-set-support" id="id5" name="id5">Unicode and multiple character set support.</a></li>
+<li><a class="reference" href="#languages-other-than-english" id="id6" name="id6">Languages other than English</a><ul>
+<li><a class="reference" href="#mapping-labels-to-python-identifiers" id="id7" name="id7">Mapping labels to Python Identifiers.</a></li>
+<li><a class="reference" href="#mapping-fixture-names-to-file-system-names-and-class-names" id="id8" name="id8">Mapping Fixture Names to File System names and Class Names</a></li>
+<li><a class="reference" href="#other-translation-issues" id="id9" name="id9">Other translation issues.</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#automating-fit-tests" id="id10" name="id10">Automating FIT tests</a><ul>
+<li><a class="reference" href="#table-and-color" id="id11" name="id11">Table and Color</a></li>
+<li><a class="reference" href="#fail-and-exception-cell-handlers" id="id12" name="id12">Fail and Exception cell handlers</a></li>
+<li><a class="reference" href="#fitlibrary-s-fixturefixture" id="id13" name="id13">FitLibrary's FixtureFixture</a></li>
+<li><a class="reference" href="#fitlibrary-s-specifyfixture" id="id14" name="id14">FitLibrary's SpecifyFixture</a></li>
+<li><a class="reference" href="#the-final-question" id="id15" name="id15">The Final Question</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="error-reporting-and-whole-values">
+<h1><a class="toc-backref" href="#id2" name="error-reporting-and-whole-values">Error Reporting and Whole Values</a></h1>
+<p>Fit works best when the application has created a separate class for each distinct concept in the domain model. These classes, if designed properly, can be used directly in FIT tests, eliminating the need to write specific type adapters.</p>
+<p>This may seem like a lot of work initially; however there are several benefits, both from the FIT viewpoint and from the design of the application.</p>
+<p>First is the unfortunate fact that it's difficult in classic FIT, and impossible in the Fit Library, to get decent error checking on given values with the generic type adapters. The reason is that error checking as part of the calculated result is much too late: the errors will be reported in the wrong column, causing confusion for the customer. The checking in the generic type adapters is usually insufficient since they don't know the specifics of how the application uses a particular value.</p>
+<p>Another reason is that some of the supplied type adapters are quite difficult to work with. Floating point, in particular, always causes problems with corner cases for anyone except seasoned numerical analysts. And I'm not so sure that calling an attempt to compare two floats for equality a &quot;corner case&quot; isn't a drastic oversimplification. While Python Fit has a nifty extension to take a lot of the sting out of floating point comparisons, an application specific type adapter can do it the way the application needs to have it done. Also, the next emerging specification (2.0) may very well prohibit raw floating point as a calculated result.</p>
+<p>The final consideration, though, is that encapsulating application concepts in their own classes is one of the standard features of advanced OO design. It's often overlooked because using the language's fundamental types looks so easy. It is easy, but it leads to serious type safety and understandability issues that only get worse as the application gets bigger.</p>
+<p>Ward Cunningham calls this notion a Whole Value, and describes it as part of his Checks pattern language for input data validation on the www.c2.com wiki. There are also a number of good design texts that reference this concept. Unfortunately, it isn't dealt with in most elementary &quot;Learn Java in 15 minutes&quot; books, and it's almost totally ignored in Python textbooks.</p>
+<p>The fundamental point is that business applications don't use percentages; they use discount rates, tax rates, conversion rates, rates of return and so forth. Each of these is a different concept which happens to be expressed in the same numerical notation for convenience. Each of them has different editing rules, and few of them are a good fit for generic floating point.</p>
+<p>In the same sense, applications don't deal with measurements as nice, pristine integers or floats; they deal with quarts, ounces, kilograms, miles, centimeters, acres, furlongs and various measures of time and combinations. And the way they deal with them is highly application specific.</p>
+<p>Python FIT makes it easy to use the application specific object as its type adapter, without writing any additional code. This maximizes code reuse and minimizes duplication. See the <a class="reference" href="FIT_TypeAdapters.htm">type adapter</a> writeup for details of how to make it work.</p>
+</div>
+<div class="section" id="interface-with-fitnesse">
+<h1><a class="toc-backref" href="#id3" name="interface-with-fitnesse">Interface with FitNesse</a></h1>
+<p>This version of FIT is intended to be bi-modal; that is, it will work in batch, but it will also work with FitNesse. To use it with FitNesse, the following markup needs to be inserted in the test or suite that you want to run with Python FIT, or in a page above that test or suite.</p>
+<div class="line-block">
+<div class="line">!define COMMAND_PATTERN {python &quot;%m&quot; %p}</div>
+<div class="line">!define TEST_RUNNER {&lt;full path to FitServer.py&gt;}</div>
+<div class="line">!path &lt;full path to directory containing the fit directory&gt;</div>
+</div>
+<p>The required path contains two parts: the path to your Python installation, and the location of FIT within it. To get the first part, invoke Python at a command prompt, import sys, and then list out the sys.exec_prefix variable. The rest of the path is: &quot;/Lib/site-packages/fit&quot;</p>
+<p>The path statement needs to be in the next higher page; it does not seem to work if it is in the same page as the test that you want to execute.</p>
+<p>Also, you do not need to use a !path statement for the standard fixtures: Python automatically adds the directory containing FitServer to the Pythonpath, which is all that is needed to access the standard packages, including the FitNesse package which contains converted FitNesse acceptance test fixtures.</p>
+<p>You will need to use a !path statement for your own projects unless you put the fixture packages in the fit directory (not recommended.)</p>
+<p>Python FIT automatically removes all .jar files and similar stuff from the path before adding it to the Pythonpath.</p>
+</div>
+<div class="section" id="css-cascading-style-sheets">
+<h1><a class="toc-backref" href="#id4" name="css-cascading-style-sheets">CSS (Cascading Style Sheets)</a></h1>
+<p>Beginning with version 0.5 of Python FIT, and the 20040530 release of FitNesse, all of the markup that FIT inserts into the HTML documents is done with CSS tags. For Fitnesse, FIT inserts seven class names: pass, fail, error, ignore, fit_stacktrace, fit_label and fit_ignore. For all other cases, FIT inserts 8 class names: fit_pass, fit_fail, fit_error, fit_ignore, fitbody_stacktrace, fitbody_label, fitbody_ignore, fitbody_note. The latter is mapped to fit_label for FitNesse.</p>
+<p>FIT uses one of two stylesheets. If FIT was invoked from Fitnesse, it uses the Fitnesse style sheet. Otherwise, it uses a stylesheet named FIT.css. This stylesheet must be in the directory with the resulting HTML document. This is important enough that FileRunner (and WikiRunner) will write a default FIT.css file into that directory if one does not exist.</p>
+<p>FitServer forces the use of the class names for FitNesse. Otherwise, FIT checks for the presence of a &lt;link rel=&quot;stylesheet&quot; href=&quot;FIT.css&quot;&gt; tag. If it finds one, it does nothing else.</p>
+<p>If it does not find the proper link tag, it inserts a link tag for FIT.css just before the end header tag. If it can't find an end header tag, it wraps the entire HTML document with a complete header and ending tags. It makes no attempt to work with or fix incorrect framing: the framing tags must either be present and correct, or completely missing.</p>
+<p>You can disable CSS support by using the -c switch on the batch runners. CSS support is automatically disabled if you invoke standards mode with the +e switch on the batch runners. You cannot disable CSS for FitNesse.</p>
+</div>
+<div class="section" id="unicode-and-multiple-character-set-support">
+<h1><a class="toc-backref" href="#id5" name="unicode-and-multiple-character-set-support">Unicode and multiple character set support.</a></h1>
+<p>The PyFIT batch runners check the input for the character set that they are encoded in, and convert it to unicode for processing. They then convert it back to the same character set on output.</p>
+<p>This processing does not apply to FitNesse; all data between FIT and FitNesse is unicode encoded as utf-8.</p>
+<p>This feature is not intended as full internationalization and localization support; it's a necessary prerequisite, but PyFit is still a long way from supporting internationalization and localization.</p>
+</div>
+<div class="section" id="languages-other-than-english">
+<h1><a class="toc-backref" href="#id6" name="languages-other-than-english">Languages other than English</a></h1>
+<p>There are a number of places where FIT needs language specific support. The two most obvious are the labels used in fixtures such as ColumnFixture, RowFixture, DoFixture and ActionFixture, and in the fixture names themselves.</p>
+<p>Python FIT only supplies mapping routines for English. This is unfortunate, but it is inevitable since Python, like almost all programming languages, requires identifiers to be in the English, that is ASCII, character set. This restriction not only applies to identifiers in fixtures, but also to the fixture names themselves, both as class names and as names on the file system.</p>
+<p>Consequently, for any language other than English, the application needs to supply the translation between labels and Python identifiers, or between fixture names and file system names and class names. The only people that are qualified to do that are the development team working on the application.</p>
+<div class="section" id="mapping-labels-to-python-identifiers">
+<h2><a class="toc-backref" href="#id7" name="mapping-labels-to-python-identifiers">Mapping labels to Python Identifiers.</a></h2>
+<p>There are several ways of doing the mapping, ranging from the special purpose to the very generic.</p>
+<p>The most specialized is the &quot;.RenameTo&quot; key in the metadata. It's only useful when using the &quot;.useToMapLabel&quot; metadata key with an operand of &quot;extended&quot;. Most fixtures that use the type adapter mechanism support it automatically; it does not need specialized coding.</p>
+<p>The next most generic is the exit supplied with ColumnFixture and RowFixture. The primary purpose of this exit is to allow identification of column types without having to go through the standard label to identifier mechanism. To do this, it hands the entire mapping mechanism over to the fixture writer, who can do whatever he wants, including language translation, as long as the result is a valid Python identifier. See the ColumnFixture writeup for more details.</p>
+<p>The exit is not available in other root fixtures because they have models other than column types; it makes no sense and the &quot;.renameTo&quot; mechanism in the metadata will work acceptably for most of them.</p>
+<p>The most generic is an exit in the Application Configuration module. If supplied, it gets control on every request to map a label to an identifier.</p>
+<p>The difference between the two approaches is that the &quot;.renameTo&quot; mechanism and the routine in ColumnFixture and RowFixture can be very specific to exactly what that fixture needs, while the routine in the Application Configuration module must, of necessity, be very generic. It's best used when the application has a Ubiquitous Language, that is, a vocabulary that is common to everyone working on the application, including the customers, and where it's used in all tests and program identifiers.</p>
+<p>See the Configuration Exit writeup for further information on how to use this facility.</p>
+</div>
+<div class="section" id="mapping-fixture-names-to-file-system-names-and-class-names">
+<h2><a class="toc-backref" href="#id8" name="mapping-fixture-names-to-file-system-names-and-class-names">Mapping Fixture Names to File System names and Class Names</a></h2>
+<p>Fixture names present a slightly different problem. First, there is no fixture loaded at the time they need to be translated, so the only options are the Application Configuration module or an external configuration file.</p>
+<p>The second issue is that one may want different fixtures for the same tests depending on the testing environment.</p>
+<p>In addition, many people think that it is desirable to eliminate fixture names from tests entirely. It is currently not possible to do this completely, but with DoFixture it is possible to get by with a single fixture name at the beginning of the test. This is a small enough burden that it's not necessary to have it in the application's native language.</p>
+<p>The ways of doing all of this are discussed in either the Application Configuration module document or the Runners document.</p>
+</div>
+<div class="section" id="other-translation-issues">
+<h2><a class="toc-backref" href="#id9" name="other-translation-issues">Other translation issues.</a></h2>
+<p>Error messages are another place where translation is possibly needed. The error module will also invoke the Application Configuration module to get the message skeleton for each message. The message dictionary is in the FitException module; the exit is discussed in the Application Configuration document.</p>
+<p>The current release does not, unfortunately, use the FitException mechanism for all exceptions. Fixing this is a long term objective.</p>
+<p>The Boolean type adapter also understands English only. The best way around this is to use an application specific type adapter; see the discussion at the beginning of this document under the title &quot;Error Reporting and Whole Values.&quot;</p>
+<p>The Date type adapter is very primitive and provides almost no flexability. It's mostly useful for quick tasks; for anything substantive it's best for the application to write their own date classes, using either Python's supplied date libraries or one of several excellent third party libraries for the heavy lifting.</p>
+</div>
+</div>
+<div class="section" id="automating-fit-tests">
+<h1><a class="toc-backref" href="#id10" name="automating-fit-tests">Automating FIT tests</a></h1>
+<p>But FIT tests are automated tests? Well, yes and no. The no part is that it's not all that easy to run a batch of them and tell which of them ran and which didn't.</p>
+<p>For test automation, we'd like for each test to end in a known state, preferably all green, and with the expected number of counts.</p>
+<p>All green isn't that hard to do for the majority of fixtures. Most fixtures are very simple, and one expects them to end with green status on all tests. However, some fixtures are not all that simple, and tests are needed for error conditions.</p>
+<p>Python Fit provides four ways of dealing with this. Each way has its strengths and weaknesses; there is no perfect solution.</p>
+<div class="section" id="table-and-color">
+<h2><a class="toc-backref" href="#id11" name="table-and-color">Table and Color</a></h2>
+<p>The first method, and the one most likely to be availible in all versions of FIT, is the Table and Color fixture pair in the fat directory. These two fixtures are part of the original acceptance test suite.</p>
+<p>Table simply puts an extra line at the beginning of the fixture being tested. It isolates the fixture from the counts and saves the result. Color then checks each cell of the fixture for having the right color status.</p>
+<p>The good thing about it is its simplicity. The bad thing is that it doesn't check anything other than the status.</p>
+</div>
+<div class="section" id="fail-and-exception-cell-handlers">
+<h2><a class="toc-backref" href="#id12" name="fail-and-exception-cell-handlers">Fail and Exception cell handlers</a></h2>
+<p>The Fail[] and exception[] cell handlers let you change the result status on a cell by cell basis, and also let you check that a specific exception is thrown.</p>
+<p>The good thing is that it gives you pinpoint control when you want to only deal with one or two cells in a table.</p>
+<p>The bad thing is that it isn't portable: Python Fit and the FitNesse C# version of FIT are the only ones that implement it. It also requires that the fixture use the Type Adapter mechanism; the other three solutions do not require this.</p>
+</div>
+<div class="section" id="fitlibrary-s-fixturefixture">
+<h2><a class="toc-backref" href="#id13" name="fitlibrary-s-fixturefixture">FitLibrary's FixtureFixture</a></h2>
+<p>FixtureFixture provides pinpoint control over all almost all aspects of the table. It lets you check the actual contents of cells as well as final status.</p>
+<p>The good thing is that it's a fairly comprehensive solution. The bad thing is that it's a complicated format that requires a bit of attention to detail to construct and read. It's also only available in the versions of FIT that implement the original FitLibrary - the FitLibrary author intends to depreciate it because it's too complicated.</p>
+</div>
+<div class="section" id="fitlibrary-s-specifyfixture">
+<h2><a class="toc-backref" href="#id14" name="fitlibrary-s-specifyfixture">FitLibrary's SpecifyFixture</a></h2>
+<p>SpecifyFixture is another approach to specifying the result table in detail. Unlike FixtureFixture, it uses embedded tables, with the first table being the one tested, and the second being the expected result value.</p>
+<p>It's an excellent solution provided that both versions of the table fit on the screen at the same time. If the table is too big for that, FixtureFixture may be the better approach.</p>
+<p>The down side is that the current version does not give a user friendly analysis of what was wrong. It's also, of course, only available in versions of FIT that implement FitLibrary.</p>
+</div>
+<div class="section" id="the-final-question">
+<h2><a class="toc-backref" href="#id15" name="the-final-question">The Final Question</a></h2>
+<p>Now that we've gotten to the point where our test only has green status, and we've checked for actual result values where that's appropriate, there's still one question to ask. How do we know that we've got the expected number of rights?</p>
+<p>One possible answer is that if we don't have any wrongs, ignores or exceptions, we must have a good test. Unfortunately, this isn't always true. The most obvious reason is that fixtures can silently exit early, leaving things untested. There are other issues as well.</p>
+<p>The standard FIT fixtures do not provide an answer for this. FitNesse provides the ability to produce an XML file with the counts for each test run in batch (that is, via TestRunner). Python Fit extends this to batch, but other versions of FIT do not presently produce such a file. Even the versions that do produce a stats file don't tell you whether the run produced the expected results; that's left to your test automation system.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

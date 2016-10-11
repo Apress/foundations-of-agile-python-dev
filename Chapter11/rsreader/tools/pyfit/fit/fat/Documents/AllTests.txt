@@ -1,0 +1,21 @@
+# Mostly the tests that came with the original versions of FIT
+# A number of tests that haven't been working are in the NonWorkingTests directory.
+# The formal specification 1.1 tests are in the FIT1_1 directory,
+# the newer tests specific to Python FIT features are in the fit/accTests directory
+# Tests for FitNesse features are in the FitNesse directory somewhere.
+[options]
++q yt
+[files]
+AllCombinations.html
+AllPairs.html
+BinaryChop.html
+CalculatorExample.html
+MusicExample.html
+MusicPlayer.html
+ParmTest.htm
+ParseExit.htm
+SimpleExample.html
+SymbolCellHandler.htm
+SymbolTest.htm
+TestSaveAndRecallSymbol.html
+UTF8Example.html

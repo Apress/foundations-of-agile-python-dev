@@ -1,0 +1,102 @@
+<html><head><title>Cell Handler Specifications</title></head><body>
+<h1><center>Cell Handler specifications</center></h1>
+<p>&nbsp;</p>
+<center><h3>String cell handlers.</h3></center>
+<p>The blank and null keywords are a FitNesse extension, the asis[] cell handler is a Python FIT extension. Also note that the asis[] cell handler needs to be enabled specifically; see the fixture for details.</p>
+<p>&nbsp;</p>
+<p>Two of the result cells use the Fail[] cell handler because the actual result contains either leading or trailing white space; the standard string type adapter cannot handle this comparison, so it reports a wrong</p>
+<p>&nbsp;</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=4>fit.AccTestFixtures.CellHandlerTestFixtures.StringCellHandlers</td></tr>
+<tr><td>input</td><td>string length</td><td>output</td><td>Notes</td></tr>
+<tr><td>blank</td><td>0</td><td>blank</td><td>blank is a keyword for a zero length string</td></tr>
+<tr><td>null</td><td>-1</td><td>null</td><td>null is a None object, -1 is a hack.</td></tr>
+<tr><td>asis[]</td><td>0</td><td>blank</td><td>Another way of entering a zero length string</td></tr>
+<tr><td>asis[ ]</td><td>1</td><td>&nbsp;</td><td>blank string</td></tr>
+<tr><td>asis[ x ]</td><td>3</td><td>Fail[x]</td><td>leading and trailing white space</td></tr>
+<tr><td>asis[ [ x ] ]</td><td>7</td><td>Fail[[ x ]]</td><td>embedded brackets</td></tr>
+<tr><td>blank</td><td>0</td><td>asis[]</td><td>some tests for asis checks.</td></tr>
+<tr><td>asis[ ]</td><td>1</td><td>asis[ ]</td><td>&nbsp;</td></tr>
+<tr><td>asis[ x ]</td><td>3</td><td>asis[ x ]</td><td>&nbsp;</td></tr>
+<tr><td>asis[ [ x ] ]</td><td>7</td><td>asis[ [ x ] ]</td><td>&nbsp;</td></tr>
+<tr><td>asis[ asis[ x ] ]</td><td>11</td><td>asis[ asis[ x ] ]</td><td>recursion</td></tr>
+</table>
+
+<center><h3>Exception cell handler parameters</h3></center>
+<p>The exception cell handler is an extension of the error keyword. It allows the test writer to specify either the exception type or the exception message or both. This table shows the valid formats for the parameter.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=7>fit.AccTestFixtures.CellHandlerTestFixtures.ParseExceptionCellHandler</td></tr>
+<tr><td>contents</td><td>type</td><td>message length</td><td>message</td
+   ><td>value length</td><td>value</td><td>Notes</td></tr>
+<tr><td>snafu</td><td>snafu</td><td>null</td><td>null</td
+   ><td>null</td><td>null</td><td>C</td></tr>
+<tr><td>"fubar"</td><td>null</td><td>5</td><td>fubar</td
+   ><td>null</td><td>null</td><td>M</td></tr>
+<tr><td>fubar: "snafu"</td><td>fubar</td><td>5</td><td>snafu</td
+   ><td>null</td><td>null</td><td>C:M</td></tr>
+<tr><td>snafu, "fubar"</td><td>snafu</td><td>5</td><td>fubar</td
+   ><td>null</td><td>null</td><td>C,M</td></tr>
+<tr><td>snafu, "fubar", "oops"</td><td>snafu</td><td>5</td><td>fubar</td
+   ><td>4</td><td>oops</td><td>C,M,V</td></tr>
+<tr><td>snafu,,"oops"</td><td>snafu</td><td>null</td><td>null</td
+   ><td>4</td><td>oops</td><td>C,M,V</td></tr>
+<tr><td>,"fubar"</td><td>null</td><td>5</td><td>fubar</td
+   ><td>null</td><td>null</td><td>,M,V</td></tr>
+<tr><td>,,"oops"</td><td>null</td><td>null</td><td>null</td
+   ><td>4</td><td>oops</td><td>C,M,V</td></tr>
+</table>
+
+<center><h3>Exception Cell Handler for results without values</h3></center>
+<p>This is the exception cell handler from FitNesse dotNet and Python FIT 0.7. It performs a 'get' operation, but does not take the additional step of doing the comparison, because this form does not contain a value to compare against.</p>
+
+<p>The first three lines use the old syntax, the next two use the new syntax. The last line uses the error keyword from the base FIT package.</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=4>fit.AccTestFixtures.CellHandlerTestFixtures.ExceptionCellHandler</td></tr>
+<tr><td>type</td><td>message</td><td>get</td><td>Notes</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>exception[Exception]</td><td>C</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>exception["fubar"]</td><td>M</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>exception[Exception: "fubar"]</td><td>C:M</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>exception[Exception, "fubar"]</td><td>C,M</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>exception[, "fubar"]</td><td>,M</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>error</td><td>FIT base</td></tr>
+</table>
+
+<center><h3>Exception Cell Handler for results with values</h3></center>
+<p>This version does both the get and the equals routine against a calculated result. It's new in Python FIT 0.8</p>
+
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5>fit.AccTestFixtures.CellHandlerTestFixtures.ExceptionCellHandler</td></tr>
+<tr><td>type</td><td>message</td><td>value</td><td>check</td><td>Notes</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>exception[Exception,,"huh?"]</td><td>C,,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>exception["fubar", "huh?"]</td><td>M,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>exception[Exception, "fubar", "huh?"]</td><td>C,M,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>Fail[exception["snafu", "huh?"]]</td><td>M,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>Fail[exception[Exception, "snafu", "huh?"]]</td><td>C,M,V</td></tr>
+</table>
+
+<center><h3>Exception Cell Handler for given values</h3></center>
+<p>The exception cell handler for a given value must include the value parameter. It can also be enclosed in a Fail cell handler; this is the only time the Fail cell handler is legal in a given cell</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5>fit.AccTestFixtures.CellHandlerTestFixtures.ExceptionCellHandler</td></tr>
+<tr><td>type</td><td>message</td><td>value</td><td>store</td><td>Notes</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>exception[Exception,,"huh?"]</td><td>C,,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>exception["fubar", "huh?"]</td><td>M,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>exception[Exception, "fubar", "huh?"]</td><td>C,M,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>Fail[exception["snafu", "huh?"]]</td><td>M,V</td></tr>
+<tr><td>Exception</td><td>fubar</td><td>oops!</td
+   ><td>Fail[exception[Exception, "snafu", "huh?"]]</td><td>C,M,V</td></tr>
+</table>
+
+<p>&nbsp;</p>
+</body></html>

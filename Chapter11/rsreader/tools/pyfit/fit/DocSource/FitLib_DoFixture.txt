@@ -1,0 +1,123 @@
+DoFixture and SequenceFixture
+=============================
+
+The DoFixture and SequenceFixture are the basic flow type fixtures in the Fit Library. Before reading this description, you should read the Java Fit Library documentation on the DoFixture. It would also be useful to read the material in the Fit Book. The writeup only covers the basics and the things which are specific to Python Fit that you need to know.
+
+Everything in here applies to both DoFixture and SequenceFixture: they differ only in one minor detail of presentation.
+
+To do anything useful, these fixtures either need to be subclassed, or the test needs to execute a start command to load a SUT module which contains the necessary commands and metadata for the remainder of the test. 
+
+Table Format
+------------
+
+Each row is a separate method call. The first cell of the row is an optional special action; the last cell of the row contains the expected result for the check special action. If there is no special action, the cell for the special action does not exist: the command name or fixture name starts in the first cell.
+
+Special actions are identified in the fixture code with a method attribute of "fitLibSpecialAction" which must be set to True. See the DoFixture.py module for examples.
+
+For SequenceFixture, the entire command name occupies one cell; subsequent cells contain the parameters.
+
+For DoFixture, the command name and parameters occupy alternate cells. That is, if the command takes three parameters, the command name occupys three cells. It can extend into an extra cell after the last parameter if desired. This leads to a very pleasant writing style that is similar to normal English.
+
+This release searches for a special action and then a fixture before checking for the existance of a command. This behavior will change in release 0.9: if a command can be interpreted as more than one of the three possibilities it will raise an exception.
+
+Software Under Test
+-------------------
+
+These fixtures normally use an application object called the Software Under Test (SUT). This can be any application object; it does not have to be a subclass of anything in particular, although it must be a new style class. 
+
+DoFixture and SequenceFixture will search the SUT for a method before searching the fixture; this means that you can avoid writing proxy methods in a great many cases.
+
+Metadata
+--------
+
+Most methods that are invoked follow the multiple parameter format explained in the Fit Library overview. Each of those methods must be described with the '.types' suffix in the _typeDict metadata dictionary in the fixture's class object. 
+
+The return type, which is the first entry in the value list, has a number of special entries that cannot appear in the parameter entries. 
+
+None
+>>>>
+
+None as the return metadata means that no return value is to be expected.
+
+Subfixtures
+>>>>>>>>>>>
+
+DoFixture tests the returned value to find out if it is a subclass of Fixture. If it is, it instantiates it as a subfixture, and uses it for the rest of the current table. Conventionally, the return metadata field should be None.
+
+"$SUT"
+>>>>>>
+
+"$SUT" means the return is a new Software Under Test class or instance. The method returning this must insure that the class object for the SUT has a _typeDict entry, if necessary by inserting it directly. This will replace the existing SUT.
+
+This mechanism will likely change in future releases. In particular, it will probably grow a stack mechanism.
+
+Array Fixtures
+>>>>>>>>>>>>>>
+
+"$Array", "$Row", "$Set" and "$Subset" invoke the ArrayFixture, RowFixture, SetFixture or SubsetFixture directly. This set of special functions avoids the need to write additional fixtures.
+
+The return value is a tuple with two entries: an iterator containing the objects from the collection, and a dictionary containing the metadata required for the comparison.
+
+The iterator must be a list, tuple, dictionary or iterator function that yields the required list of objects in the collection.
+
+The objects in the list may be of any type that has the requested attributes, including dictionaries. This does not currently apply to RowFixture: it cannot handle dictionaries.
+
+"$Display" invokes the `display utility`__, which is a Python FIT enhancement.
+
+__ FitLib_DisplayUtility.htm
+
+Type Adapters
+-------------
+
+The facility in the original FIT Library distribution for creating a pool of `type adapters`__ does not exist. User type adapters can either be invoked by putting a reference to their class object in the metadata entry, or can be invoked using the "@" syntax supported by the `Application Configuration`__ module.
+
+__ FIT_TypeAdapters.htm
+__ FIT_ConfigurationExit.htm
+
+Special Actions
+---------------
+
+DoFixture and SequenceFixture provide a number of special actions. These are always in the first cell of the row. The actions are:
+
+check
+>>>>>
+
+This checks that the return value of the requested method matches the value in the last cell of the row.
+
+show
+>>>>
+
+This displays the return value in a new cell at the end of the row.
+
+ensure
+>>>>>>
+
+This checks that the method call succeeded. If the result is defined as a boolean, it must be True. If it is defined as anything else, it must not throw an exception.
+
+reject or not
+>>>>>>>>>>>>>
+
+This checks that the method call failed. If the result is defined as a boolean, it must be False, otherwise it must raise an exception.
+
+note
+>>>>
+
+note ignores the rest of the row,
+
+start
+>>>>>
+
+Start loads a different module as a new Software Under Test. The intent is to allow DoFixture to be used without writing any fixtures, similarly to ActionFixture. However, it does not provide any method of setting up metadata, so the metadata must already be in the SUT, which limits its usefulness. In general, the $SUT return value is more useful. However, see the MusicPlayer example for an attempt to write an application in this style.
+
+calculate
+>>>>>>>>>
+
+This loads the CalculateFixture for the remainder of the table. It is intended to be used in a classroom situation where the students don't write fixtures, however it suffers from the same problem as start: there is no place for the required metadata to come from.
+
+name and use
+>>>>>>>>>>>>
+
+This pair of commands gives a method result a name, and then uses it later. It is an experimental command, which is not committed to remain in future releases. It also doesn't work at the moment.
+
+
+

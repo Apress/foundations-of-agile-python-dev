@@ -1,0 +1,56 @@
+<html><title>FitLibraryUserGuide</title><body>
+<h1>FitLibraryUserGuide</h1>
+The <i>FitLibrary</i> consists of several fixtures that work together.  There are several interesting features of the <i>FitLibrary</i> fixtures:<br>
+<ul><li><a href="DoFixture.index.html"><a href="DoFixture/index.html">DoFixture</a></a> tables are compact and flexible for writing workflow tests</li>
+<li>The fixtures can operate directly on application objects, in a <i>Domain Driven Design</i> way, without the need to write fixtures. </li>
+<li>The fixtures support various "graphical" values, including HTML lists and images. For example:</li></ul>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>fit.specify.DoTree</td></tr>
+</table>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td>check</td><td>tree</td><td><ul><li>a</li><li>BB</li></ul></td></tr>
+</table>
+<ul><li>The fixtures completely avoid magic values, such as "error"</li></ul>
+For each of the <i>FitLibrary</i> fixtures, we show some example tables and the corresponding fixture code:<br>
+<h3>Fixtures for actions (workflow):</h3>
+<ul><li><a href="DoFixture.index.html"><a href="DoFixture/index.html">DoFixture</a></a></li>
+<li><a href="SequenceFixture.html"><a href="SequenceFixture.html">SequenceFixture</a></a> (mostly the same as <a href="DoFixture.index.html"><a href="DoFixture/index.html">DoFixture</a></a>)</li></ul>
+<h3>Fixtures for lists:</h3>
+<ul><li><a href="ArrayFixture.html"><a href="ArrayFixture.html">ArrayFixture</a></a> for ordered lists</li>
+<li><a href="SetFixture.html"><a href="SetFixture.html">SetFixture</a></a> for unordered lists</li>
+<li><a href="SubsetFixture.html"><a href="SubsetFixture.html">SubsetFixture</a></a> for parts of unordered lists</li>
+<li><a href="ParamRowFixture.html"><a href="ParamRowFixture.html">ParamRowFixture</a></a> to simplify the use of <i>RowFixture</i> with other <i>FitLibrary</i> fixtures</li></ul>
+<h3>Fixture for calculations:</h3>
+<ul><li><a href="CalculateFixture.index.html"><a href="CalculateFixture/index.html">CalculateFixture</a></a></li></ul>
+<h3>Fixture for set up:</h3>
+<ul><li><a href="SetUpFixture.index.html"><a href="SetUpFixture/index.html">SetUpFixture</a></a></li></ul>
+<h3>Fixture for testing grids</h3>
+<ul><li><a href="GridFixture.html"><a href="GridFixture.html">GridFixture</a></a></li>
+<li><a href="ImageFixture.html"><a href="ImageFixture.html">ImageFixture</a></a> is a subclass of <a href="GridFixture.html"><a href="GridFixture.html">GridFixture</a></a></li></ul>
+<h3>Fixture for comparing files and directories</h3>
+<ul><li><a href="FileCompareFixture.html"><a href="FileCompareFixture.html">FileCompareFixture</a></a></li></ul>
+<h3>Support for Graphics</h3>
+<ul><li>Core Fit handles textual values in the cells of a table. These values are converted automatically into primitive values, such as 12, and into objects, such as a <i>Date</i>.</li>
+<li>The <i>FitLibrary</i> fixtures also support "graphical" values:</li></ul>
+  * <a href="TreeList.index.html"><a href="TreeList/index.html">TreeList</a></a> uses HTML lists<br>
+  * <a href="ImageNameGraphic.html"><a href="ImageNameGraphic.html">ImageNameGraphic</a></a> uses HTML image names<br>
+  * <a href="DotGraphics.html"><a href="DotGraphics.html">DotGraphics</a></a> uses HTML images and associated Dot files<br>
+  * I've just added support for embedded tables as values, which will be documented in the next release. That will be used to specify tests for fixtures more directly than <i>FixtureFixture</i>, for example.<br>
+<ul><li>This general visual capability is described in <i>Ubiquitous Visual Languages</i>, a paper which is under construction.</li></ul>
+<h3><i><a href="FolderRunner.html">FolderRunner</a></i> (only in <i>FitLibraryForFit</i>)</h3>
+<ul><li><i><a href="FolderRunner.html"><a href="FolderRunner.html">FolderRunner</a></a></i> runs Fit tests. It handles test suites, organised in directories (folders). It can handle both HTML and XLS spreadsheet files.</li>
+<li>The <i><a href="FolderRunnerBrowser.html"><a href="FolderRunnerBrowser.html">FolderRunnerBrowser</a></a></i> provides a GUI to run tests and to view the reports.</li></ul>
+<h3>Support for FitJava and FitNesse (Java)</h3>
+<ul><li>The <i>FitLibrary</i> fixtures are supported in both FitJava and FitNesse in Java</li>
+<li>Versions in other languages are not yet available</li></ul>
+<h3>Further Information</h3>
+<ul><li>Further information will be made available at http://www.cs.auckland.ac.nz/~rick/FitLibrary.</li>
+<li>Many examples of the development of Fit tables using the core and the <i>FitLibrary</i> fixtures, etc are covered in <i>Fit for Developing Software</i>, Rick Mugridge and Ward Cunningham, Prentice-Hall, 2005.</li></ul>
+<h3>Planned Changes</h3>
+<ul><li>I am in the process of generalising the support for graphics (and other non-String values)</li>
+<li>I'm experimenting with some extensions to <i><a href="DoFixture/index.html">DoFixture</a></i>.</li></ul>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

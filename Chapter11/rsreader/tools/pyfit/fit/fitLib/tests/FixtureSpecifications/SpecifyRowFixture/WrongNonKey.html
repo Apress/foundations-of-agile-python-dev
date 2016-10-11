@@ -1,0 +1,15 @@
+<html><title>WrongNonKey</title><body>
+<h1><a href="WrongNonKey.html">WrongNonKey</a></h1>
+<h2>Wrong values are signalled in different ways, depending on where they occur in a row.</h2>
+Matching of each row proceeds from left to right across the columns, so that earlier columns act as keys.<br>
+<br>
+If a "non-key" value is wrong, it's signalled in place. Here the expected "|one|3|" was actually "|one|1|":<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>fitLib.FixtureFixture</td></tr>
+<tr><td>fixture</td><td ColSpan=2>fitLib.specify.RowFixtureUnderTest</td></tr>
+<tr><td></td><td>s</td><td>a</td></tr>
+<tr><td>rr</td><td>two</td><td>2</td></tr>
+<tr><td>rr</td><td>two</td><td>1</td></tr>
+<tr><td>rw</td><td>one</td><td>3</td></tr>
+</table>
+</body></html>

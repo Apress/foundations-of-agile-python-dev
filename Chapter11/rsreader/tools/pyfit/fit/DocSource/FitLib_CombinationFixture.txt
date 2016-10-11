@@ -1,0 +1,12 @@
+Combination Fixture
+===================
+
+The Combination Fixture is a variation on the Calculate Fixture which verifies an array of results of all combinations of two variables. The possible values of the first variable are in the first cell of each row other than the first, the possible values of the second variable are in each cell of the first row, other than the first.
+
+The actual function to be evaluated is named "combine", and must have two parameters in addition to self. The first parameter is the first cell of the rows, the second parameter is the top cell of the columns.
+
+Since this follows the Fit Library conventions, the metadata is:
+
+| _typeDict = {"combine.types": ["Int", "Int", "Int"]}
+
+or whatever the actual types happen to be.

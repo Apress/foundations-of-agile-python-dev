@@ -1,0 +1,30 @@
+<html><head><title>Application Wide Directory of Type Adapters</title></head><body>
+<h1><center>Application Wide Directory of Type Adapters</center></h1>
+<p>Allow the application to create a directory of available type adapters</p>
+<p>A type adapter in this directory is represented by a character string that begins with an "@". An actual implementation requires an Application Configuration module to supply the mappings</p>
+<p>The first thing we do is to check that our Application Configuration module is installed.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>check configuration</td></tr>
+<tr><td>Environment</td><td colspan=2>Batch</td></tr>
+<tr><td>Options</td><td>appConfigurationModule</td><td>fit.AccTestFixtures.ApplicationConfiguration1</td></tr>
+</table>
+<p>Now that we've verified the environment, we need to run a test. This fixture is a variant on one of the utility fixtures that references a specialty type adapter rather than the standard type adapter</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=3>add with custom int adapter</td></tr>
+<tr><td>a</td><td>b</td><td>c</td></tr>
+<tr><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>2</td><td>3</td><td>5</td></tr>
+<tr><td>3</td><td>5</td><td>8</td></tr>
+<tr><td>5</td><td>8</td><td>13</td></tr>
+</table>
+<p>Now, let's just check to see what's in the various type adapter directories. The fixture will do this by invoking the type adapter service, not by checking the tables directly. In other words, this is somewhat of an integration test.</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=2>check that adapters can be used</td></tr>
+<tr><td>name</td><td>class name</td></tr>
+<tr><td>Integer</td><td>IntAdapter</td></tr>
+<tr><td>Boolean</td><td>BooleanAdapter</td></tr>
+<tr><td>@customInt</td><td>CustomIntAdapter</td></tr>
+<tr><td>@fubar</td><td>error</td></tr>
+</table>
+</body></html>
+

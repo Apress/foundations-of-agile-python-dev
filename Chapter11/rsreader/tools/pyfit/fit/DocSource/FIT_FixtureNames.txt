@@ -1,0 +1,71 @@
+Fixture Names
+=============
+
+All tables which FIT interprets begin with a special row. The first cell of this row contains the name of the fixture, remaining cells (if any) contain parameters that the fixture can use. Certain fixtures (ActionFixture and DoFixture being good examples) also have fixture names in other places.
+
+Fixture names that are acceptable to the fixture loading mechanism have the same syntax as names used in the Python import statement. A name in this form will be refered to as "technology facing".
+
+While it is possible to supply fixture names that can be used directly by the fixture loading mechanism, it is usually better to supply "Business Facing" names; that is names that are meaningful in terms that the business people on the project actually use.
+
+This requires a translation step. There are two mechanisms to do this translation: the new Application Configuration exit and the classic mechanism. Only one of them will be used.
+
+The `Application Configuration`__ Exit
+++++++++++++++++++++++++++++++++++++++
+
+__ FIT_ConfigurationExit.htm
+
+If an Application Configuration exit is installed, the mapFixture routine will be invoked as the first step. This routine can either return None, in which case the classic mechanism will be invoked, or it can return the name required by the fixture loading mechanism.
+
+Classic Translation Mechanism
++++++++++++++++++++++++++++++
+
+This mechanism has existed for some time. The normalization mechanism will continue to be maintained; the Fixture Renames and Remembered Packages features may be depreciated in a future release.
+
+Normalization
+-------------
+
+Python Fit makes a hard distinction between names which contain a period, and names which do not. 
+
+Names which do not contain a period are assumed to be business facing: that is, they represent words or phrases that are meaningful for the business. They may be part of the Ubiquitous Language created for the application. 
+
+Names which do not contain a period, and which do contain a space, are normalized as follows. First, quotes are removed and then the phrase is converted to title case. This means that the first character of each piece is converted to upper case, and all other letters in the piece are converted to lower case. Finally, all characters which are not letters or numbers are removed.
+
+For example, "Susie's storage" becomes "SusiesStorage", while "spam, spam, spam!" becomes "SpamSpamSpam".
+
+Rename Table
+------------
+
+FIT next checks the rename table for both technology and business facing names. The first check is to see if there is an exact match. If there is, the name will be replaced and the new name used to search for the module.
+
+If there is not, FIT will attempt to match on the first part of the name, checking for longer matches first. If a match is found, the matched part of the name is replaced.
+
+The renames table is initially loaded from a configuration file. For batch execution, the default file is named "FixtureRenames.txt" and is located in the directory containing the tests. For FitNesse, the proper file is specified using the !path widget; any name ending with .txt is assumed to be a configuration file. A different configuration file can be specified on the batch runners, including the FitNesse TestRunner.
+
+Support for the file within FitNesse has a number of difficulties having to do with locating it in the file system, and may be withdrawn in the future. The Application Configuration exit facility should be used instead.
+
+Remembered Packages feature.
+----------------------------
+
+This feature came in from FitNesse, and its use is strongly discouraged. It's maintained only for compatability with tests written for FitNesse.
+
+It works by remembering packages. A package is all parts of a name above the actual module; it has nothing to do with the Python package mechanism (although a package in this sense is also a Python package). 
+
+When it sees a single element name, i.e. a name without a period, it will search for that module in all remembered packages. It searches in the order in which the package is first added to the list of packages. Changes in a test can result in a change in the search order.
+
+Packages can be added to the list by the Import fixture, described below. The Rememberd Packages table is initialized with the basic "fit" package; this means that it is not necessary to write, for example, fit.Summary. The single name Summary will do as well.
+
+Import Fixture
+--------------
+
+Entries can be placed in either the remembered packages table or the renames table using the `import`__ fixture. Doing this is strongly discouraged; the facility is present only to support tests from FitNesse versions of FIT. Its use violates the principle that anything in a test should be business facing rather than technology facing.
+
+__ FIT_Import.htm
+
+The import fixture may be depreciated in a future release. The Application Configuration exit provides a much more consistent way of doing this.
+
+The Loading Process
++++++++++++++++++++
+
+There is an interesting ambiguity in loading the requested fixture. Since Python modules can contain several fixture classes, the last qualifier can be either the fixture class name, or both the module and fixture class name. Put another way, it is not necessary to supply the class name if it is the same as the module name.
+
+Python FIT normally resolves this ambiguity smoothly.

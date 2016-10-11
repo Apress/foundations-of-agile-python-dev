@@ -1,0 +1,33 @@
+<html><title>WritingFixtures</title><body>
+<h1><a href="WritingFixtures.html">WritingFixtures</a></h1>
+Let's start by looking at the fixture code for the previous example, shown in part again:<br>
+<br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td ColSpan=3>CalculatedDiscount</td></tr>
+<tr><td><i>$</i></td><td></td><td><i>discount</i></td></tr>
+<tr><td>2000.00</td><td></td><td>100.00</td></tr>
+</table>
+<br>
+The fixture code is as follows:<br>
+<hr>
+<pre>public class CalculatedDiscount extends fit.CalculateFixture{
+	private Discount application = new Discount();
+	
+	public double discountDollar(double amount) {
+		return application.getDiscount(amount);
+	}
+}</pre>
+<hr>
+The method <i>discountDollar()</i> is called for each of the rows. The <i>given</i> value is supplied as an argument to the method and the result is compared to the <i>expected</i> value.<br>
+<br>
+The header labels are used to determine the method name, being the <i>expected</i> column label followed by each of the <i>given</i> column labels ("discount" + "$"). This name is converted into a valid Java method name based on <a href="../../FitLibraryUserGuide/ExtendedCamelCase.html"><i>extended camel</i></a>. While this can result in some weird method names, it does given the Fit test writer considerable freedom of expression.<br>
+<h3>In General</h3>
+<ul><li>For each <i>expected</i> column in a <i>CalculateFixture</i> table, there is a distinct method. The name of the method is created from the <i>expected</i> column label followed by each of the <i>given</i> column labels. The method has a parameter for each of the <i>given</i> columns and returns a result which is compared against the <i>expected</i> value. </li>
+<li>As with <a href="../../FitLibraryUserGuide/DoFixture/FixtureDetails.html"><i>DoFixture</i></a>, a <i>SystemUnderTest</i> object may be associated with a <i>CalculateFixture</i>. If the fixture itself doesn't have a required method, the one in the <i>SystemUnderTest</i> is called instead. This means that the fixture acts as an adapter only when necessary, to map actions in the table into methods in the <i>SystemUnderTest</i>.</li>
+<li>To enable a specific string to signify repeating of the previous <i>given</i> value (" " is used in <i>ColumnFixture</i>), call the <i>CalculateFixture</i> method <i>setRepeatString()</i>.</li>
+<li>To enable a specific string to signify an exception is <i>expected </i>("error" is used in <i>ColumnFixture</i>), call the <i>CalculateFixture</i> method <i>setExceptionString()</i>.</li></ul>
+In <i>ColumnFixture</i>, " " as an <i>expected</i> value means that the actual value is displayed in the report. There is currently nothing directly equivalent to this in <i>CalculateFixture</i>. The closest is a <i>show</i> special action in <a href="../../FitLibraryUserGuide/DoFixture/index.html"><i>DoFixture</i></a><br>
+<hr>
+<ul><li><i>Copyright (c) 2004 Rick Mugridge, University of Auckland, New Zealand.</i></li>
+<li><i>Released under the terms of the GNU General Public License version 2 or later.</i></li></ul>
+</body></html>

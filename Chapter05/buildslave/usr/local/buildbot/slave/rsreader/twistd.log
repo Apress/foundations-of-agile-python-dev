@@ -1,0 +1,324 @@
+2007/11/15 21:23 -0700 [-] Log opened.
+2007/11/15 21:23 -0700 [-] twistd 2.5.0 (/Library/Frameworks/Python.framework/Versions/2.5/Resources/Python.app/Contents/MacOS/Python 2.5.1) starting up
+2007/11/15 21:23 -0700 [-] reactor class: <class 'twisted.internet.selectreactor.SelectReactor'>
+2007/11/15 21:23 -0700 [-] Loading buildbot.tac...
+2007/11/15 21:23 -0700 [-] Creating BuildSlave
+2007/11/15 21:23 -0700 [-] Loaded.
+2007/11/15 21:23 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:23 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 2 seconds
+2007/11/15 21:23 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:24 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:24 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 6 seconds
+2007/11/15 21:24 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:24 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:24 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 16 seconds
+2007/11/15 21:24 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:24 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:24 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 48 seconds
+2007/11/15 21:24 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:25 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:25 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 111 seconds
+2007/11/15 21:25 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:27 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:27 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 329 seconds
+2007/11/15 21:27 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:32 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:32 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 854 seconds
+2007/11/15 21:32 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:46 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 21:46 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 2114 seconds
+2007/11/15 21:46 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 22:22 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 22:22 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 4116 seconds
+2007/11/15 22:22 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 23:30 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/15 23:30 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 4161 seconds
+2007/11/15 23:30 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 00:40 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 00:40 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3560 seconds
+2007/11/16 00:40 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 01:39 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 01:39 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 4183 seconds
+2007/11/16 01:39 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 02:49 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 02:49 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3453 seconds
+2007/11/16 02:49 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 03:46 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 03:46 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 2898 seconds
+2007/11/16 03:46 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 04:34 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 04:34 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3724 seconds
+2007/11/16 04:34 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 05:37 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 05:37 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3190 seconds
+2007/11/16 05:37 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 06:30 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 06:30 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 2946 seconds
+2007/11/16 06:30 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 07:19 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 07:19 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 4097 seconds
+2007/11/16 07:19 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 08:27 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 08:27 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3354 seconds
+2007/11/16 08:27 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 09:23 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 09:23 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3668 seconds
+2007/11/16 09:23 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 10:24 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 10:24 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 2849 seconds
+2007/11/16 10:24 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 11:12 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 11:12 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3610 seconds
+2007/11/16 11:12 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 12:12 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 12:12 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3653 seconds
+2007/11/16 12:12 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 13:13 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 13:13 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3820 seconds
+2007/11/16 13:13 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 14:16 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 14:16 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0x12a07d8> will retry in 3912 seconds
+2007/11/16 14:16 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0x1317fd0>
+2007/11/16 14:21 -0700 [-] Received SIGTERM, shutting down.
+2007/11/16 14:21 -0700 [-] Main loop terminated.
+2007/11/16 14:21 -0700 [-] Server Shut Down.
+2008/04/28 22:27 -0700 [-] Log opened.
+2008/04/28 22:27 -0700 [-] twistd 2.5.0 (/Library/Frameworks/Python.framework/Versions/2.5/Resources/Python.app/Contents/MacOS/Python 2.5.1) starting up
+2008/04/28 22:27 -0700 [-] reactor class: <class 'twisted.internet.selectreactor.SelectReactor'>
+2008/04/28 22:27 -0700 [-] Loading buildbot.tac...
+2008/04/28 22:27 -0700 [-] Creating BuildSlave
+2008/04/28 22:27 -0700 [-] Loaded.
+2008/04/28 22:27 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:27 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 2 seconds
+2008/04/28 22:27 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:27 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:27 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 7 seconds
+2008/04/28 22:27 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:27 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:27 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 21 seconds
+2008/04/28 22:27 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:27 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:27 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 60 seconds
+2008/04/28 22:27 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:28 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:28 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 191 seconds
+2008/04/28 22:28 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:31 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:31 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 556 seconds
+2008/04/28 22:31 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:41 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 22:41 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 1415 seconds
+2008/04/28 22:41 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 23:04 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/28 23:04 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3462 seconds
+2008/04/28 23:04 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 00:02 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 00:02 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3635 seconds
+2008/04/29 00:02 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 10:10 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 10:10 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3996 seconds
+2008/04/29 10:10 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 11:16 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 11:16 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3395 seconds
+2008/04/29 11:16 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 12:13 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 12:13 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3722 seconds
+2008/04/29 12:13 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 13:15 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 13:15 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3507 seconds
+2008/04/29 13:15 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 14:14 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 14:14 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3300 seconds
+2008/04/29 14:14 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 16:25 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 16:25 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4109 seconds
+2008/04/29 16:25 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 17:34 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 17:34 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3863 seconds
+2008/04/29 17:34 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 18:38 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 18:38 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3725 seconds
+2008/04/29 18:38 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 20:05 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/29 20:05 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4122 seconds
+2008/04/29 20:05 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 13:43 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 13:43 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3346 seconds
+2008/04/30 13:43 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 14:39 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 14:39 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3653 seconds
+2008/04/30 14:39 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 15:39 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 15:39 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4044 seconds
+2008/04/30 15:39 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 16:47 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 16:47 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3788 seconds
+2008/04/30 16:47 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 17:50 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 17:50 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3558 seconds
+2008/04/30 17:50 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 18:49 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 18:49 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3929 seconds
+2008/04/30 18:49 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 20:12 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 20:12 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3288 seconds
+2008/04/30 20:12 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 21:07 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 21:07 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3380 seconds
+2008/04/30 21:07 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 22:03 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 22:03 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3717 seconds
+2008/04/30 22:03 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 23:05 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/04/30 23:05 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4093 seconds
+2008/04/30 23:05 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 00:13 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 00:13 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3118 seconds
+2008/05/01 00:13 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 01:05 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 01:05 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4054 seconds
+2008/05/01 01:05 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 02:13 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 02:13 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3795 seconds
+2008/05/01 02:13 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 03:16 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 03:16 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4153 seconds
+2008/05/01 03:16 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 04:25 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 04:25 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3262 seconds
+2008/05/01 04:25 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 05:20 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 05:20 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3365 seconds
+2008/05/01 05:20 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 06:16 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 06:16 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3870 seconds
+2008/05/01 06:16 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 07:20 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 07:20 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3101 seconds
+2008/05/01 07:20 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 08:12 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 08:12 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4014 seconds
+2008/05/01 08:12 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 09:19 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 09:19 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3585 seconds
+2008/05/01 09:19 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 10:19 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 10:19 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3074 seconds
+2008/05/01 10:19 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 11:10 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 11:10 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4047 seconds
+2008/05/01 11:10 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 12:17 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 12:17 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3431 seconds
+2008/05/01 12:17 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 13:14 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 13:14 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 2744 seconds
+2008/05/01 13:14 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 14:00 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 14:00 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3799 seconds
+2008/05/01 14:00 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 15:04 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 15:04 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4123 seconds
+2008/05/01 15:04 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 16:12 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 16:12 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3453 seconds
+2008/05/01 16:12 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 17:10 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 17:10 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3107 seconds
+2008/05/01 17:10 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 18:02 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 18:02 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3255 seconds
+2008/05/01 18:02 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 18:56 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 18:56 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4117 seconds
+2008/05/01 18:56 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 20:05 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 20:05 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4325 seconds
+2008/05/01 20:05 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 21:17 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 21:17 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4238 seconds
+2008/05/01 21:17 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 22:27 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/01 22:27 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 2813 seconds
+2008/05/01 22:27 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 08:18 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 08:18 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 2973 seconds
+2008/05/02 08:18 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 09:56 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 09:56 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3527 seconds
+2008/05/02 09:56 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 10:55 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 10:55 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3440 seconds
+2008/05/02 10:55 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 11:53 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 11:53 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3294 seconds
+2008/05/02 11:53 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 13:14 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 13:14 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3404 seconds
+2008/05/02 13:14 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 14:29 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 14:29 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4501 seconds
+2008/05/02 14:29 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 15:45 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 15:45 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 2970 seconds
+2008/05/02 15:45 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 16:34 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 16:34 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3697 seconds
+2008/05/02 16:34 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 17:36 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 17:36 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3162 seconds
+2008/05/02 17:36 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 18:28 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 18:28 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3681 seconds
+2008/05/02 18:28 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 19:30 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 19:30 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4093 seconds
+2008/05/02 19:30 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 20:38 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 20:38 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4065 seconds
+2008/05/02 20:38 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 21:46 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 21:46 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3449 seconds
+2008/05/02 21:46 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 22:43 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 22:43 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4143 seconds
+2008/05/02 22:43 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 23:52 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/02 23:52 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 4012 seconds
+2008/05/02 23:52 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/03 00:59 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/03 00:59 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3634 seconds
+2008/05/03 00:59 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/03 23:04 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/03 23:04 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3297 seconds
+2008/05/03 23:04 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/03 23:59 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/03 23:59 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 2785 seconds
+2008/05/03 23:59 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 00:46 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 00:46 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3577 seconds
+2008/05/04 00:46 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 01:45 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 01:45 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3147 seconds
+2008/05/04 01:45 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 10:47 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 10:47 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3570 seconds
+2008/05/04 10:47 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 11:46 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 11:46 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3621 seconds
+2008/05/04 11:46 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 12:47 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 12:47 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 2989 seconds
+2008/05/04 12:47 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 13:36 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 13:36 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3570 seconds
+2008/05/04 13:36 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 14:36 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 14:36 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3243 seconds
+2008/05/04 14:36 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 15:30 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 15:30 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3805 seconds
+2008/05/04 15:30 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 16:33 -0700 [-] Starting factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>
+2008/05/04 16:33 -0700 [Uninitialized] <twisted.internet.tcp.Connector instance at 0xe55558> will retry in 3845 seconds
+2008/05/04 16:33 -0700 [Uninitialized] Stopping factory <buildbot.slave.bot.BotFactory instance at 0xeddc88>

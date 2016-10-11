@@ -1,0 +1,27 @@
+Import Fixture
+==============
+
+The Import fixture lets you control where FIT looks for fixture renames and remembered packages. Entries with a name in the first column only are remembered packages; entires with two names are fixture renames. A version of the table with only one column is acceptable.
+
+The single entry version is for compatability with FitNesse. 
+
+It should be placed in the acceptance test before any fixtures that need it. The fit
+package itself is always predeclared.
+
++---------------------+-------------------+
+| fit.Import                              |
++---------------------+-------------------+
+| spam.eggs.toast     |                   |
++---------------------+-------------------+
+| spaghetti.meatballs |                   |
++---------------------+-------------------+
+| fat                 | fat.Spec1_1Tests  |
++---------------------+-------------------+
+
+
+It also declares that any names which begin with fat. will be changed to begin with fat.Spec1_1Tests. This is one of the entries that is used to map the Fit 1.1 specification tests to a more specific location.
+
+NOTE - use of this fixture is strongly discouraged. It's here because it's heavily used in tests created by FitNesse. Future versions of PyFit may make this fixture a comment. Either the `application configuration`__ facility or the `fixture renames`__ facility is a significantly better replacement.
+
+__ FIT_ConfigurationExit.htm
+__ FIT_FixtureNames.htm

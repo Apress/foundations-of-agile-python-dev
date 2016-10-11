@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<title>ImageFixture</title>
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="imagefixture">
+<h1 class="title">ImageFixture</h1>
+<p>The Image Fixture provides a two dimensional array of images. It's best used in a situation where there are a relatively small number of images that are to be mapped into an array. See the example on page 83 and 84 of the <a class="reference" href="Fitbook_Intro.htm">FIT Book</a>.</p>
+<p>There is an associated object, the ImageNameGraphic, which handles one image name graphic. It can be used in other fixtures to provide support for named images. This object is in the ImageFixture module, not in a separate module of its own.</p>
+<p>A good place to use these objects might be in conjunction with the <a class="reference" href="FitNesse_TableFixture.htm">TableFixture</a>, where one of several pictures could be inserted to indicate status.</p>
+<p>ImageNameGraphic, in turn, requires the support of the <a class="reference" href="FitLib_GraphicTypeAdapter.htm">GraphicTypeAdapter</a>, a generic type adapter mechanism for handling tables containing &quot;&lt;img ...&gt;&quot; and &quot;&lt;a ...&gt;&quot; tags. The GraphicTypeAdapter requires a &quot;.class&quot; qualifier to tell it what class it's adapting. The metadata for a method, field or property is thus:</p>
+<div class="line-block">
+<div class="line">_typeDict = {&quot;name&quot;: GraphicTypeAdapter,
+&quot;name.class&quot;: ImageNameGraphic}</div>
+</div>
+</div>
+</body>
+</html>

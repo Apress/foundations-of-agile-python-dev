@@ -1,0 +1,16 @@
+<html><head><title>Label to Identifier Mapping</title></head>
+<body>
+<h1><center>Label to Identifier Mapping</center></h1>
+<p>Compare the results of all three mapping algorithms</p>
+<p>Change in 0.8a2 - accept _ as alphabetic char in camel and GracefulNames</p>
+<table border cellspacing=0 cellpadding=3>
+<tr><td colspan=5>fit.AccTestFixtures.LabelMappingFixture</td></tr>
+<tr><td>label</td><td>camel</td><td>graceful names</td><td>extended camel</td><td>notes</td></tr>
+<tr><td>hi there!</td><td>hiThere</td><td>hiThere</td><td>hiThereBang</td><td>"Bang" is a developer term.</td></tr>
+<tr><td>123.45</td><td>one2345</td><td>one2345</td><td>one23Dot45</td><td>&nbsp;</td></tr>
+<tr><td>pass</td><td>pass_</td><td>pass_</td><td>pass_</td><td>"pass" is a Python reserved word</td></tr>
+<tr><td>try_this</td><td>try_this</td><td>try_this</td><td>try_this</td><td>Python regards _ as an alphabetic character in identifiers.</td></tr>
+<tr><td>Leading caps</td><td>LeadingCaps</td><td>LeadingCaps</td><td>LeadingCaps</td><td>&nbsp;</td></tr>
+<tr><td>One2buckle My shoe</td><td>One2buckleMyShoe</td><td>One2BuckleMyShoe</td><td>One2buckleMyShoe</td><td>Note the capitalization of "buckle"</td></tr>
+</table>
+</body></html>

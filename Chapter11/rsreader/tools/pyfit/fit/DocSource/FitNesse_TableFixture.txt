@@ -1,0 +1,92 @@
+Table Fixture
+=============
+
+The TableFixture is part of the FitNesse distribution. Python FIT makes it available in both the FitNessse and batch environments.
+
+The TableFixture supplies elementary support for a table that looks like a business form, rather  than an array of rows and columns. 
+
+The table shown on p.82 of the Fit Book is an example of an invoice. Its main claim to fame is that it actually looks like an invoice: the table cells are laid out similarly to those on a real invoice, it has cells with the kind of printed labels that would appear on an invoice, and some of the cells span multiple columns, giving  more of a look of a printed form rather than a spreadsheet. The layout makes it recognizable to the business people on the project.
+
+However, processing the format is a different matter. The TableFixture provides very elementary support. Once you've gotten used to it, you may find that it's simpler to write your own Fixture subclass than to use it. Or you may build a library of helper routines that you include with Python's multiple inheritance feature.
+
+Using TableFixture
+>>>>>>>>>>>>>>>>>>
+
+To use TableFixture, you write a subclass and provide a "doStaticTable(self, numberOfRows)" method. This method then uses the inherited "getCell(row, column)" method to retrieve and save the cells that need to be processed. 
+
+You can process the table as if you were writing a ColumnFixture subclass by using the inherited getCell(), parseCell() and checkCell() methods. For each cell, you use getCell(row, column) to retrieve the cell and either parseCell(cell, nameOrMetaData) or checkCell(cell, nameOrMetaData) to parse it or check it, as appropriate. You also need to provide a field, method or property for each cell.
+
+Alternatively, you can use the standard routines in Fixture, Parse and TypeAdapter to process each cell. 
+
+High Level Processing
+---------------------
+
+You can process a TableFixture table similarly to the way you would process a ColumnFixture table. To do this, you need a field, method or property for each cell in the table you want to process, and you need to have the following routine in the doStaticTable(...) method for each cell.
+
+For a given value, the routine is:
+
+self.parseCell(self.getCell(row, column), name)
+
+For a result value, the routine is:
+
+self.checkCell(self.getCell(row, column), name)
+
+Rows and columns count from zero. parseCell returns the parsed value or an exception object, checkCell returns a checkResult object. You can usually ignore these unless you want to do additional processing in the doStaticTable(...) routine.
+
+Useful Support Routines
+>>>>>>>>>>>>>>>>>>>>>>>
+
+getCell(row, column)
+--------------------
+
+The inherited getCell(row, column) method returns the parse cell from the table. Most of the other routines you are likely to use require this cell as input. Both row and column count from zero.
+
+parseCell(cell, name or metaData)
+---------------------------------
+
+The inherited parseCell(cell, name or metaData) routine acquires a type adapter and uses it to parse the cell, returning either the parsed value or an exception object. If the second parameter is a character string, the type adapter will be bound to the named field, method or property, and the result will be stored there. If the second parameter is a dictionary, it will be used as the required metadata, and the result will be returned. No attempt will be made to store the result into a field, method or property. The supplied dictionary needs to use a null string as the field name.
+
+checkCell(cell, name or metaData [, expected])
+----------------------------------------------
+
+The inherited checkCell(cell, name or metaData [, expected]) routine acquires a type adapter and uses it to check the cell, returning a checkResult object. 
+
+If the second parameter is a character string, the type adapter is bound to the named field, method or property, and the value acquired from that field, method or property is used as the expected value. If the second parameter is a dictionary, it is used as the metadata for an unbound type adapter. The third parameter must contain the expected value for the comparison.
+
+Routines for when you don't use getCell or checkCell
+----------------------------------------------------
+
+There are a large number of methods on the cell, of which the most useful is ".text()", which retrieves the text in the cell after stripping out any HTML markup and doing a few other housekeeping chores. Cell methods are all in the `Parse`__ module.
+
+__ FIT_Parse.htm
+
+Fixture provides the right(cell), wrong(cell, [message]), ignore(cell) and exception(cell, message or exception-object) methods. These annotate the cell and tabulate counts. It also provides the check(cell, typeAdapter) routine, which checks the content of the cell, annotates the cell with the result, and tabulates the result in the counts. It also returns a CheckResult object, which you can use for additional processing on the result.
+
+`TypeAdapter`__ provides the interface to all of the standard type conversion routines. While you don't need to use it, it provides a good deal of convenience and standard processing for very little cost. Having a type adapter is necessary if you want to use the check(cell, typeAdapter) routine.
+
+__ FIT_TypeAdapters.htm
+
+Using TypeAdapter in this context is a little different, since you most likely don't want to use the feature that accesses the method, field or property. For this situation, the TypeAdapter.on() method takes three parameters: self, "", {metadata dictionary}. Using a null string for the name prevents TypeAdapter from trying to locate the method.
+
+You only need one instance of TypeAdapter for each type. You use the parse(cell) method to convert the cell's contents to an object, the equals(cell, object) method to check if the object matches the cell, and the toString(cell) method to convert the object to printable form.
+
+All three of these can throw exceptions, so it may be useful to surround them with try blocks. Equals usually returns a boolean True or False, but occasionally returns a CheckResult object. This always indicates an exception or other error.
+
+Rather than use the equals routine, it may be more convenient to use the check(cell, adapter) routine in Fixture rather than the equals routine in TypeAdapter. This takes care of annotating the cell and tabulating the results. It does, however, require a type adapter so it can't be used without one.
+
+Design Note on the conversion
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+The original version of TableFixture in FitNesse has a number of helper routines. When I went to convert them, I discovered that they shadowed routines of the same name in Fixture. This is legitimate in Java, where the compiler choses the correct version of a method by checking the signature. Python does not support multiple versions of a method with the same name, so I would have had to change the names anyway. This would necessarily invalidate the examples in the FIT book, which is one of the major reasons for keeping the same API.
+
+So I sat back to think about redesigning the API. Once I did that, several othe problems surfaced. The helper routines all involved refetching the cell, using the basic getCell(row, column) routine. This duplicates the row and column coordinates, which is both code duplication and a potential violation of OAOO (Once and Only Once, also known as DRY - Don't Repeat Yourself). Saving the cell and giving it a descriptive name is cheaper than fixing the OAOO violation by creating a constant or an object encapsulating the coordinates. The latter would also require another set of interface routines that took the coordinate object as the parameter.
+
+Outside of taking row and column instead of cell, most of the helper routines provided no additional functionality. The integer and string routines were so basic that I wondered why anyone would bother, especially since the routines in TypeAdapter are both more capable and provide services in a consistent manner.
+
+So I decided to not convert them. It seemed like way too much work for almost no benefit.
+
+However, once I wrote the first draft of the documentation, it occured to me that I could usefully encapsulate the parse and check functionality in a pair of service routines. So here they are.
+
+
+
+

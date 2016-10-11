@@ -1,0 +1,48 @@
+<html><head><title>Parse Exit Test</title></head>
+<body>
+<center><h1>Test Parse Exit</h1></center>
+<p>When I restructured the TypeAdapter hierarchy, I lost the ability to put a Parse routine in the fixtures. This facility allows the fixture writer to plug a parse routine into any of the binding objects, and have it called before (or instead of) the type adapter's Parse routine.</p>
+<p>The Parse routine must be a callable that takes one parameter (the string to parse) and that returns a tuple of two objects. The first object is a character string of "OK", "Continue" or "Error"; the second object depends on the first. For "OK", it's the object to be returned to the caller: the type adapter's parse routine will not be called. For "continue", the type adapter's parse routine will be called either with the second object if it's a string, or the original string if it's None. If the first object is "error", the second must be a string that will either be passed back as an error message or will be the 'args' parameter on an exception, depending on another parameter.</p>
+
+<p>The first row of the fixture is simply some indicative labels; they are not processed in any way. The cells in each succeeding row works as follows:</p>
+<ul>
+<li>fixture type</li>
+<li>an exit name or blank</li>
+<li>a value to be parsed with that exit</li>
+<li>the parsed value will be retrieved using str() and then compared without parse processing</li>
+<li>another exit name or blank</li>
+<li>the value will be parsed, and then compared using the type's native compare routine</li>
+</ul>
+
+<table BORDER CELLSPACING=0 CELLPADDING=3>
+<tr>
+    <td colspan=6>tests.ParseExit</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>exit 1</td>
+    <td>value</td>
+    <td>result 1</td>
+    <td>exit 2</td>
+    <td>result 2</td>
+</tr><tr>
+    <td>string</td>
+    <td>reverse</td>
+    <td>kafuzalum</td>
+    <td>mulazufak</td>
+    <td>reverse</td>
+    <td>kafuzalum</td>
+</tr><tr>
+    <td>string</td>
+    <td>sort</td>
+    <td>kafuzalum</td>
+    <td>aafklmuuz</td>
+    <td>reverse</td>
+    <td>zuumlkfaa</td>
+</tr>
+</table>
+
+<p>The values in the result columns should be green if it works. </p>
+<table BORDER CELLSPACING=0 CELLPADDING=3><tr><td colspan=2>fit.Summary</td></tr></table>
+</body>
+</html>

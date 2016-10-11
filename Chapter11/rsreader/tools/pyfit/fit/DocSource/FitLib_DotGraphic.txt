@@ -1,0 +1,16 @@
+Dot Graphics
+____________
+
+Even though I'm linking to this as if it was a fixture, it isn't one. It's a more or less (hopefully more) functional example of how to link to an external package that renders graphics from some kind of source file.
+
+The example uses the dot visualization program from the graphics package at graphvis. See page 83 of the Fit Book for an example, and a reference to where to get the graphvis programs.
+
+The DotGraphic module and class is an application object: it encapsulates a text string that can be run through dot to produce a gif (or a lot of other formats, for that matter). It also contains some file management code and the code to actually run dot to produce the graphic file. 
+
+It hooks into the system through the `GraphicTypeAdapter`__. This type adapter links to two different application objects: this one and the `ImageNameGraphic`__, so it needs an additional piece of metadata to tell it which object to create on a parse call.
+
+__ FitLib_GraphicTypeAdapter.htm
+__ FitLib_ImageFixture.htm
+
+I'm not at all happy with either the code, the file management or the quality of the port from Rick Mugridge's work in FitLibrary. In particular, the file management has substantial problems, most of which will be solved in release 0.9, while the interface with dot makes too many assumptions of where it is. It probably won't work properly except on my machine, at least without some code hackery.
+

@@ -1,0 +1,13 @@
+Constraint Fixture
+++++++++++++++++++
+
+The Constraint Fixture is a variation on the Calculate Fixture where the result of the calculation is either all True or all False. Consequently, there is no column in the table that represents the result: all the columns are given values.
+
+Since this is a part of the Fit Library, the name of the method that is invoked is created by combining the labels of all of the columns. The invoked method must be defined to return a boolean. Whatever it returns is coerced to a boolean before being checked as equal to True or False, using Python's normal rules for deciding truth.
+
+The expected result is the first parameter of the table.
+
+This fixture can be used to advantage for business rule tests where the same table is to be used to test integration with a workflow. It allows the business rules to be separated by the path taken through the workflow.
+
+See the specification test for further details.
+

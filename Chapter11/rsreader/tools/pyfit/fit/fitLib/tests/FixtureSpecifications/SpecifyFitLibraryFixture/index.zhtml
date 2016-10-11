@@ -1,0 +1,10 @@
+<html><title>SpecifyFitLibraryFixture</title><body>
+<h1>SpecifyFitLibraryFixture</h1>
+This is an abstract class which provides various capabilities to all the fit library fixtures. We test these with specific subclasses.<br>
+<br>
+<a href="TestDelegatedHandlingOfParse.html"><a href="TestDelegatedHandlingOfParse.html">TestDelegatedHandlingOfParse</a></a><br>
+<a href="UseStaticParseMethod.html"><a href="UseStaticParseMethod.html">UseStaticParseMethod</a></a><br>
+<a href="UseToStringForResult.html"><a href="UseToStringForResult.html">UseToStringForResult</a></a><br>
+<br>
+<a href="SetUp.html"><a href="SetUp.html">SetUp</a></a><br>
+</body></html>

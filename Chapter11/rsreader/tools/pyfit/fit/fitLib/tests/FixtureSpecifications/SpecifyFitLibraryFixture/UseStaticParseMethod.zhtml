@@ -1,0 +1,14 @@
+<html><title>UseStaticParseMethod</title><body>
+<h1><a href="UseStaticParseMethod.html">UseStaticParseMethod</a></h1>
+The <i>static parse()</i> method of a class is used if a object of that type needs a <i>TypeAdapter</i><br>
+<table border cellspacing=0 cellpadding=3>
+<tr><td></td><td>show</td><td ColSpan=2>my class</td></tr>
+<tr><td>--r</td><td>check</td><td>my class</td><td>3</td></tr>
+</table>
+In this example, the method <i>myClass()</i> returns an object of class <i>MyClass</i>. This has the following methods, which are all needed for parsing to work:<br>
+<ul><li><i>public static parse(String s)</i> is used to parse a String from a Fit table cell. It  needs to return an object (not a primitive value or <i>void</i>).</li>
+<li><i>public String toString()</i> is used to unparse an Object, to display the actual result in a reported cell.</li>
+<li><i>public boolean equals(Object object)</i> is used to compare an expected and an actual value to see if they're the same.</li></ul>
+<br>
+This capability is provided for all fixtures in the <i>FitNesse</i> version of Fit.<br>
+</body></html>
